@@ -1,0 +1,56 @@
+@import '../../less/base.less';
+
+/* home */
+.home {
+  .banner {
+    .autofix();
+    padding-top: 45%;
+
+    img {
+      border-radius: 6px 6px 0 0;
+    }
+  }
+  .menus {
+    background-color: #fff;
+    height: 75px;
+    border-radius: 0 0 6px 6px;
+
+    .item {
+      position: relative;
+
+      &:not(:last-child):after {
+        .borderRight();
+      }
+      img {
+        width: 29px;
+        height: 29px;
+      }
+      span {
+        display: block;
+        margin: 0 auto;
+      }
+    }
+  }
+}
+
+/* records */
+.records {
+  .bar + section > .tabview {
+    margin-top: -1px;
+  }
+  .tabpane .list > .item {
+    border-radius: 5px;
+  }
+}
+
+/* protocol instruction */
+.protocol, .instruction {
+  background-color: #fff;
+}
+
+/* packages */
+.package {
+  .packets {
+    min-height: 300px;
+  }
+}

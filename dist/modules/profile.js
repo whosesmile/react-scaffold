@@ -1,0 +1,1 @@
+webpackJsonp([1],[function(e,t,u){"use strict";function n(e){return e&&e.__esModule?e:{default:e}}var r=u(11),l=n(r),o=u(38),a=n(o);a.default.render(l.default.createElement("h1",null,"个人中心"),document.querySelector("#bootstrap"))}]);

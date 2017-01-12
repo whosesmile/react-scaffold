@@ -1,0 +1,82 @@
+var fs = require('fs');
+var path = require('path');
+var webpack = require('webpack');
+var autoprefixer = require('autoprefixer');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var OpenBrowserPlugin = require('open-browser-webpack-plugin');
+var uglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
+var port = 3302;
+
+var plugins = [
+  new HtmlWebpackPlugin({ title: '千丁前端', template: '../template.html', chunks: [] }),
+  new webpack.HotModuleReplacementPlugin(),
+  new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
+  new OpenBrowserPlugin({ url: 'http://localhost:' + port }),
+];
+
+if (process.argv.indexOf('--compress') > -1) {
+  plugins.push(new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify("production") } }));
+  plugins.push(new uglifyJsPlugin({ compress: { warnings: false } }));
+}
+
+module.exports = {
+  context: path.join(__dirname, 'src'),
+  entry: Object.assign(entries(), {
+    vendor: ['react', 'react-dom', 'react-router', 'react-addons-css-transition-group', 'classnames', 'webpack-zepto', 'fastclick'],
+  }),
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: '[name].js'
+  },
+  plugins: plugins,
+  module: {
+    loaders: [{
+      test: /\.jsx?$/,
+      exclude: /(node_modules|bower_components)/,
+      loader: 'babel',
+      query: {
+        cacheDirectory: true,
+      }
+    }, {
+      test: /\.less$/,
+      loader: 'style!css!postcss!less'
+    }]
+  },
+  postcss: [autoprefixer(['iOS >= 7', 'Android >= 4.1'])],
+  devServer: {
+    host: '0.0.0.0',
+    port: port,
+    hot: true,
+    inline: true,
+    compress: true,
+    contentBase: ['./dist'],
+    historyApiFallback: true,
+    setup: function(app) {
+      app.all('/*/ajax/**', function(req, res) {
+        // req.query
+        var path = './mock' + req.path.replace(/\/ajax/, '');
+        delete require.cache[require.resolve(path)];
+        res.json(require(path)());
+      });
+    }
+  },
+  resolve: {
+    extensions: ['', '.js', 'json', '.jsx'],
+  },
+};
+
+
+// 递归目录查找模块
+function entries() {
+  var result = {};
+  var base = path.join(__dirname, './src/modules');
+  fs.readdirSync(base).forEach(function(file) {
+    file = path.resolve(base, file);
+    var stat = fs.statSync(file);
+    if (stat && stat.isDirectory() && fs.existsSync(path.join(file, 'index.jsx'))) {
+      var name = path.join('modules', path.basename(file));
+      result[name] = ['.', name, 'index.jsx'].join(path.sep);
+    }
+  });
+  return result;
+}

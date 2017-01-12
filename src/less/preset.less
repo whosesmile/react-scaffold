@@ -1,0 +1,47 @@
+html {
+  touch-action: manipulation;
+}
+body {
+  user-select: none;
+  overflow-x: hidden;
+  background-color: #f1f1f1;
+}
+.page {
+  min-height: 100vh;
+  background-color: #f1f1f1;
+}
+.page.view-enter, .page.view-leave {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+
+/* 页入 */
+.view-enter {
+  transform: translate3d(100%, 0, 0);
+}
+.view-enter.view-enter-active {
+  animation: ex-kf-view-in ease .3s forwards;
+  z-index: 2;
+}
+.view-leave.view-leave-active {
+  animation: none;
+  z-index: 1;
+}
+
+/* 页出 */
+.backoff {
+  .view-enter {
+    transform: translate3d(0, 0, 0);
+  }
+  .view-enter.view-enter-active {
+    animation: none;
+    z-index: 1;
+  }
+  .view-leave.view-leave-active {
+    animation: ex-kf-view-out ease .3s forwards;
+    z-index: 2;
+  }
+}
