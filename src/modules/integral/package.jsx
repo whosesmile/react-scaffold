@@ -4,7 +4,9 @@
 import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
 import { Link, browserHistory } from 'react-router';
+import Bar from '../../components/bar';
 import Page from '../../components/page';
+import Input from '../../components/input';
 import MaskLayer from '../../components/masklayer';
 
 export default class Package extends Component {
@@ -134,7 +136,7 @@ export default class Package extends Component {
   }
 
   renderPackage() {
-    if (this.state.list.length === 0 && this.state.loading) {
+    if (this.state.loading) {
       return (
         <div className="loadmore">
           <i className="loading"></i>
@@ -143,43 +145,56 @@ export default class Package extends Component {
       );
     }
 
-    return this.state.list.map((item, idx) => {
-      return (
-        <div key={ idx } className="item">
-          <div className="text">{ item.goodsName } <span className="text-sm text-driving">({ item.consumeIntegral }积分)</span></div>
-          <div className="interact narrow">
-            <button className="button literal text-primary" type="button" disabled={ this.state.invalid } onClick={ this.confirmExchange.bind(this, item) }>兑换</button>
+    return (
+      this.state.list.map((item, idx) => {
+        return (
+          <div key={ idx } className="item">
+            <div className="text">{ item.goodsName } <span className="text-sm text-driving">({ item.consumeIntegral }积分)</span></div>
+            <div className="interact narrow">
+              <button className="button literal text-primary" type="button" disabled={ this.state.invalid } onClick={ this.confirmExchange.bind(this, item) }>兑换</button>
+            </div>
           </div>
-        </div>
-      );
-    });
+        );
+      })
+    );
   }
 
   render() {
     return (
       <Page className="package" title={ this.state.title }>
         {/* main */}
-        <section className="main">
+        <section className="main has-footer">
           <div className="list compact">
             <label className="item">
               <span className="label">手机号</span>
               <div className="text">
-                <input className="input" type="tel" pattern="[0-9]*" maxLength="11" defaultValue={ this.state.mobile } placeholder="请输入您的手机号码(仅限中国大陆)" onChange={ this.handleChange } />
+                <Input className="input" type="tel" pattern="[0-9]*" maxLength="11" defaultValue={ this.state.mobile } placeholder="请输入您的手机号码(仅限中国大陆)" onChange={ this.handleChange } />
               </div>
             </label>
           </div>
 
           <div className="list packets">
             { this.renderPackage() }
-          </div>
 
-          <div className="vspace">
-            <div className="text-sm text-darkgray text-center">
-              <p><Link className="link" to="/integral/instruction">兑换说明</Link></p>
-              <p>如有疑问，请致电：<a className="text-blue" href="tel:4000818181">4000818181</a></p>
-            </div>
+            { this.state.list.length > 0 &&
+              <div className="article text-sm text-gray">
+                <h3>充值说明</h3>
+                <section>
+                  <p>1. 流量为全国流量，立即生效，月底失效，每个手机号码每月限充5次。</p>
+                  <p>2. 每月最后两天，中国移动手机号进入清算期，暂不支持兑换。</p>
+                  <p>3. 积分换取的流量，以实际运营商套餐为准，移动、联通、电信略有不同。</p>
+                  <p>4. 超过运营商冲抵限额、号码欠费、套餐互斥、非实名认证、运营商黑名单等充值失败，则积分会自动返还。</p>
+                </section>
+              </div>
+            }
           </div>
         </section>
+
+        <Bar component="footer" className="btm-fixed">
+          <div className="button-group compact">
+            <a className="button default square" href="tel:4000818181">如有疑问，请致电: 4000818181</a>
+          </div>
+        </Bar>
 
         <MaskLayer show={ this.state.show }>
           <div className="modal">

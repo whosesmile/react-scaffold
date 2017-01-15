@@ -1,5 +1,5 @@
 /*!
- * 选项卡 约定className(tabs,tabpane), 放弃使用Tab自定义标签,简化结构
+ * 选项卡 约定class(tabs,tabpane), 放弃使用Tab自定义标签,简化结构
  */
 import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
@@ -17,9 +17,15 @@ export default class TabView extends Component {
 
   componentDidMount() {
     $(this.refs.panel).on('click', '.tabs .item', (e) => {
-      let tab = $(e.target).addClass('active')
-      tab.siblings().removeClass('active');
-      $(tab.attr('href')).addClass('active').siblings().removeClass('active');
+      let tab = $(e.target);
+      if (!tab.is('.active')) {
+        tab.addClass('active')
+        tab.siblings().removeClass('active');
+        $(tab.attr('href')).addClass('active').siblings().removeClass('active');
+
+        // TODO 待实践是否合适
+        window.scrollTo(0, 0);
+      }
       e.preventDefault();
     });
   }

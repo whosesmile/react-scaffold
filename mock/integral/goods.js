@@ -7,8 +7,8 @@ module.exports = function() {
       id: faker.random.number(),
       goodsName: faker.name.jobArea(),
       consumeIntegral: faker.random.number(),
-      // coverImg: faker.image.image(300, 300),
-      coverImg: 'https://img1.qdingnet.com/image-268d5860-648e-44e4-b568-17b93a4491e5.jpg?imageView2/2/w/305/h/305',
+      coverImg: faker.image.image(300, 300),
+      // coverImg: 'https://img1.qdingnet.com/image-268d5860-648e-44e4-b568-17b93a4491e5.jpg?imageView2/2/w/305/h/305',
       marketPrice: faker.random.number(),
       exchangeStatus: faker.random.number(1),
       // auditAt: faker.date.recent()

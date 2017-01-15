@@ -1,5 +1,5 @@
 /*!
- * bar
+ * bar 待完善
  */
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
@@ -7,7 +7,7 @@ import classnames from 'classnames';
 export default class Bar extends Component {
 
   static propTypes = {
-    menus: PropTypes.array.isRequired,
+    menus: PropTypes.array,
   };
 
   static defaultProps = {};
@@ -52,15 +52,26 @@ export default class Bar extends Component {
   }
 
   render() {
-    let prev = this.props.menus[0] || [];
-    let next = this.props.menus[1] || [];
+    let Tag = this.props.component || 'div';
+    let clazz = classnames('bar', this.props.className);
 
-    return (
-      <header className="bar">
-        { this.renderPrev(prev) }
-        <h1 className="title"><b>{ this.props.children }</b></h1>
-        { this.renderNext(next) }
-      </header>
-    );
+    // header bar
+    if (this.props.title && this.props.menus) {
+      let prev = this.props.menus[0] || [];
+      let next = this.props.menus[1] || [];
+      return (
+        <Tag className={ clazz }>
+          { this.renderPrev(prev) }
+          <h1 className="title"><b>{ this.props.title }</b></h1>
+          { this.renderNext(next) }
+        </Tag>
+      );
+    }
+    // others bar
+    else {
+      return (
+        <Tag className={ clazz }>{ this.props.children }</Tag>
+      );
+    }
   }
 }

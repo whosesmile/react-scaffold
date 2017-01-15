@@ -13,6 +13,8 @@ import Protocol from './protocol';
 import Instruction from './instruction';
 import Details from './details';
 import Order from './order';
+import Success from './success';
+import Failure from './failure';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 
 ReactDOM.render(
@@ -26,6 +28,8 @@ ReactDOM.render(
       <Route path="/integral/details/:id" component={ Details } />
       <Route path="/integral/orders" component={ Orders } />
       <Route path="/integral/order/:id" component={ Order } />
+      <Route path="/integral/success/:id" component={ Success } />
+      <Route path="/integral/failure/:id" component={ Failure } />
     </Route>
   </Router>,
   document.querySelector('#bootstrap')

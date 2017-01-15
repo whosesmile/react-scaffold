@@ -1,7 +1,7 @@
 import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
 import Page from '../../components/page';
-import Lazy from '../../components/lazy';
+import LazyImage from '../../components/image';
 import Loader from '../../components/loader';
 import { Link } from 'react-router';
 
@@ -31,7 +31,7 @@ export default class Home extends Component {
           <div className="panel">
           <div is class="vspace hspace" ui-mode="10px">
             <div className="figure">
-              <Lazy src={ item.coverImg } />
+              <LazyImage src={ item.coverImg } />
             </div>
             </div>
             <div className="text">

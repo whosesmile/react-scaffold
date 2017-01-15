@@ -1,12 +1,12 @@
 /*!
- * 模块模板 待完善
+ * 应用模板 待完善
  */
 import FastClick from 'fastclick';
 import React, { Component, PropTypes } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { browserHistory } from 'react-router';
 
-// PROXY CLICK
+// FASTCLICK: PROXY CLICK
 window.addEventListener('load', () => FastClick.attach(document.body));
 
 export default class App extends Component {
@@ -43,7 +43,7 @@ export default class App extends Component {
   componentDidMount() {
     browserHistory.listen((data) => {
       let key = data.key;
-      // 新增
+      // 新增 PUSH
       if (data.action === 'PUSH') {
         let rrkeys = this.setRrkeys(data.key);
         this.setState({
@@ -84,7 +84,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <ReactCSSTransitionGroup id="app" className={ this.state.action } component="div" transitionName={ {enter: 'view-enter', leave: 'view-leave'} }  transitionEnterTimeout={ 300 } transitionLeaveTimeout={ 300 }>
+      <ReactCSSTransitionGroup component="div" className={ this.state.action } transitionName={ {enter: 'view-enter', leave: 'view-leave'} }  transitionEnterTimeout={ 300 } transitionLeaveTimeout={ 300 }>
         { React.cloneElement(this.props.children, {key: location.pathname}) }
       </ReactCSSTransitionGroup>
     );

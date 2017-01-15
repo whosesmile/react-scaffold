@@ -1,5 +1,5 @@
 /*!
- * screen mask, used in `Modal`, `ActionSheet`, `Popup`.
+ * 遮罩容器
  */
 import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';

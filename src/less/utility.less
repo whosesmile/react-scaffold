@@ -3,8 +3,7 @@
   width: 100%;
   margin: 0 auto;
 }
-
-/* 清除浮动 */
+// 清除浮动
 .clearfix {
   &:after {
     content: '\0200';
@@ -15,8 +14,7 @@
     height: 0;
   }
 }
-
-/* 图片占位 */
+// 图片占位
 .autofix {
   position: relative;
   display: block;
@@ -28,5 +26,28 @@
     left: 50%;
     width: 100%;
     transform: translate(-50%, -50%);
+  }
+}
+.list > .item.division > .text:not(:first-child) {
+  position: relative;
+
+  &:before {
+    .borderLeft();
+  }
+}
+.main.has-footer {
+  margin-bottom: 58px;
+}
+.list > .item .input-widget {
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  .input + .icon {
+    display: none;
+    margin-left: 15px;
+  }
+  .input:valid + .icon {
+    display: block;
   }
 }

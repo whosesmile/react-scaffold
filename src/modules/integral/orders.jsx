@@ -27,6 +27,7 @@ export default class Orders extends Component {
   }
 
   renderList() {
+    let prizeTypes = { 'TICKET': '优惠券', 'FLOW': '流量包', 'ENTITY': '实物商品' };
     return this.state.list.map((item, idx) => {
       return (
         <div key={ idx } className="list">
@@ -40,7 +41,7 @@ export default class Orders extends Component {
             </div>
             <div className="text">
               <h4>{ item.goodsName }</h4>
-              <div className="brief">{ item.consumeIntegral }</div>
+              <div className="brief">{ prizeTypes[item.goodsType] || '其他类型' }</div>
             </div>
           </Link>
           <div className="item">

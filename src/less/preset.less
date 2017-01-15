@@ -6,9 +6,20 @@ body {
   overflow-x: hidden;
   background-color: #f1f1f1;
 }
+// 白色背景
+.bgwhite {
+  background-color: #fff !important;
+}
 .page {
   min-height: 100vh;
   background-color: #f1f1f1;
+
+  // 解决margin折叠问题
+  &:before {
+    clear: both;
+    content: "";
+    display: table;
+  }
 }
 .page.view-enter, .page.view-leave {
   position: absolute;
@@ -17,8 +28,7 @@ body {
   right: 0;
   width: 100%;
 }
-
-/* 页入 */
+// 页入
 .view-enter {
   transform: translate3d(100%, 0, 0);
 }
@@ -30,8 +40,7 @@ body {
   animation: none;
   z-index: 1;
 }
-
-/* 页出 */
+// 页出
 .backoff {
   .view-enter {
     transform: translate3d(0, 0, 0);
@@ -43,5 +52,64 @@ body {
   .view-leave.view-leave-active {
     animation: ex-kf-view-out ease .3s forwards;
     z-index: 2;
+  }
+}
+// 旋转木马
+.carousel {
+  position: relative;
+  overflow: hidden;
+
+  .slider {
+    position: absolute !important;
+    height: 100% !important;
+    top: 0;
+    bottom: 0;
+
+    .slider-frame {
+      height: 100% !important;
+    }
+    [class^="slider-decorator"] {
+      width: 100%;
+      bottom: 0;
+      top: auto !important;
+
+      nav {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        line-height: normal;
+
+        /*
+        a {
+          display: inline-block;
+          width: 10px;
+          height: 10px;
+          margin: 0 5px;
+          border-radius: 100%;
+          vertical-align: middle;
+          overflow: hidden;
+          border: 1px solid #ff6f21;
+
+          &.active {
+            background: #ff6f21;
+          }
+        }
+        */
+        a {
+          display: inline-block;
+          width: 16px;
+          height: 2px;
+          margin: 0 2px;
+          vertical-align: middle;
+          overflow: hidden;
+          background-color: rgba(255, 255, 255, 0.5);
+
+          &.active {
+            background-color: rgba(255, 255, 255, 1);
+          }
+        }
+      }
+    }
   }
 }

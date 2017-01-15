@@ -84,12 +84,12 @@ export default class Records extends Component {
               </div>
             </Swing>
             <div id="tab1" className="tabpane active">
-              <Loader url="/integral/ajax/details" callback={ this.appendList.bind(this, 1) }>
+              <Loader url="/integral/ajax/bills" callback={ this.appendList.bind(this, 1) }>
                 { this.renderList(1) }
               </Loader>
             </div>
             <div id="tab2" className="tabpane">
-              <Loader url="/integral/ajax/records" callback={ this.appendList.bind(this, 2) }>
+              <Loader url="/integral/ajax/income" callback={ this.appendList.bind(this, 2) }>
                 { this.renderList(2) }
               </Loader>
             </div>

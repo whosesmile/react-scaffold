@@ -1,10 +1,10 @@
+/*!
+ * 弹窗
+ */
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import MaskLayer from './masklayer';
 
-/**
- * Used to display a collection of actions that contain a set of interactivity, including descriptions, links, and so on. Popup from the bottom, generally used to respond to user clicks on the page.
- */
 export default class Modal extends Component {
   static propTypes = {
     type: PropTypes.string,
