@@ -8,6 +8,7 @@ import Bar from '../../components/bar';
 import Page from '../../components/page';
 import Input from '../../components/input';
 import MaskLayer from '../../components/masklayer';
+import Filter from '../../support/filter';
 
 export default class Package extends Component {
   static propTypes = {};
@@ -33,26 +34,18 @@ export default class Package extends Component {
     }
   }
 
+  // 更改手机
   handleChange = (e) => {
     let mobile = e.target.value.trim();
-    // 合法手机号
-    if (/^\d{11}$/.test(mobile)) {
+    let invalid = !/^\d{11}$/.test(mobile);
+    this.setState({
+      invalid: invalid,
+    });
+    // 合法新手机号刷新流量包
+    if (!invalid && mobile != this.state.mobile) {
       this.setState({
-        invalid: false,
-      });
-
-      // 是否需要刷新
-      if (mobile != this.state.mobile) {
-        this.setState({
-          mobile: mobile,
-        }, this.refreshPackages);
-      }
-    }
-    // 非法手机号
-    else {
-      this.setState({
-        invalid: true,
-      });
+        mobile: mobile,
+      }, this.refreshPackages);
     }
   }
 
@@ -60,17 +53,10 @@ export default class Package extends Component {
   dismiss = (e) => {
     this.setState({
       show: false,
-      packet: {},
     });
   }
 
-  confirmExchange = (data) => {
-    this.setState({
-      show: true,
-      packet: data,
-    });
-  }
-
+  // 请求兑换
   handleExcange = (e) => {
     this.setState({
       show: false,
@@ -98,6 +84,15 @@ export default class Package extends Component {
     });
   }
 
+  // 兑换确认
+  confirmExchange(data) {
+    this.setState({
+      show: true,
+      packet: data,
+    });
+  }
+
+  // 刷新流量包
   refreshPackages() {
     if (this.state.mobile) {
       if (this.request) {
@@ -151,7 +146,7 @@ export default class Package extends Component {
           <div key={ idx } className="item">
             <div className="text">{ item.goodsName } <span className="text-sm text-driving">({ item.consumeIntegral }积分)</span></div>
             <div className="interact narrow">
-              <button className="button literal text-primary" type="button" disabled={ this.state.invalid } onClick={ this.confirmExchange.bind(this, item) }>兑换</button>
+              <button className="button literal text-primary" type="button" disabled={ this.state.invalid || item.exchangeStatus == 0 } onClick={ this.confirmExchange.bind(this, item) }>兑换</button>
             </div>
           </div>
         );
@@ -219,7 +214,7 @@ export default class Package extends Component {
         <MaskLayer transparent={ true } show={ this.state.failure }>
           <div className="toast">
             <i className="icon">&#xe61d;</i>
-            <span className="text">{ this.state.message }</span>
+            <span className="text">{ Filter.default(this.state.message, '兑换失败') }</span>
           </div>
         </MaskLayer>
       </Page>

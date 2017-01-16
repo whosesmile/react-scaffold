@@ -7,7 +7,8 @@ module.exports = function() {
       entity: {
         orderId: faker.random.number(),
         goodsId: faker.random.number(),
-        goodsType: faker.random.arrayElement(['TICKET', 'ENTITY', 'FLOW']),
+        // goodsType: faker.random.arrayElement(['TICKET', 'ENTITY', 'FLOW']),
+        goodsType: faker.random.arrayElement(['TICKET']),
         goodsName: faker.name.jobArea(),
         exchangeAt: new Date(faker.date.recent()).getTime(),
         consumeIntegral: faker.random.number(),
@@ -15,9 +16,11 @@ module.exports = function() {
         number: faker.random.number(),
         orderCode: faker.random.number(),
         consigneeMobile: 18610535297,
+        consigneeAddress: faker.address.streetAddress("###"),
         status: 2,
-        source: 1,
+        source: faker.random.number({ min: 2, max: 2 }),
         coverImg: faker.image.image(100, 100),
+        logisticsCode: faker.random.arrayElement([null, faker.random.number()]),
       }
     },
   };

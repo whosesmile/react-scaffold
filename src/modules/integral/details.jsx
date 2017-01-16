@@ -51,7 +51,7 @@ export default class Details extends Component {
           }
 
           { this.state.goods &&
-            <div className="for-assist">
+            <div className="noop">
               <Carousel list={ this.state.goods.imageSrcList }></Carousel>
               <div className="list compact">
                 <div className="item">
@@ -63,12 +63,12 @@ export default class Details extends Component {
                     <span className="text-xs">积分</span>
                   </div>
                 </div>
-                <div className="item text-md thread division">
-                  <div className="text text-center">库存:{ Filter.default(this.state.goods.inventory, '不限') }</div>
-                  <Link className="text text-center text-dark" to="/integral/instruction">兑换说明</Link>
+                <div className="item thread split">
+                  <div className="text">库存:{ Filter.default(this.state.goods.inventory, '不限') }</div>
+                  <Link className="text text-dark" to="/integral/instruction">兑换说明</Link>
                 </div>
                 <div className="item thread">
-                  <div className="text text-md">
+                  <div className="text">
                     商品描述
                     <div className="describe text-darkgray">{ this.state.goods.goodsDesc }</div>
                   </div>

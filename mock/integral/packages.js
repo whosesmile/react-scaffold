@@ -2,7 +2,8 @@
 var faker = require('faker')
 module.exports = function() {
   var list = [];
-  for (var i = 0; i < 3; i++) {
+  var count = faker.random.number({ min: 3, max: 6 });
+  for (var i = 0; i < count; i++) {
     list.push({
       id: 30,
       goodsName: faker.name.jobArea(),
