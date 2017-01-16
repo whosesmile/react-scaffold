@@ -86,7 +86,7 @@ export default class Details extends Component {
 
         <Bar component="footer" className="btm-fixed">
           <div className="button-group compact">
-            <a className="button driving square" disabled={ !this.state.goods }>我要兑换</a>
+            <Link className="button driving square" to={ (this.state.goods ? '/integral/confirm/' + this.state.goods.id : 'javascript:;') } disabled={ !this.state.goods }>我要兑换</Link>
           </div>
         </Bar>
       </Page>

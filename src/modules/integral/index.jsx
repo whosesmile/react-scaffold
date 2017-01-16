@@ -12,6 +12,7 @@ import Package from './package';
 import Protocol from './protocol';
 import Instruction from './instruction';
 import Details from './details';
+import Confirm from './confirm';
 import Order from './order';
 import Success from './success';
 import Failure from './failure';
@@ -30,6 +31,7 @@ ReactDOM.render(
       <Route path="/integral/order/:id" component={ Order } />
       <Route path="/integral/success/:id" component={ Success } />
       <Route path="/integral/failure/:id" component={ Failure } />
+      <Route path="/integral/confirm/:id" component={ Confirm } />
     </Route>
   </Router>,
   document.querySelector('#bootstrap')

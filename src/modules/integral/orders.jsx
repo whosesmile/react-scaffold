@@ -3,6 +3,7 @@
  */
 import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
+import Filter from '../../support/filter';
 import Page from '../../components/page';
 import Loader from '../../components/loader';
 import { Link } from 'react-router';
@@ -28,12 +29,14 @@ export default class Orders extends Component {
 
   renderList() {
     let prizeTypes = { 'TICKET': '优惠券', 'FLOW': '流量包', 'ENTITY': '实物商品' };
+    let orderStatus = [, , '已兑换', '兑换失败', '已发货', '已签收', '未兑换'];
+
     return this.state.list.map((item, idx) => {
       return (
         <div key={ idx } className="list">
           <div className="item">
             <div className="text text-sm">积分商城</div>
-            <div className="extra text-sm">已兑换</div>
+            <div className="extra text-sm">{ Filter.default(orderStatus[item.status], '其他') }</div>
           </div>
           <Link is class="item" ui-mode="15px" to={ '/integral/order/' + item.id }>
             <div className="avatar">
@@ -45,7 +48,7 @@ export default class Orders extends Component {
             </div>
           </Link>
           <div className="item">
-            <div className="text text-sm">花费:<span className="text-driving">{ item.consumeIntegral }积分</span></div>
+            <div className="text text-sm">消耗: <span className="text-driving">{ item.consumeIntegral }积分</span></div>
             <div className="extra">
               <div className="button-group">
                 <Link className="button default sm" to={ '/integral/order/' + item.id }>查看详情</Link>

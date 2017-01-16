@@ -8,6 +8,7 @@ export default class Input extends Component {
 
   clean = () => {
     this.refs.input.value = '';
+    this.refs.input.dispatchEvent(new Event('input', { bubbles: true }));
     this.refs.input.focus();
   }
 

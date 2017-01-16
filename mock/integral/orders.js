@@ -10,7 +10,7 @@ module.exports = function() {
       goodsName: faker.name.jobArea(),
       coverImg: faker.image.image(300, 300),
       goodsType: faker.random.arrayElement(['TICKET', 'ENTITY', 'FLOW']),
-      status: 2,
+      status: faker.random.number({ min: 0, max: 6 }),
     });
   }
   return {

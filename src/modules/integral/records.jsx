@@ -1,7 +1,7 @@
 import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
 import { Link, browserHistory } from 'react-router';
-import datefmt from '../../support/datefmt';
+import Filter from '../../support/filter';
 import Page from '../../components/page';
 import Swing from '../../components/swing';
 import Loader from '../../components/loader';
@@ -58,7 +58,7 @@ export default class Records extends Component {
           <div is class="item text-sm" ui-mode="10px">
             <span className="text">
               { item.productName }
-              <p>{ datefmt(item.optTime, 'yyyy-MM-dd') }</p>
+              <p>{ Filter.date(item.optTime, 'yyyy-MM-dd') }</p>
             </span>
             <span className="text text-right">
               { points(item) }
