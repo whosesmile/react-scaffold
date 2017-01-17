@@ -30,7 +30,7 @@ export default class Success extends Component {
             <div className="describe">如有疑问，您可以致电 <a className="link" href="tel:4000818181">4000818181</a> 咨询</div>
 
             <div className="vspace hspace">
-              <Link className="button success" to={ '/integral/order/' + this.props.params.id }>查看我的兑换</Link>
+              <Link className="button plain-success" to={ '/integral/order/' + this.props.params.id }>查看我的兑换</Link>
               <Link className="button default" to="/integral">返回积分商城</Link>
             </div>
           </div>

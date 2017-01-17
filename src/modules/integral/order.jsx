@@ -6,6 +6,8 @@ import React, { Component, PropTypes } from 'react';
 import Bar from '../../components/bar';
 import Page from '../../components/page';
 import Filter from '../../support/filter';
+import MaskLayer from '../../components/masklayer';
+import { Link } from 'react-router';
 
 export default class Order extends Component {
   static propTypes = {
@@ -19,6 +21,8 @@ export default class Order extends Component {
     this.state = {
       title: '兑换详情',
       order: this.props.order,
+      showResultReceive: false,
+      showConfirmReceive: false,
     };
   }
 
@@ -34,20 +38,71 @@ export default class Order extends Component {
     }
   }
 
+  confrimReceive = () => {
+    this.setState({
+      showConfirmReceive: true,
+    });
+  }
+
+  cancelReceive = () => {
+    this.setState({
+      showConfirmReceive: false,
+    });
+  }
+
+  handleReceive = () => {
+    this.setState({
+      showConfirmReceive: false,
+    });
+
+    $.ajax({
+      url: '/integral/ajax/receive',
+      type: 'post',
+      data: { id: this.state.order.orderId },
+      success: (res) => {
+        if (res.code === 200) {
+          this.state.order.status = 5;
+          this.setState({
+            showResultReceive: true,
+            message: res.data.message || '签收失败，请稍后重试',
+            order: this.state.order,
+          });
+        } else {
+          this.setState({
+            showResultReceive: true,
+            message: res.data.message || '签收失败，请稍后重试',
+          });
+        }
+      },
+      error: () => {
+        this.setState({
+          showResultReceive: true,
+          message: '签收失败，请稍后重试',
+        });
+      }
+    });
+  }
+  dismissReceive = () => {
+    this.setState({
+      showResultReceive: false,
+    });
+  }
+
   render() {
+    let order = this.state.order;
     let orderStatus = [, , '已兑换', '兑换失败', '已发货', '已签收', '未兑换'];
     return (
       <Page className="order" title={ this.state.title }>
         {/* main */}
         <section className="main has-footer">
-          { !this.state.order &&
+          { !order &&
             <div className="loadmore">
               <i className="loading"></i>
               <span className="tips text-gray">正在加载</span>
             </div>
           }
 
-          { this.state.order &&
+          { order &&
             <div className="noop">
               <div className="list compact overlap">
                 <div className="item">
@@ -55,33 +110,33 @@ export default class Order extends Component {
                     <img width="16" src="//img1.qdingnet.com/f171f93870df8119a2df9681bfd61cdd.png" />
                   </div>
                   <div className="text">
-                    <p>兑换状态：<span className="text-driving">{ Filter.default(orderStatus[this.state.order.status], '其他') }</span></p>
+                    <p>兑换状态：<span className="text-driving">{ Filter.default(orderStatus[order.status], '其他') }</span></p>
                   </div>
                 </div>
               </div>
 
               {/* 物流信息 */}
-              { this.state.order.source == 2 &&
+              { order.source == 2 &&
                 <div className="noop">
                   <div is class="vspace" ui-mode="10px"></div>
                   <div className="list compact">
-                    { this.state.order.logisticsCode &&
-                      <a className="item" href="{{ macro.url('/shopping/logistics/' + order.logisticsCode, {company: order.logisticsCompany}) }}">
+                    { order.logisticsCode &&
+                      <Link className="item" to={{pathname: '/integral/logistics/' + order.logisticsCode, query: {company: order.logisticsCompany}}}>
                         <div className="avatar">
                           <img width="16" src="//img1.qdingnet.com/2922a6d2a27be37d5dc8182a9d1194ca.png" />
                         </div>
-                        <div className="text">物流追踪: { this.state.order.logisticsCompany }</div>
-                        <div className="text text-right">{ this.state.order.logisticsCode }</div>
+                        <div className="text">物流追踪</div>
+                        <div className="extra">{ order.logisticsCompany }</div>
                         <i className="icon text-gray">&#xe61a;</i>
-                      </a>
+                      </Link>
                     }
-                    { !this.state.order.logisticsCode &&
+                    { !order.logisticsCode &&
                       <div className="item">
                         <div className="avatar">
                           <img width="16" src="//img1.qdingnet.com/2922a6d2a27be37d5dc8182a9d1194ca.png" />
                         </div>
                         <div className="text">物流追踪</div>
-                        <div className="text text-right text-gray">暂无物流信息</div>
+                        <div className="extra">暂无物流信息</div>
                       </div>
                     }
                   </div>
@@ -89,41 +144,41 @@ export default class Order extends Component {
               }
 
               {/* 流量包 */}
-              { this.state.order.goodsType == 'FLOW' &&
+              { order.goodsType == 'FLOW' &&
                 <div className="list compact">
                   <div className="item-divider">充值手机：</div>
                   <div className="item">
                     <div className="avatar">
                       <img width="16" src="//img1.qdingnet.com/4cae9deb696a71f5c8754000896abf85.png" />
                     </div>
-                    <div className="text">{ this.state.order.consigneeMobile}</div>
+                    <div className="text">{ order.consigneeMobile}</div>
                   </div>
                 </div>
               }
 
               {/* 实物 */}
-              { this.state.order.goodsType == 'ENTITY' &&
+              { order.goodsType == 'ENTITY' &&
                 <div className="list compact">
                   <div className="item-divider">收货人信息：</div>
                   <div className="item address">
                     <i className="icon text-gray">&#xe60d;</i>
                     <div className="text">
-                      收货人：{ this.state.order.consignee }
-                      <span className="pull-right">{ this.state.order.consigneeMobile }</span>
-                      <div className="brief">{ Filter.default(this.state.order.consigneeAddress, '暂未填写') }</div>
+                      收货人：{ order.consignee }
+                      <span className="pull-right">{ order.consigneeMobile }</span>
+                      <div className="brief">{ Filter.default(order.consigneeAddress, '暂未填写') }</div>
                     </div>
                   </div>
                 </div>
               }
 
               {/* 优惠券 */}
-              { this.state.order.goodsType == 'TICKET' &&
+              { order.goodsType == 'TICKET' &&
                 <div className="list compact">
                   <div className="item-divider">优惠券：</div>
                   <div className="item">
                     <i className="icon text-gray">&#xe601;</i>
                     <div className="text text-dark">
-                      <p>{ this.state.order.ticketCode }</p>
+                      <p>{ order.ticketCode }</p>
                       请在 <a className="link" href="/account/coupons">我的千丁券</a> 中查看
                     </div>
                   </div>
@@ -135,12 +190,12 @@ export default class Order extends Component {
                 <div className="item-divider">商品信息：</div>
                 <a is class="item" ui-mode="15px">
                   <div className="avatar">
-                    <img width="45" height="45" src={ this.state.order.coverImg } />
+                    <img width="45" height="45" src={ order.coverImg } />
                   </div>
                   <div className="text">
-                    <h4>{ this.state.order.goodsName }</h4>
+                    <h4>{ order.goodsName }</h4>
                     <div className="brief text-ellipsis">
-                      <span className="text-orange">{ this.state.order.consumeIntegral }积分</span>
+                      <span className="text-orange">{ order.consumeIntegral }积分</span>
                     </div>
                   </div>
                 </a>
@@ -153,15 +208,15 @@ export default class Order extends Component {
                   <div className="text">
                     <p className="text-justify">
                       <span className="label">消耗积分</span>
-                      <span className="value text-right">{ this.state.order.consumeIntegral }</span>
+                      <span className="value text-right">{ order.consumeIntegral }</span>
                     </p>
                     <p className="text-justify">
                       <span className="label">兑换时间</span>
-                      <span className="value text-right">{ Filter.date(this.state.order.exchangeAt, 'yyyy-MM-dd hh:mm:ss') }</span>
+                      <span className="value text-right">{ Filter.date(order.exchangeAt, 'yyyy-MM-dd hh:mm:ss') }</span>
                     </p>
                     <p className="text-justify">
                       <span className="label">订单编号</span>
-                      <span className="value text-right">{ this.state.order.orderCode }</span>
+                      <span className="value text-right">{ order.orderCode }</span>
                     </p>
                   </div>
                 </div>
@@ -170,11 +225,46 @@ export default class Order extends Component {
           }
         </section>
 
-        <Bar component="footer" className="btm-fixed">
-          <div className="button-group compact">
-            <a className="button default square" href="tel:4000818181">如有疑问，请致电: 4000818181</a>
+        { order &&
+          <Bar component="footer" className="btm-fixed">
+            { order.source == 2 && order.status == 4 &&
+              <div className="button-group compact">
+                <a className="button default square" href="tel:4000818181">客服咨询</a>
+                <button className="button warning square" onClick={ this.confrimReceive }>确认签收</button>
+              </div>
+            }
+            { order.source != 2 || order.status != 4 &&
+              <div className="button-group compact">
+                <a className="button default square" href="tel:4000818181">如有疑问，请致电: 4000818181</a>
+              </div>
+            }
+          </Bar>
+        }
+
+        <MaskLayer show={ this.state.showConfirmReceive }>
+          <div className="modal">
+            <h3 className="title">温馨提示</h3>
+            <div className="content">您确认签收这件商品吗？</div>
+            <footer className="footer">
+              <div className="button-group compact nesting">
+                <a className="button square text-primary" onClick={ this.cancelReceive }>取消</a>
+                <a className="button square text-primary text-strong" onClick={ this.handleReceive }>确定</a>
+              </div>
+            </footer>
           </div>
-        </Bar>
+        </MaskLayer>
+
+        <MaskLayer show={ this.state.showResultReceive }>
+          <div className="modal">
+            <h3 className="title">温馨提示</h3>
+            <div className="content">{ this.state.message }</div>
+            <footer className="footer">
+              <div className="button-group compact nesting">
+                <a className="button square text-primary text-strong" onClick={ this.dismissReceive }>确定</a>
+              </div>
+            </footer>
+          </div>
+        </MaskLayer>
       </Page>
     );
   }

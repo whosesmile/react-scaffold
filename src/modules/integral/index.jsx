@@ -16,6 +16,7 @@ import Confirm from './confirm';
 import Order from './order';
 import Success from './success';
 import Failure from './failure';
+import Logistics from './logistics';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 
 ReactDOM.render(
@@ -26,12 +27,13 @@ ReactDOM.render(
       <Route path="/integral/packages" component={ Package } />
       <Route path="/integral/protocol" component={ Protocol } />
       <Route path="/integral/instruction" component={ Instruction } />
-      <Route path="/integral/details/:id" component={ Details } />
       <Route path="/integral/orders" component={ Orders } />
       <Route path="/integral/order/:id" component={ Order } />
+      <Route path="/integral/details/:id" component={ Details } />
       <Route path="/integral/success/:id" component={ Success } />
       <Route path="/integral/failure/:id" component={ Failure } />
       <Route path="/integral/confirm/:id" component={ Confirm } />
+      <Route path="/integral/logistics/:id" component={ Logistics } />
     </Route>
   </Router>,
   document.querySelector('#bootstrap')

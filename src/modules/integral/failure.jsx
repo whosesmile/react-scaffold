@@ -30,7 +30,7 @@ export default class Failure extends Component {
             <div className="describe">如有疑问，您可以致电 <a className="link" href="tel:4000818181">4000818181</a> 咨询</div>
 
             <div className="vspace hspace">
-              <Link className="button warning" to="/integral/orders">查看我的兑换</Link>
+              <Link className="button plain-warning" to="/integral/orders">查看我的兑换</Link>
               <Link className="button default" to="/integral">返回积分商城</Link>
             </div>
           </div>

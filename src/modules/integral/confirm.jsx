@@ -86,6 +86,7 @@ export default class Confirm extends Component {
             </div>
           }
         </section>
+
         { this.state.goods &&
           <Bar component="footer" className="btm-fixed">
             <div className="button-group compact">
