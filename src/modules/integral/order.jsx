@@ -3,11 +3,12 @@
  */
 import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import Bar from '../../components/bar';
 import Page from '../../components/page';
+import Modal from '../../components/Modal';
+import Toast from '../../components/Toast';
 import Filter from '../../support/filter';
-import MaskLayer from '../../components/masklayer';
-import { Link } from 'react-router';
 
 export default class Order extends Component {
   static propTypes = {
@@ -20,9 +21,8 @@ export default class Order extends Component {
     super(props);
     this.state = {
       title: '兑换详情',
+      // TODO
       order: this.props.order,
-      showResultReceive: false,
-      showConfirmReceive: false,
     };
   }
 
@@ -39,53 +39,36 @@ export default class Order extends Component {
   }
 
   confrimReceive = () => {
-    this.setState({
-      showConfirmReceive: true,
-    });
-  }
-
-  cancelReceive = () => {
-    this.setState({
-      showConfirmReceive: false,
+    Modal.render({
+      title: '温馨提示',
+      message: '您确认签收这件商品吗？',
+      buttons: [{
+        text: '取消',
+      }, {
+        text: '确定',
+        onClick: this.handleReceive
+      }]
     });
   }
 
   handleReceive = () => {
-    this.setState({
-      showConfirmReceive: false,
-    });
-
     $.ajax({
       url: '/integral/ajax/receive',
       type: 'post',
       data: { id: this.state.order.orderId },
       success: (res) => {
         if (res.code === 200) {
-          this.state.order.status = 5;
+          Toast.success('签收成功');
+          // 更新订单状态
           this.setState({
-            showResultReceive: true,
-            message: res.data.message || '签收失败，请稍后重试',
-            order: this.state.order,
+            order: Object.assign(this.state.order, { status: 5 }),
           });
         } else {
-          this.setState({
-            showResultReceive: true,
-            message: res.data.message || '签收失败，请稍后重试',
-          });
+          Toast.failure('签收失败');
         }
-      },
-      error: () => {
-        this.setState({
-          showResultReceive: true,
-          message: '签收失败，请稍后重试',
-        });
       }
     });
-  }
-  dismissReceive = () => {
-    this.setState({
-      showResultReceive: false,
-    });
+    return false;
   }
 
   render() {
@@ -240,31 +223,6 @@ export default class Order extends Component {
             }
           </Bar>
         }
-
-        <MaskLayer show={ this.state.showConfirmReceive }>
-          <div className="modal">
-            <h3 className="title">温馨提示</h3>
-            <div className="content">您确认签收这件商品吗？</div>
-            <footer className="footer">
-              <div className="button-group compact nesting">
-                <a className="button square text-primary" onClick={ this.cancelReceive }>取消</a>
-                <a className="button square text-primary text-strong" onClick={ this.handleReceive }>确定</a>
-              </div>
-            </footer>
-          </div>
-        </MaskLayer>
-
-        <MaskLayer show={ this.state.showResultReceive }>
-          <div className="modal">
-            <h3 className="title">温馨提示</h3>
-            <div className="content">{ this.state.message }</div>
-            <footer className="footer">
-              <div className="button-group compact nesting">
-                <a className="button square text-primary text-strong" onClick={ this.dismissReceive }>确定</a>
-              </div>
-            </footer>
-          </div>
-        </MaskLayer>
       </Page>
     );
   }

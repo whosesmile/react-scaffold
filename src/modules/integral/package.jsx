@@ -8,6 +8,8 @@ import Bar from '../../components/bar';
 import Page from '../../components/page';
 import Input from '../../components/input';
 import MaskLayer from '../../components/masklayer';
+import Modal from '../../components/Modal';
+import Toast from '../../components/Toast';
 import Filter from '../../support/filter';
 
 export default class Package extends Component {
@@ -21,11 +23,8 @@ export default class Package extends Component {
       title: '流量兑换',
       invalid: false,
       loading: false,
-      show: false,
-      processing: false,
       packet: {},
       list: [],
-      failure: false,
       message: '',
     };
 
@@ -49,47 +48,44 @@ export default class Package extends Component {
     }
   }
 
-  // 关闭
-  dismiss = (e) => {
+  // 兑换确认
+  handleConfirm(data) {
     this.setState({
-      show: false,
+      packet: data,
+    }, () => {
+      Toast.loading('处理中');
+      Modal.render({
+        title: '温馨提示',
+        message: '确认花费<span class="text-driving">' + this.state.packet.consumeIntegral + '积分</span>兑换<span class="text-driving">' + this.state.packet.goodsName + '</span>吗？',
+        buttons: [{ text: '取消' }, { text: '确定', onClick: this.handleExcange }],
+      });
     });
   }
 
   // 请求兑换
   handleExcange = (e) => {
-    this.setState({
-      show: false,
-      processing: true,
-    });
-
-    let packet = this.state.packet;
-    $.post('/integral/ajax/placeorder', {
-      goodsId: packet.id,
-      goodsType: 'FLOW',
-      consigneeMobile: this.state.mobile,
-    }, (res) => {
-      if (res.code === 200) {
-        let path = `/integral/success/${ res.data.entity.orderCode }`;
-        browserHistory.push(path);
-      } else {
-        this.setState({
-          processing: false,
-          failure: true,
-          message: res.data.message || '操作失败',
-        });
-
-        this.timer = setTimeout(() => { this.setState({ failure: false }) }, 2500);
+    let widget = Toast.loading('处理中');
+    $.ajax({
+      url: '/integral/ajax/placeorder',
+      type: 'post',
+      data: {
+        goodsId: this.state.packet.id,
+        goodsType: 'FLOW',
+        consigneeMobile: this.state.mobile,
+      },
+      success: (res) => {
+        if (res.code === 200) {
+          let path = '/integral/success/' + res.data.entity.orderCode;
+          browserHistory.push(path);
+        } else {
+          Toast.failure('兑换失败');
+        }
+      },
+      complete: () => {
+        widget.dismiss();
       }
     });
-  }
 
-  // 兑换确认
-  confirmExchange(data) {
-    this.setState({
-      show: true,
-      packet: data,
-    });
   }
 
   // 刷新流量包
@@ -127,31 +123,6 @@ export default class Package extends Component {
     if (this.request) {
       this.request.abort();
     }
-    clearTimeout(this.timer);
-  }
-
-  renderPackage() {
-    if (this.state.loading) {
-      return (
-        <div className="loadmore">
-          <i className="loading"></i>
-          <span className="tips text-gray">正在加载</span>
-        </div>
-      );
-    }
-
-    return (
-      this.state.list.map((item, idx) => {
-        return (
-          <div key={ idx } className="item">
-            <div className="text">{ item.goodsName } <span className="text-sm text-driving">({ item.consumeIntegral }积分)</span></div>
-            <div className="interact narrow">
-              <button className="button literal text-primary" type="button" disabled={ this.state.invalid || item.exchangeStatus == 0 } onClick={ this.confirmExchange.bind(this, item) }>兑换</button>
-            </div>
-          </div>
-        );
-      })
-    );
   }
 
   render() {
@@ -169,7 +140,25 @@ export default class Package extends Component {
           </div>
 
           <div className="list packets">
-            { this.renderPackage() }
+            { this.state.loading &&
+              <div className="loadmore">
+                <i className="loading"></i>
+                <span className="tips text-gray">正在加载</span>
+              </div>
+            }
+
+            { !this.state.loading &&
+              this.state.list.map((item, idx) => {
+                return (
+                  <div key={ idx } className="item">
+                    <div className="text">{ item.goodsName } <span className="text-sm text-driving">({ item.consumeIntegral }积分)</span></div>
+                    <div className="interact narrow">
+                      <button className="button literal text-primary" type="button" disabled={ this.state.invalid || item.exchangeStatus == 0 } onClick={ this.handleConfirm.bind(this, item) }>兑换</button>
+                    </div>
+                  </div>
+                );
+              })
+            }
 
             { this.state.list.length > 0 &&
               <div className="article text-sm text-gray">
@@ -190,33 +179,6 @@ export default class Package extends Component {
             <a className="button default square" href="tel:4000818181">如有疑问，请致电: 4000818181</a>
           </div>
         </Bar>
-
-        <MaskLayer show={ this.state.show }>
-          <div className="modal">
-            <h3 className="title">温馨提示</h3>
-            <div className="content">确认花费<span className="text-driving">{ this.state.packet.consumeIntegral }积分</span>兑换<span className="text-driving">{ this.state.packet.goodsName }</span>吗？</div>
-            <footer className="footer">
-              <div className="button-group compact nesting">
-                <a className="button square text-primary" onClick={ this.dismiss }>取消</a>
-                <a className="button square text-primary text-strong" onClick={ this.handleExcange }>确定</a>
-              </div>
-            </footer>
-          </div>
-        </MaskLayer>
-
-        <MaskLayer transparent={ true } show={ this.state.processing }>
-          <div className="toast">
-            <i className="icon waiting"></i>
-            <span className="text">请稍后</span>
-          </div>
-        </MaskLayer>
-
-        <MaskLayer transparent={ true } show={ this.state.failure }>
-          <div className="toast">
-            <i className="icon">&#xe61d;</i>
-            <span className="text">{ Filter.default(this.state.message, '兑换失败') }</span>
-          </div>
-        </MaskLayer>
       </Page>
     );
   }

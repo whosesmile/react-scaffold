@@ -1,11 +1,11 @@
 import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
 import { Link, browserHistory } from 'react-router';
-import Filter from '../../support/filter';
 import Page from '../../components/page';
 import Swing from '../../components/swing';
 import Loader from '../../components/loader';
 import TabView from '../../components/tabview';
+import Filter from '../../support/filter';
 
 export default class Records extends Component {
   static propTypes = {};

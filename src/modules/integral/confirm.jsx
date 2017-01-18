@@ -3,9 +3,9 @@
  */
 import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import Bar from '../../components/bar';
 import Page from '../../components/page';
-import { Link } from 'react-router';
 
 export default class Confirm extends Component {
   static propTypes = {

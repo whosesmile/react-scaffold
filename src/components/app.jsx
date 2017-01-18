@@ -1,5 +1,5 @@
 /*!
- * 应用模板 待完善
+ * 应用模板
  */
 import FastClick from 'fastclick';
 import React, { Component, PropTypes } from 'react';

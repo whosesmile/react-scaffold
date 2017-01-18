@@ -1,11 +1,12 @@
 import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import Page from '../../components/page';
 import LazyImage from '../../components/image';
 import Loader from '../../components/loader';
-import { Link } from 'react-router';
 
 export default class Home extends Component {
+
   static propTypes = {};
 
   static defaultProps = {};

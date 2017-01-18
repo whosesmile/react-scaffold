@@ -17,7 +17,7 @@ module.exports = function() {
         orderCode: faker.random.number(),
         consigneeMobile: 18610535297,
         consigneeAddress: faker.address.streetAddress("###"),
-        status: faker.random.number({ min: 4, max: 6 }),
+        status: faker.random.number({ min: 4, max: 4 }),
         source: faker.random.number({ min: 2, max: 2 }),
         coverImg: faker.image.image(90, 90),
         logisticsCode: faker.random.number(),

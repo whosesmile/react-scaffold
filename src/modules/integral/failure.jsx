@@ -2,8 +2,8 @@
  * 兑换成功
  */
 import React, { Component, PropTypes } from 'react';
-import Page from '../../components/page';
 import { Link } from 'react-router';
+import Page from '../../components/page';
 
 export default class Failure extends Component {
   static propTypes = {};

@@ -8,10 +8,6 @@ import Env from '../support/env';
 
 export default class Page extends Component {
 
-  static contextTypes = {
-    router: React.PropTypes.object.isRequired,
-  };
-
   static propTypes = {
     title: PropTypes.string.isRequired,
     menus: PropTypes.array,
@@ -58,7 +54,17 @@ export default class Page extends Component {
         { !Env.nested &&
           <Bar component="header" menus={ menus } title={ title }></Bar>
         }
+
         { this.props.children }
+
+        {
+        /*
+          * 全局组件插槽
+          * 注意：由于页面过度有动画，同时网络AJAX有延迟，因此有时会在错误的页面弹出组件
+          * 如果不能接受这种情况，可以在当前PAGE手动加入slot元素，调用组件时将slot作为最后一个参数传递即可。
+        */
+        }
+        <div id="gslot"></div>
       </div>
     );
   }

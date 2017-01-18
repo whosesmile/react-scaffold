@@ -10,7 +10,9 @@ export default class LazyImage extends Component {
     src: PropTypes.string.isRequired,
   };
 
-  static defaultProps = {};
+  static defaultProps = {
+    src: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
+  };
 
   constructor(props) {
     super(props);

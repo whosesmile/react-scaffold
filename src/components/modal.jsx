@@ -2,93 +2,81 @@
  * 弹窗
  */
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import MaskLayer from './masklayer';
 
-export default class Modal extends Component {
+class ModalWidget extends Component {
+
   static propTypes = {
-    type: PropTypes.string,
     title: PropTypes.string,
-    modal: PropTypes.bool,
-    cancelText: PropTypes.string,
-    confirmText: PropTypes.string,
-    content: PropTypes.string.isRequired,
+    message: PropTypes.string.isRequired,
   };
 
-  static defaultProps = {
-    type: 'alert',
-    modal: true,
-    cancelText: '取消',
-    confirmText: '确定',
-  };
+  static defaultProps = {};
 
   constructor(props) {
     super(props);
     this.state = {};
   }
 
-  handlerCancel = (e) => {
-    console.log('cancel')
+  dismiss() {
+    // 防御编程 多次调用会报错
+    try {
+      ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(this).parentNode);
+    } catch (e) {}
   }
 
-
-  handlerConfirm = (e) => {
-    console.log('confirm')
-  }
-
-  renderHeader() {
-    if (this.props.title) {
-      return (
-        <h3 className="title">{ this.props.title }</h3>
-      );
-    }
-  }
-
-  renderHeader() {
-    if (this.props.title) {
-      return (
-        <h3 className="title">{ this.props.title }</h3>
-      );
-    }
-  }
-  renderContent() {
-    return (
-      <div className="content">本商品销售范围不支持您所在的社区或库存不足</div>
-    );
-  }
-
-  renderFooter() {
-    if (this.props.type == 'confirm') {
-      return (
-        <footer className="footer">
-          <div className="button-group compact nesting">
-            <a className="button square text-primary cancel" onClick={ this.handlerCancel }>{ this.props.cancelText }</a>
-            <a className="button square text-primary text-strong submit" onClick={ this.handlerConfirm }>{ this.props.confirmText }</a>
-          </div>
-        </footer>
-      );
-    } else {
-      return (
-        <footer className="footer">
-          <div className="button-group compact nesting">
-            <a className="button square text-primary text-strong submit" onClick={ this.handlerConfirm }>{ this.props.confirmText }</a>
-          </div>
-        </footer>
-      );
-    }
+  delegate(fn) {
+    return (e) => {
+      if (fn(e) !== false) {
+        this.dismiss(e);
+      }
+      // 禁用防止重复提交
+      else {
+        let button = e.target;
+        button.disabled = true;
+        button.innerHTML = '<i class="loading"></i>请稍后';
+      }
+    };
   }
 
   render() {
-    let { shown, type, title, modal, cancelText, confirmText, content, className, ...others } = this.props;
-    let clazz = classnames('modal', className);
     return (
-      <MaskLayer data-dismiss={ this.props.modal } shown={ shown }>
-        <div className={ clazz } { ...others }>
-          { this.renderHeader() }
-          { this.renderContent() }
-          { this.renderFooter() }
+      <MaskLayer show={ true }>
+        <div className="modal">
+          { this.props.title &&
+            <h3 className="title">{ this.props.title }</h3>
+          }
+          <div className="content" dangerouslySetInnerHTML={{__html: this.props.message}}></div>
+
+          <footer className="footer">
+            <div className="button-group compact nesting">
+              {
+                this.props.buttons.map((item, idx) => {
+                  let { text, className='text-primary', onClick, ...others } = item;
+                  let clazz = classnames('button square', className);
+                  onClick = this.delegate(typeof onClick === 'function' ? onClick : (() => {}));
+                  return (
+                    <button key={ idx } className={ clazz } onClick={ onClick } { ...others }>{ text }</button>
+                  );
+                })
+              }
+              </div>
+          </footer>
+
         </div>
       </MaskLayer>
     );
   }
 };
+
+// 弹窗代理 注意：反REACT模式
+const Modal = {
+  render: (opts, slot) => {
+    slot = slot instanceof HTMLElement ? slot : document.querySelector('#gslot');
+    return ReactDOM.render(React.cloneElement(<ModalWidget { ...opts } />, { key: Date.now() }), slot);
+  },
+};
+
+export default Modal;

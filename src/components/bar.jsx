@@ -1,5 +1,5 @@
 /*!
- * bar 待完善
+ * BAR
  */
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';

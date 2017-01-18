@@ -1,8 +1,12 @@
+/*!
+ * 吐司
+ */
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import MaskLayer from './masklayer';
 
-export default class Toast extends Component {
+class ToastWidget extends Component {
   static propTypes = {
     icon: PropTypes.string,
     message: PropTypes.string,
@@ -16,7 +20,6 @@ export default class Toast extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      shown: true,
       presets: {
         success: '&#xe61c;',
         failure: '&#xe61d;',
@@ -25,13 +28,18 @@ export default class Toast extends Component {
     };
   }
 
-  componentDidMount() {
-    let self = this;
-    setTimeout(function() {
-      self.setState({
-        shown: false,
-      });
-    }, 2500);
+  dismiss = (e) => {
+    // 防御编程 多次调用或unmount之后调用会报错
+    try {
+      ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(this).parentNode);
+      if (typeof this.props.callback === 'function') {
+        this.props.callback();
+      }
+    } catch (e) {}
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timer);
   }
 
   renderIcon() {
@@ -39,6 +47,10 @@ export default class Toast extends Component {
     // PRESET ICON
     if (Object.keys(this.state.presets).includes(icon)) {
       return <i className="icon" dangerouslySetInnerHTML={{__html: this.state.presets[icon]}}></i>;
+    }
+    // LOADING
+    if (icon === 'loading') {
+      return <i className="icon waiting"></i>;
     }
     // OTHER ICON
     if (/^&#\w+;$/.test(icon)) {
@@ -53,10 +65,11 @@ export default class Toast extends Component {
   }
 
   render() {
-    let { message, className, ...others } = this.props;
+    let { time = 3000, message, className, callback, ...others } = this.props;
     let clazz = classnames('toast', className);
+    this.timer = setTimeout(this.dismiss, time);
     return (
-      <MaskLayer transparent={ true }>
+      <MaskLayer transparent={ true } show={ true }>
         <div className={ clazz } { ...others }>
           { this.renderIcon() }
           <span className="text">{ message || '木有提示' }</span>
@@ -65,3 +78,36 @@ export default class Toast extends Component {
     );
   }
 };
+
+// 兼容参数
+const vary = (opts, callback) => {
+  if (typeof opts === 'string') {
+    opts = { message: opts };
+  }
+  if (typeof callback === 'function') {
+    opts.callback = callback;
+  }
+  return opts;
+};
+
+// 吐司代理 注意：反REACT模式
+const Toast = {
+  success: function() {
+    return Toast.render(Object.assign({ icon: 'success' }, vary.apply(null, arguments)), arguments[arguments.length - 1]);
+  },
+  failure: function() {
+    return Toast.render(Object.assign({ icon: 'failure' }, vary.apply(null, arguments)), arguments[arguments.length - 1]);
+  },
+  warning: function() {
+    return Toast.render(Object.assign({ icon: 'warning' }, vary.apply(null, arguments)), arguments[arguments.length - 1]);
+  },
+  loading: function() {
+    return Toast.render(Object.assign({ icon: 'loading', time: 10000, message: '请稍后' }, vary.apply(null, arguments)), arguments[arguments.length - 1]);
+  },
+  render: function(opts, slot) {
+    slot = slot instanceof HTMLElement ? slot : document.querySelector('#gslot');
+    return ReactDOM.render(React.cloneElement(<ToastWidget { ...opts } />, { key: Date.now() }), slot);
+  },
+};
+
+export default Toast;

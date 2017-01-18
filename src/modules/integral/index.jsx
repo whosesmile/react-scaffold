@@ -1,5 +1,5 @@
 /*!
- * by 李双宝
+ * By 李双宝 其他业务也请声明负责人
  */
 import './style.less';
 import React from 'react';

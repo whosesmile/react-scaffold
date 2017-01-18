@@ -56,7 +56,8 @@ module.exports = {
         // req.query
         var path = './mock' + req.path.replace(/\/ajax/, '');
         delete require.cache[require.resolve(path)];
-        res.json(require(path)());
+        // res.json(require(path)());
+        setTimeout(function() { res.json(require(path)()); }, 500);
       });
     }
   },
