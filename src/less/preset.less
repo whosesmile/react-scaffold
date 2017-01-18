@@ -52,6 +52,29 @@ body {
     z-index: 2;
   }
 }
+// 组件
+.widget-enter {
+  &.widget-enter-active {
+    visibility: visible;
+
+    &:not(.transparent) {
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    .modal, .toast {
+      animation: ex-kf-blow-in ease .3s forwards;
+    }
+  }
+}
+.widget-leave {
+  &.widget-leave-active {
+    visibility: visible;
+    background-color: rgba(0, 0, 0, 0);
+
+    .modal, .toast {
+      animation: ex-kf-blow-out ease .3s forwards;
+    }
+  }
+}
 // 旋转木马
 .carousel {
   position: relative;

@@ -53,7 +53,6 @@ export default class Package extends Component {
     this.setState({
       packet: data,
     }, () => {
-      Toast.loading('处理中');
       Modal.render({
         title: '温馨提示',
         message: '确认花费<span class="text-driving">' + this.state.packet.consumeIntegral + '积分</span>兑换<span class="text-driving">' + this.state.packet.goodsName + '</span>吗？',
@@ -64,28 +63,18 @@ export default class Package extends Component {
 
   // 请求兑换
   handleExcange = (e) => {
-    let widget = Toast.loading('处理中');
-    $.ajax({
-      url: '/integral/ajax/placeorder',
-      type: 'post',
-      data: {
-        goodsId: this.state.packet.id,
-        goodsType: 'FLOW',
-        consigneeMobile: this.state.mobile,
-      },
-      success: (res) => {
-        if (res.code === 200) {
-          let path = '/integral/success/' + res.data.entity.orderCode;
-          browserHistory.push(path);
-        } else {
-          Toast.failure('兑换失败');
-        }
-      },
-      complete: () => {
-        widget.dismiss();
+    Toast.loading();
+    $.post('/integral/ajax/placeorder', {
+      goodsId: this.state.packet.id,
+      goodsType: 'FLOW',
+      consigneeMobile: this.state.mobile,
+    }, (res) => {
+      if (res.code === 200) {
+        browserHistory.push('/integral/success/' + res.data.entity.orderCode);
+      } else {
+        Toast.failure('兑换失败');
       }
     });
-
   }
 
   // 刷新流量包

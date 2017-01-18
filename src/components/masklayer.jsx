@@ -8,8 +8,8 @@ import classnames from 'classnames';
 export default class MaskLayer extends Component {
 
   static propTypes = {
-    show: React.PropTypes.bool.isRequired,
-    transparent: React.PropTypes.bool,
+    show: PropTypes.bool.isRequired,
+    transparent: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -28,14 +28,14 @@ export default class MaskLayer extends Component {
     // 关闭
     let fn = (e) => {
       let mask = $(this.refs.mask);
-      if (mask.is('.ex-widget-out')) {
-        this.setState({
-          mount: false,
-        });
-      }
       if (mask.is('.ex-widget-in')) {
         this.setState({
           mount: true,
+        });
+      }
+      if (mask.is('.ex-widget-out')) {
+        this.setState({
+          mount: false,
         });
       }
     };

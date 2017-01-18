@@ -17,14 +17,25 @@ class ModalWidget extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      show: true,
+    };
   }
 
-  dismiss() {
-    // 防御编程 多次调用会报错
-    try {
-      ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(this).parentNode);
-    } catch (e) {}
+  componentDidMount() {
+    this._mounted = true;
+  }
+
+  componentWillUnmount() {
+    this._mounted = false;
+  }
+
+  dismiss = (e) => {
+    if (this._mounted) {
+      this.setState({
+        show: false,
+      });
+    }
   }
 
   delegate(fn) {
@@ -43,7 +54,7 @@ class ModalWidget extends Component {
 
   render() {
     return (
-      <MaskLayer show={ true }>
+      <MaskLayer show={ this.state.show }>
         <div className="modal">
           { this.props.title &&
             <h3 className="title">{ this.props.title }</h3>
@@ -71,7 +82,7 @@ class ModalWidget extends Component {
   }
 };
 
-// 弹窗代理 注意：反REACT模式
+// 弹窗代理
 const Modal = {
   render: (opts, slot) => {
     slot = slot instanceof HTMLElement ? slot : document.querySelector('#gslot');

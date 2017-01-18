@@ -14,7 +14,7 @@ export default class Page extends Component {
   };
 
   static defaultProps = {
-    // 此处是示意 可能会变动
+    // 此处是示意 上线前会改动
     // 二维数组 第一个前置菜单，第二个后置菜单
     menus: [
       [{ icon: '&#xe60e;', label: '返回', className: 'text-gray', href: 'javascript:history.back()' }],

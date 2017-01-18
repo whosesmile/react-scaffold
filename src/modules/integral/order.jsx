@@ -52,23 +52,18 @@ export default class Order extends Component {
   }
 
   handleReceive = () => {
-    $.ajax({
-      url: '/integral/ajax/receive',
-      type: 'post',
-      data: { id: this.state.order.orderId },
-      success: (res) => {
-        if (res.code === 200) {
+    Toast.loading();
+    $.post('/integral/ajax/receive', { id: this.state.order.orderId }, (res) => {
+      if (res.code === 200) {
+        this.setState({
+          order: Object.assign(this.state.order, { status: 5 }),
+        }, () => {
           Toast.success('签收成功');
-          // 更新订单状态
-          this.setState({
-            order: Object.assign(this.state.order, { status: 5 }),
-          });
-        } else {
-          Toast.failure('签收失败');
-        }
+        });
+      } else {
+        Toast.failure('签收失败');
       }
     });
-    return false;
   }
 
   render() {
