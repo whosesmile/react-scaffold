@@ -36,7 +36,6 @@ export default class Records extends Component {
           <div className="mark">
             <img width="220" height="220" src="//img1.qdingnet.com/b70973ae84276a865ae7ae673ea1e318.png" alt="空白" />
           </div>
-          <h3 className="title">真遗憾</h3>
           <div className="describe">暂时还没有相关信息哦</div>
         </div>
       );

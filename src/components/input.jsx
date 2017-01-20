@@ -7,9 +7,9 @@ import classnames from 'classnames';
 export default class Input extends Component {
 
   clean = () => {
+    this.refs.input.focus();
     this.refs.input.value = '';
     this.refs.input.dispatchEvent(new Event('input', { bubbles: true }));
-    this.refs.input.focus();
   }
 
   render() {
@@ -19,7 +19,7 @@ export default class Input extends Component {
     return (
       <div className="input-widget">
         <input ref="input" required className={ clazz }  { ...others} />
-        <i className="icon text-darkgray" onClick={ this.clean }>&#xe61d;</i>
+        <i className="icon text-gray" onClick={ this.clean }>&#xe61d;</i>
       </div>
     );
   }

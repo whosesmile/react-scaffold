@@ -69,7 +69,7 @@ export default class Order extends Component {
           [{
             text: '签收',
             className: 'text-primary',
-            onClick: this.clearWidget,
+            onClick: this.handleReceive,
           }],
           [{
             text: '取消',

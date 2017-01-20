@@ -15,18 +15,18 @@ export default class Swing extends Component {
     this.state = {
       threshold: 0,
     };
+  }
 
-    this.handler = (e) => {
-      $(this.refs.panel).toggleClass('fixed', window.scrollY > this.state.threshold);
-    };
+  handler = (e) => {
+    $(this.refs.panel).toggleClass('fixed', window.scrollY > this.state.threshold);
+  }
 
-    this.reposition = (e) => {
-      let panel = $(this.refs.panel);
-      panel.css('height', panel.height());
-      this.setState({
-        threshold: panel.offset().top,
-      });
-    };
+  reposition = (e) => {
+    let panel = $(this.refs.panel);
+    panel.css('height', panel.height());
+    this.setState({
+      threshold: panel.offset().top,
+    });
   }
 
   componentDidMount() {

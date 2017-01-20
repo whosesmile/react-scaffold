@@ -130,9 +130,7 @@ export default class Package extends Component {
           <div className="list compact">
             <label className="item">
               <span className="label">手机号</span>
-              <div className="text">
-                <Input className="input" type="tel" pattern="[0-9]*" maxLength="11" defaultValue={ this.state.mobile } placeholder="请输入您的手机号码(仅限中国大陆)" onChange={ this.handleChange } />
-              </div>
+              <Input className="input" type="tel" pattern="[0-9]*" maxLength="11" defaultValue={ this.state.mobile } placeholder="请输入您的手机号码(仅限中国大陆)" onChange={ this.handleChange } />
             </label>
           </div>
 

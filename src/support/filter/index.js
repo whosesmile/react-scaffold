@@ -1,9 +1,15 @@
 // 过滤器
 const Filter = {
 
-  // 默认值
+  // 添加默认值
   default: function(x, y) {
     return typeof x !== 'undefined' ? x : y;
+  },
+
+  // 金额格式化
+  currency: function(input, size = 2, symbol = '￥') {
+    input = Number(input);
+    return /^[\d.]+$/.test(input) ? (symbol + input.toFixed(input % 1 === 0 ? 0 : size)) : '';
   },
 
   // 日期格式化
@@ -33,7 +39,7 @@ const Filter = {
       }
     }
     return fmt;
-  }
+  },
 };
 
 export default Filter;

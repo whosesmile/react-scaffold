@@ -11,12 +11,16 @@ export default class Loader extends Component {
     page: PropTypes.number,
     size: PropTypes.number,
     load: PropTypes.bool,
+    tips: PropTypes.string, // 加载文案
+    ends: PropTypes.string, // 终点提示文案 传空就是不显示
   };
 
   static defaultProps = {
     page: 1,
     size: 20,
     load: true,
+    tips: '正在加载',
+    ends: '已经到底啦',
   };
 
   constructor(props) {
@@ -116,12 +120,12 @@ export default class Loader extends Component {
       return (
         <div className="loadmore">
           <i className="loading"></i>
-          <span className="tips text-gray">正在加载</span>
+          <span className="tips text-gray">{ this.props.tips }</span>
         </div>
       );
-    } else if (!this.state.hasmore && this.state.count) {
+    } else if (!this.state.hasmore && this.state.count && this.props.ends) {
       return (
-        <div is class="divider" ui-mode="30%">已经到底啦</div>
+        <div is class="divider" ui-mode="30%">{ this.props.ends }</div>
       );
     }
   }
