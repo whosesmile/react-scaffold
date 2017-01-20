@@ -11,50 +11,21 @@ class ModalWidget extends Component {
   static propTypes = {
     title: PropTypes.string,
     message: PropTypes.string.isRequired,
+    show: PropTypes.bool,
   };
 
-  static defaultProps = {};
+  static defaultProps = {
+    show: true,
+  };
 
   constructor(props) {
     super(props);
-    this.state = {
-      show: true,
-    };
-  }
-
-  componentDidMount() {
-    this._mounted = true;
-  }
-
-  componentWillUnmount() {
-    this._mounted = false;
-  }
-
-  dismiss = (e) => {
-    if (this._mounted) {
-      this.setState({
-        show: false,
-      });
-    }
-  }
-
-  delegate(fn) {
-    return (e) => {
-      if (fn(e) !== false) {
-        this.dismiss(e);
-      }
-      // 禁用防止重复提交
-      else {
-        let button = e.target;
-        button.disabled = true;
-        button.innerHTML = '<i class="loading"></i>请稍后';
-      }
-    };
+    this.state = {};
   }
 
   render() {
     return (
-      <MaskLayer show={ this.state.show }>
+      <MaskLayer show={ this.props.show }>
         <div className="modal">
           { this.props.title &&
             <h3 className="title">{ this.props.title }</h3>
@@ -65,11 +36,10 @@ class ModalWidget extends Component {
             <div className="button-group compact nesting">
               {
                 this.props.buttons.map((item, idx) => {
-                  let { text, className='text-primary', onClick, ...others } = item;
+                  let { text, className='text-primary', ...others } = item;
                   let clazz = classnames('button square', className);
-                  onClick = this.delegate(typeof onClick === 'function' ? onClick : (() => {}));
                   return (
-                    <button key={ idx } className={ clazz } onClick={ onClick } { ...others }>{ text }</button>
+                    <button key={ idx } className={ clazz } { ...others }>{ text }</button>
                   );
                 })
               }
@@ -84,10 +54,10 @@ class ModalWidget extends Component {
 
 // 弹窗代理
 const Modal = {
-  render: (opts, slot) => {
-    slot = slot instanceof HTMLElement ? slot : document.querySelector('#gslot');
-    return ReactDOM.render(React.cloneElement(<ModalWidget { ...opts } />, { key: Date.now() }), slot);
-  },
+  render: (opts) => {
+    return React.createElement(ModalWidget, Object.assign({ key: Date.now() }, opts));
+  }
 };
 
 export default Modal;
+export { ModalWidget };

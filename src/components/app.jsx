@@ -84,7 +84,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <ReactCSSTransitionGroup component="div" className={ this.state.action } transitionName={ {enter: 'view-enter', leave: 'view-leave'} }  transitionEnterTimeout={ 300 } transitionLeaveTimeout={ 300 }>
+      <ReactCSSTransitionGroup component="div" className={ this.state.action } transitionName="view"  transitionEnterTimeout={ 300 } transitionLeaveTimeout={ 300 }>
         { React.cloneElement(this.props.children, {key: location.pathname}) }
       </ReactCSSTransitionGroup>
     );

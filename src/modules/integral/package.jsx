@@ -8,8 +8,8 @@ import Bar from '../../components/bar';
 import Page from '../../components/page';
 import Input from '../../components/input';
 import MaskLayer from '../../components/masklayer';
-import Modal from '../../components/Modal';
-import Toast from '../../components/Toast';
+import Modal from '../../components/modal';
+import Toast from '../../components/toast';
 import Filter from '../../support/filter';
 
 export default class Package extends Component {
@@ -23,7 +23,6 @@ export default class Package extends Component {
       title: '流量兑换',
       invalid: false,
       loading: false,
-      packet: {},
       list: [],
       message: '',
     };
@@ -31,6 +30,10 @@ export default class Package extends Component {
     if (typeof CF !== 'undefined') {
       this.state.mobile = CF.member.memberMobile;
     }
+  }
+
+  clearWidget = () => {
+    this.setState({ widget: null });
   }
 
   // 更改手机
@@ -49,30 +52,35 @@ export default class Package extends Component {
   }
 
   // 兑换确认
-  handleConfirm(data) {
+  handleConfirm(packet) {
     this.setState({
-      packet: data,
-    }, () => {
-      Modal.render({
+      widget: Modal.render({
         title: '温馨提示',
-        message: '确认花费<span class="text-driving">' + this.state.packet.consumeIntegral + '积分</span>兑换<span class="text-driving">' + this.state.packet.goodsName + '</span>吗？',
-        buttons: [{ text: '取消' }, { text: '确定', onClick: this.handleExcange }],
-      });
+        message: `确认花费<span class="text-driving">${ packet.consumeIntegral }积分</span>兑换<span class="text-driving">${ packet.goodsName }</span>吗？`,
+        buttons: [{
+          text: '取消',
+          onClick: this.clearWidget,
+        }, {
+          text: '确定',
+          onClick: this.handleExcange.bind(this, packet),
+        }],
+      })
     });
   }
 
   // 请求兑换
-  handleExcange = (e) => {
-    Toast.loading();
+  handleExcange(packet) {
+    this.setState({ widget: Toast.loading() });
     $.post('/integral/ajax/placeorder', {
-      goodsId: this.state.packet.id,
+      goodsId: packet.id,
       goodsType: 'FLOW',
       consigneeMobile: this.state.mobile,
     }, (res) => {
       if (res.code === 200) {
-        browserHistory.push('/integral/success/' + res.data.entity.orderCode);
+        browserHistory.push(`/integral/success/${ res.data.entity.orderCode }`);
       } else {
         Toast.failure('兑换失败');
+        this.setState({ widget: Toast.failure('兑换失败', this.clearWidget) });
       }
     });
   }
@@ -116,7 +124,7 @@ export default class Package extends Component {
 
   render() {
     return (
-      <Page className="package" title={ this.state.title }>
+      <Page className="package" title={ this.state.title } widget={ this.state.widget }>
         {/* main */}
         <section className="main has-footer">
           <div className="list compact">

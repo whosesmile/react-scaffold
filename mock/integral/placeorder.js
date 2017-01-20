@@ -1,7 +1,7 @@
 // https://github.com/Marak/faker.js/wiki
 var faker = require('faker')
 module.exports = function() {
-  var code = faker.random.arrayElement([500]);
+  var code = faker.random.arrayElement([200, 500]);
   return {
     code: code,
     data: {

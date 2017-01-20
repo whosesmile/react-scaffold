@@ -6,11 +6,13 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import Bar from '../../components/bar';
 import Page from '../../components/page';
-import Modal from '../../components/Modal';
-import Toast from '../../components/Toast';
+import Modal from '../../components/modal';
+import ActionSheet from '../../components/actionsheet';
+import Toast from '../../components/toast';
 import Filter from '../../support/filter';
 
 export default class Order extends Component {
+
   static propTypes = {
     order: PropTypes.object,
   };
@@ -21,7 +23,6 @@ export default class Order extends Component {
     super(props);
     this.state = {
       title: '兑换详情',
-      // TODO
       order: this.props.order,
     };
   }
@@ -38,30 +39,59 @@ export default class Order extends Component {
     }
   }
 
+  // 清空组件
+  clearWidget = () => {
+    this.setState({ widget: null });
+  }
+
   confrimReceive = () => {
-    Modal.render({
-      title: '温馨提示',
-      message: '您确认签收这件商品吗？',
-      buttons: [{
-        text: '取消',
-      }, {
-        text: '确定',
-        onClick: this.handleReceive
-      }]
+    // Modal
+    // this.setState({
+    //   widget: Modal.render({
+    //     title: '温馨提示',
+    //     message: '您确认签收这件商品吗？',
+    //     buttons: [{
+    //       text: '取消',
+    //       onClick: this.clearWidget,
+    //     }, {
+    //       text: '确定',
+    //       onClick: this.handleReceive,
+    //     }]
+    //   }),
+    // });
+
+    // ActionSheet
+    this.setState({
+      widget: ActionSheet.render({
+        title: '温馨提示',
+        message: '您确认签收这件商品吗？',
+        buttons: [
+          [{
+            text: '签收',
+            className: 'text-primary',
+            onClick: this.clearWidget,
+          }],
+          [{
+            text: '取消',
+            className: 'text-gray',
+            onClick: this.clearWidget,
+          }]
+        ]
+      })
     });
   }
 
   handleReceive = () => {
-    Toast.loading();
+    this.setState({ widget: Toast.loading() });
     $.post('/integral/ajax/receive', { id: this.state.order.orderId }, (res) => {
       if (res.code === 200) {
         this.setState({
           order: Object.assign(this.state.order, { status: 5 }),
         }, () => {
-          Toast.success('签收成功');
+          this.setState({ widget: Toast.success('签收成功', this.clearWidget) });
         });
       } else {
-        Toast.failure('签收失败');
+        this.setState({ widget: Toast.failure('签收失败', this.clearWidget) });
       }
     });
   }
@@ -70,7 +100,7 @@ export default class Order extends Component {
     let order = this.state.order;
     let orderStatus = [, , '已兑换', '兑换失败', '已发货', '已签收', '未兑换'];
     return (
-      <Page className="order" title={ this.state.title }>
+      <Page className="order" title={ this.state.title } widget={ this.state.widget }>
         {/* main */}
         <section className="main has-footer">
           { !order &&
@@ -99,7 +129,7 @@ export default class Order extends Component {
                   <div is class="vspace" ui-mode="10px"></div>
                   <div className="list compact">
                     { order.logisticsCode &&
-                      <Link className="item" to={{pathname: '/integral/logistics/' + order.logisticsCode, query: {company: order.logisticsCompany}}}>
+                      <Link className="item" to={{pathname: `/integral/logistics/${ order.logisticsCode }`, query: {company: order.logisticsCompany}}}>
                         <div className="avatar">
                           <img width="16" src="//img1.qdingnet.com/2922a6d2a27be37d5dc8182a9d1194ca.png" />
                         </div>

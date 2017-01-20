@@ -4,6 +4,7 @@
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import Bar from './bar';
+import Slot from './slot';
 import Env from '../support/env';
 
 export default class Page extends Component {
@@ -47,8 +48,8 @@ export default class Page extends Component {
   }
 
   render() {
-    let { title, menus, className, ...others } = this.props;
-    let clazz = classnames('page', className);
+    let { title, menus, className, widget, ...others } = this.props;
+    let clazz = classnames('ex-page', className);
     return (
       <div className={ clazz } { ...others }>
         { !Env.nested &&
@@ -64,7 +65,9 @@ export default class Page extends Component {
           * 如果不能接受这种情况，可以在当前PAGE手动加入slot元素，调用组件时将slot作为最后一个参数传递即可。
         */
         }
-        <div id="gslot"></div>
+
+        <Slot>{ widget }</Slot>
+
       </div>
     );
   }

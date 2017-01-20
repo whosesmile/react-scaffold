@@ -30,14 +30,14 @@ export default class Swing extends Component {
   }
 
   componentDidMount() {
+    // 顺序不能乱
+    $(window).one('scroll', this.reposition);
     $(window).on('scroll', this.handler);
     $(window).on('resize', this.reposition);
-
-    this.reposition();
-    this.handler();
   }
 
   componentWillUnmount() {
+    $(window).off('scroll', this.reposition);
     $(window).off('scroll', this.handler);
     $(window).off('resize', this.reposition);
   }

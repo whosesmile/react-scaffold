@@ -7,7 +7,28 @@ body {
 .bgwhite {
   background-color: #fff !important;
 }
-.page {
+@keyframes ex-kf-view-in {
+  0% {
+    transform: translate3d(100%, 0, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+@keyframes ex-kf-view-out {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(100%, 0, 0);
+    opacity: 0;
+  }
+}
+// 视图页设定
+.ex-page {
   min-height: 100vh;
   overflow: hidden;
   background-color: #f8f8f8;
@@ -18,60 +39,45 @@ body {
     content: "";
     display: table;
   }
-}
-.page.view-enter, .page.view-leave {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-}
-// 页入
-.view-enter {
-  transform: translate3d(100%, 0, 0);
-}
-.view-enter.view-enter-active {
-  animation: ex-kf-view-in ease .3s forwards;
-  z-index: 2;
-}
-.view-leave.view-leave-active {
-  animation: none;
-  z-index: 1;
-}
-// 页出
-.backoff {
-  .view-enter {
-    transform: translate3d(0, 0, 0);
+  &.view-enter, &.view-leave {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
   }
-  .view-enter.view-enter-active {
-    animation: none;
+}
+// 前进效果
+.ahead {
+  // 页入
+  .view-enter {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+    z-index: 2;
+
+    &.view-enter-active {
+      animation: ex-kf-view-in ease .3s forwards;
+    }
+  }
+  // 页出
+  .view-leave {
     z-index: 1;
   }
-  .view-leave.view-leave-active {
-    animation: ex-kf-view-out ease .3s forwards;
+}
+// 后退效果
+.backoff {
+  // 页入
+  .view-enter {
+    z-index: 1;
+  }
+  // 页出
+  .view-leave {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
     z-index: 2;
-  }
-}
-// 组件
-.widget-enter {
-  &.widget-enter-active {
-    visibility: visible;
 
-    &:not(.transparent) {
-      background-color: rgba(0, 0, 0, 0.6);
-    }
-    .modal, .toast {
-      animation: ex-kf-blow-in ease .3s forwards;
-    }
-  }
-}
-.widget-leave {
-  &.widget-leave-active {
-    visibility: visible;
-    background-color: rgba(0, 0, 0, 0);
-
-    .modal, .toast {
-      animation: ex-kf-blow-out ease .3s forwards;
+    &.view-leave-active {
+      animation: ex-kf-view-out ease .3s forwards;
     }
   }
 }
