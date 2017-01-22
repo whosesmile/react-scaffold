@@ -4,13 +4,16 @@
 import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
+import classnames from 'classnames';
 import Page from '../../components/page';
 import Bar from '../../components/bar';
 import Input from '../../components/input';
+import Modal from '../../components/modal';
+import Toast from '../../components/toast';
 import Carousel from '../../components/carousel';
 import Filter from '../../support/filter';
 
-export default class Details extends Component {
+export default class Address extends Component {
   static propTypes = {};
 
   static defaultProps = {};
@@ -20,12 +23,17 @@ export default class Details extends Component {
     if (this.props.params.id) {
       this.state = {
         title: '编辑地址',
-        address: null,
+        // 服务器加载
+        model: null,
       };
     } else {
       this.state = {
         title: '新增地址',
-        address: {},
+        // 给个默认值
+        model: {
+          name: CF.member.memberName,
+          mobile: CF.member.memberMobile,
+        },
       };
     }
   }
@@ -37,7 +45,7 @@ export default class Details extends Component {
       }, (res) => {
         if (res.code === 200) {
           this.setState({
-            address: res.data.entity,
+            model: res.data.entity,
           });
         }
       });
@@ -50,13 +58,21 @@ export default class Details extends Component {
     }
   }
 
+  // 修改数据
+  setModel = (e) => {
+    this.state.model[e.target.name] = e.target.value;
+    this.setState({
+      model: this.state.model,
+    });
+  }
+
   // 渲染省市区
   getLocation() {
-    let address = this.state.address;
-    if (address.projectName) {
+    let model = this.state.model;
+    if (model.projectName) {
       return (
         <div className="text text-right">
-          { address.provinceName }-{ address.cityName }-{ address.areaName || '其他地区' }
+          { model.provinceName }-{ model.cityName }-{ model.areaName || '其他地区' }
         </div>
       );
     } else {
@@ -66,12 +82,12 @@ export default class Details extends Component {
 
   // 渲染社区
   getProject() {
-    let address = this.state.address;
-    if (address.projectName) {
+    let model = this.state.model;
+    if (model.projectName) {
       return (
         <div className="text text-right">
-          { address.projectName }
-          { address.street && <div className="brief">{ address.street }</div> }
+          { model.projectName }
+          { model.street && <div className="brief">{ model.street }</div> }
         </div>
       );
     } else {
@@ -80,11 +96,11 @@ export default class Details extends Component {
   }
 
   getHouse() {
-    let address = this.state.address;
-    if (address.roomName) {
+    let model = this.state.model;
+    if (model.roomName) {
       return (
         <div className="text text-right">
-          { address.roomName }
+          { model.roomName }
         </div>
       );
     } else {
@@ -92,28 +108,47 @@ export default class Details extends Component {
     }
   }
 
+  // 清空组件
+  clearWidget = () => {
+    this.setState({ widget: null });
+  }
+
+  // 提交数据
+  submit = () => {
+    if (!this.state.model.name) {
+      return this.setState({
+        widget: <Toast icon="failure" message="请填写收货人" callback={ this.clearWidget } />
+      });
+    }
+    if (!/^\d{11}$/.test(this.state.model.mobile)) {
+      return this.setState({
+        widget: <Toast icon="failure" message="手机号不正确" callback={ this.clearWidget } />
+      });
+    }
+  }
+
   render() {
-    let address = this.state.address;
+    let model = this.state.model;
     return (
       <Page className="address" title={ this.state.title } widget={ this.state.widget }>
         <section className="main has-footer">
-          { !address &&
+          { !model &&
             <div className="loadmore">
               <i className="loading"></i>
               <span className="tips text-gray">正在加载</span>
             </div>
           }
 
-          { address &&
+          { model &&
             <div className="noop">
               <div className="list compact overlap">
                 <label className="item">
                   <span className="label">姓名</span>
-                  <Input className="input" type="text" placeholder="联系人姓名" defaultValue={ address.name } maxLength="20" />
+                  <Input className="input" type="text" placeholder="联系人姓名" name="name" value={ model.name || '' } maxLength="20" onChange={ this.setModel } />
                 </label>
                 <label className="item">
                   <span className="label">手机</span>
-                  <Input className="input" type="tel" pattern="[0-9]*" placeholder="联系人手机" defaultValue={ address.mobile } maxLength="11" />
+                  <Input className="input" type="tel" pattern="[0-9]*" placeholder="联系人手机" name="mobile" value={ model.mobile || '' } maxLength="11" onChange={ this.setModel } />
                 </label>
               </div>
               <div className="list">
@@ -134,8 +169,8 @@ export default class Details extends Component {
                 </div>
                 <label className="item">
                   <div className="text">
-                    <textarea className="textarea" placeholder="请填写详细地址" maxLength={ 100 } defaultValue={ address.address }></textarea>
-                    <div className="textarea-counter"><span>{ address.address ? address.address.length : 0 }</span>/100</div>
+                    <textarea className="textarea" placeholder="请填写详细地址" maxLength={ 100 } defaultValue={ model.address }></textarea>
+                    <div className="textarea-counter"><span>{ (model.address || '').length }</span>/100</div>
                   </div>
                 </label>
               </div>
@@ -145,7 +180,7 @@ export default class Details extends Component {
 
         <Bar component="footer" className="btm-fixed">
           <div className="button-group compact">
-            <button className="button driving square">保存地址</button>
+            <button className="button driving square" onClick={ this.submit }>保存地址</button>
           </div>
         </Bar>
       </Page>

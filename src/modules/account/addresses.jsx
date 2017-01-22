@@ -44,7 +44,7 @@ export default class Addresses extends Component {
             </div>
             <i className="icon">&#xe61a;</i>
           </Link>
-          <div className="item thread">
+          <div className="item">
             <label className="text text-sm text-darkgray">
               <input className="checkbox" type="radio" name="radio1" defaultChecked={ item.defaultFlag } />设为默认
             </label>

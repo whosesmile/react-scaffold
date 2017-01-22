@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import MaskLayer from './masklayer';
 
-class ModalWidget extends Component {
+export default class Modal extends Component {
 
   static propTypes = {
     title: PropTypes.string,
@@ -20,12 +20,20 @@ class ModalWidget extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      show: this.props.show,
+    };
+  }
+
+  dismiss = (e) => {
+    this.setState({
+      show: false,
+    });
   }
 
   render() {
     return (
-      <MaskLayer show={ this.props.show }>
+      <MaskLayer show={ this.state.show }>
         <div className="modal">
           { this.props.title &&
             <h3 className="title">{ this.props.title }</h3>
@@ -36,10 +44,10 @@ class ModalWidget extends Component {
             <div className="button-group compact nesting">
               {
                 this.props.buttons.map((item, idx) => {
-                  let { text, className='text-primary', ...others } = item;
+                  let { text, className='text-primary', onClick=this.dismiss, ...others } = item;
                   let clazz = classnames('button square', className);
                   return (
-                    <button key={ idx } className={ clazz } { ...others }>{ text }</button>
+                    <button key={ idx } className={ clazz } onClick={ onClick } { ...others }>{ text }</button>
                   );
                 })
               }
@@ -51,13 +59,3 @@ class ModalWidget extends Component {
     );
   }
 };
-
-// 弹窗代理
-const Modal = {
-  render: (opts) => {
-    return React.createElement(ModalWidget, Object.assign({ key: Date.now() }, opts));
-  }
-};
-
-export default Modal;
-export { ModalWidget };

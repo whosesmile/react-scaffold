@@ -45,53 +45,64 @@ export default class Order extends Component {
   }
 
   confrimReceive = () => {
-    // Modal
+
+    // // Modal Demo
+    // const props = {
+    //   title: '温馨提示',
+    //   message: '您确认签收这件商品吗？',
+    //   buttons: [{
+    //     text: '取消',
+    //     onClick: this.clearWidget,
+    //   }, {
+    //     text: '确定',
+    //     onClick: this.handleReceive,
+    //   }]
+    // };
+
     // this.setState({
-    //   widget: Modal.render({
-    //     title: '温馨提示',
-    //     message: '您确认签收这件商品吗？',
-    //     buttons: [{
-    //       text: '取消',
-    //       onClick: this.clearWidget,
-    //     }, {
-    //       text: '确定',
-    //       onClick: this.handleReceive,
-    //     }]
-    //   }),
+    //   widget: <Modal { ...props } />
     // });
 
-    // ActionSheet
+    // ActionSheet Demo
+    const props = {
+      title: '温馨提示',
+      message: '您确认签收这件商品吗？',
+      buttons: [
+        [{
+          text: '签收',
+          className: 'text-primary',
+          onClick: this.handleReceive,
+        }],
+        [{
+          text: '取消',
+          className: 'text-gray',
+          onClick: this.clearWidget,
+        }]
+      ]
+    };
+
     this.setState({
-      widget: ActionSheet.render({
-        title: '温馨提示',
-        message: '您确认签收这件商品吗？',
-        buttons: [
-          [{
-            text: '签收',
-            className: 'text-primary',
-            onClick: this.handleReceive,
-          }],
-          [{
-            text: '取消',
-            className: 'text-gray',
-            onClick: this.clearWidget,
-          }]
-        ]
-      })
+      widget: <ActionSheet { ...props } />
     });
   }
 
   handleReceive = () => {
-    this.setState({ widget: Toast.loading() });
+    this.setState({
+      widget: <Toast icon="loading" message="请稍后" time={ 10000 } />
+    });
     $.post('/integral/ajax/receive', { id: this.state.order.orderId }, (res) => {
       if (res.code === 200) {
         this.setState({
           order: Object.assign(this.state.order, { status: 5 }),
         }, () => {
-          this.setState({ widget: Toast.success('签收成功', this.clearWidget) });
+          this.setState({
+            widget: <Toast icon="success" message="签收成功" callback={ this.clearWidget } />
+          });
         });
       } else {
-        this.setState({ widget: Toast.failure('签收失败', this.clearWidget) });
+        this.setState({
+          widget: <Toast icon="failure" message="签收失败" callback={ this.clearWidget } />
+        });
       }
     });
   }

@@ -7,7 +7,6 @@ import { Link, browserHistory } from 'react-router';
 import Bar from '../../components/bar';
 import Page from '../../components/page';
 import Input from '../../components/input';
-import MaskLayer from '../../components/masklayer';
 import Modal from '../../components/modal';
 import Toast from '../../components/toast';
 import Filter from '../../support/filter';
@@ -53,24 +52,27 @@ export default class Package extends Component {
 
   // 兑换确认
   handleConfirm(packet) {
+    const props = {
+      title: '温馨提示',
+      message: `确认花费<span class="text-driving">${ packet.consumeIntegral }积分</span>兑换<span class="text-driving">${ packet.goodsName }</span>吗？`,
+      buttons: [{
+        text: '取消',
+        onClick: this.clearWidget,
+      }, {
+        text: '确定',
+        onClick: this.handleExcange.bind(this, packet),
+      }],
+    };
     this.setState({
-      widget: Modal.render({
-        title: '温馨提示',
-        message: `确认花费<span class="text-driving">${ packet.consumeIntegral }积分</span>兑换<span class="text-driving">${ packet.goodsName }</span>吗？`,
-        buttons: [{
-          text: '取消',
-          onClick: this.clearWidget,
-        }, {
-          text: '确定',
-          onClick: this.handleExcange.bind(this, packet),
-        }],
-      })
+      widget: <Modal { ...props }/>
     });
   }
 
   // 请求兑换
   handleExcange(packet) {
-    this.setState({ widget: Toast.loading() });
+    this.setState({
+      widget: <Toast icon="loading" message="请稍后" time={ 10000 } />
+    });
     $.post('/integral/ajax/placeorder', {
       goodsId: packet.id,
       goodsType: 'FLOW',
@@ -79,8 +81,9 @@ export default class Package extends Component {
       if (res.code === 200) {
         browserHistory.push(`/integral/success/${ res.data.entity.orderCode }`);
       } else {
-        Toast.failure('兑换失败');
-        this.setState({ widget: Toast.failure('兑换失败', this.clearWidget) });
+        this.setState({
+          widget: <Toast icon="failure" message="兑换失败" callback={ this.clearWidget } />
+        });
       }
     });
   }

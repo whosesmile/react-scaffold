@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import MaskLayer from './masklayer';
 
-class ActionSheetWidget extends Component {
+export default class ActionSheet extends Component {
   static propTypes = {
     show: PropTypes.bool,
     title: PropTypes.string,
@@ -18,11 +18,24 @@ class ActionSheetWidget extends Component {
     show: true,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      show: this.props.show,
+    };
+  }
+
+  dismiss = (e) => {
+    this.setState({
+      show: false,
+    });
+  }
+
   render() {
     let { show, title, message, buttons, className, ...others } = this.props;
     let clazz = classnames('actionsheet', className);
     return (
-      <MaskLayer show={ show }>
+      <MaskLayer show={ this.state.show }>
         <div className={ clazz } { ...others }>
           {/* HEADER */}
           { (title || message) &&
@@ -41,11 +54,11 @@ class ActionSheetWidget extends Component {
                 <div key={ idx } className="menus">
                   {
                     group.map((button, index) => {
-                      let { text, className, ...rest } = button;
+                      let { text, className, onClick = this.dismiss, ...rest } = button;
                       let clazz = classnames('item', className);
 
                       return (
-                        <div key={ index } className={ clazz } { ...rest }>{ text }</div>
+                        <div key={ index } className={ clazz } onClick={ onClick } { ...rest }>{ text }</div>
                       );
                     })
                   }
@@ -58,13 +71,3 @@ class ActionSheetWidget extends Component {
     );
   }
 };
-
-// 弹窗代理
-const ActionSheet = {
-  render: (opts) => {
-    return React.createElement(ActionSheetWidget, Object.assign({ key: Date.now() }, opts));
-  }
-};
-
-export default ActionSheet;
-export { ActionSheetWidget };

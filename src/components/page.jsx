@@ -51,7 +51,7 @@ export default class Page extends Component {
     let { title, menus, className, widget, ...others } = this.props;
     let clazz = classnames('ex-page', className);
     return (
-      <div className={ clazz } { ...others }>
+      <div ref="page" className={ clazz } { ...others }>
         { !Env.nested &&
           <Bar component="header" menus={ menus } title={ title }></Bar>
         }

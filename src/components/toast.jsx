@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import MaskLayer from './masklayer';
 
-class ToastWidget extends Component {
+export default class Toast extends Component {
   static propTypes = {
     icon: PropTypes.string,
     message: PropTypes.string,
@@ -18,18 +18,24 @@ class ToastWidget extends Component {
   static defaultProps = {
     show: true,
     time: 3000,
-    callback: () => {},
   };
 
   constructor(props) {
     super(props);
     this.state = {
+      show: this.props.show,
       presets: {
         success: '&#xe61c;',
         failure: '&#xe61d;',
         warning: '&#xe601;',
       },
     };
+  }
+
+  dismiss = (e) => {
+    this.setState({
+      show: false,
+    });
   }
 
   componentWillUnmount() {
@@ -59,11 +65,11 @@ class ToastWidget extends Component {
   }
 
   render() {
-    let { icon, message, className, show, time, callback, ...others } = this.props;
+    let { icon, message, className, show, time, callback = this.dismiss, ...others } = this.props;
     let clazz = classnames('toast', className);
     this.timer = setTimeout(callback, time);
     return (
-      <MaskLayer transparent={ true } show={ this.props.show }>
+      <MaskLayer transparent={ true } show={ this.state.show }>
         <div className={ clazz } { ...others }>
           { this.renderIcon() }
           <span className="text">{ message || '木有提示' }</span>
@@ -72,36 +78,3 @@ class ToastWidget extends Component {
     );
   }
 };
-
-// 兼容参数
-const vary = (opts, callback) => {
-  if (typeof opts === 'string') {
-    opts = { message: opts };
-  }
-  if (typeof callback === 'function') {
-    opts.callback = callback;
-  }
-  return opts;
-};
-
-// 吐司代理
-const Toast = {
-  success: function() {
-    return this.render(Object.assign({ icon: 'success' }, vary.apply(null, arguments)));
-  },
-  failure: function() {
-    return this.render(Object.assign({ icon: 'failure' }, vary.apply(null, arguments)));
-  },
-  warning: function() {
-    return this.render(Object.assign({ icon: 'warning' }, vary.apply(null, arguments)));
-  },
-  loading: function() {
-    return this.render(Object.assign({ icon: 'loading', time: 10000, message: '请稍后' }, vary.apply(null, arguments)));
-  },
-  render: function(opts) {
-    return React.createElement(ToastWidget, opts);
-  },
-};
-
-export default Toast;
-export { ToastWidget };
