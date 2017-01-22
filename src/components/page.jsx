@@ -1,6 +1,7 @@
 /*!
  * 页面模板
  */
+import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import Bar from './bar';
@@ -37,6 +38,9 @@ export default class Page extends Component {
   componentDidMount() {
     document.title = this.props.title;
 
+    // !!! 修正fixed, 原因参考 less/preset.less !!!
+    this.request = setTimeout(() => { $(this.refs.page).addClass('notrans'); }, 350);
+
     // APP内嵌或微信、服务窗，直接更改TITLE无效
     if (Env.nested) {
       var frame = document.createElement('iframe');
@@ -45,6 +49,10 @@ export default class Page extends Component {
       frame.onload = () => setTimeout(() => document.body.removeChild(frame), 10);
       document.body.appendChild(frame);
     }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.request);
   }
 
   render() {

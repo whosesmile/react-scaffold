@@ -12,6 +12,8 @@ body {
   min-height: 100vh;
   overflow: hidden;
   background-color: #f8f8f8;
+  // 添加这个是为了防止切换PAGE动画抖动 但是会导致fixed定位失效
+  // http://stackoverflow.com/questions/15194313/transform3d-not-working-with-position-fixed-children
   transform: translate3d(0, 0, 0);
   transition-property: transform;
   transition-duration: .3s;
@@ -29,6 +31,10 @@ body {
     right: 0;
     width: 100%;
   }
+}
+// 修正transform导致fixed定位失败的问题，见上面解释
+.notrans {
+  transform: none;
 }
 // 前进效果
 .ahead {
