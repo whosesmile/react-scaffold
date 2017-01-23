@@ -8,51 +8,67 @@ export default class CityPicker extends React.Component {
 
   static propTypes = {
     list: PropTypes.array.isRequired,
-    selected: PropTypes.array,
+    provinceId: PropTypes.number,
+    cityId: PropTypes.number,
+    areaId: PropTypes.number,
   }
 
   static defaultProps = {}
 
   constructor(props) {
     super(props)
-    this.state = {
-      selected: this.props.selected,
-      groups: this.parseData(this.props.list),
-    };
+    this.state = this.parseData(this.props.list);
   }
 
   // 如果数据结构不满足情况 需要解析一次
   parseData(list) {
-    // [{ items: [] }, { items: [] }, { items: [] }]
-    // 填充省份，其他列会自动调用updateGroup渲染
     let groups = Array(3).fill({ items: [] });
+    let selected = Array(3).fill(-1);
+
+    // 填充省份，其他列会自动调用updateGroup渲染
     groups[0] = {
       items: list.map((item) => {
-        return { id: item.id, label: item.name, list: item.regions };
+        return { id: item.id, label: item.name, disabled: item.disabled, list: item.regions };
       })
     };
 
-    // 是否复盘
-    let selected = this.props.selected;
+    const { provinceId, cityId, areaId } = this.props;
 
-    // 复盘城市
-    if (selected && selected[0] >= 0 && selected[1] >= 0) {
-      groups[1] = {
-        items: groups[0].items[selected[0]].list.map((item) => {
-          return { id: item.id, label: item.name, list: item.districts };
-        }),
-      };
+    // 复盘省份
+    if (provinceId) {
+      selected[0] = groups[0].items.findIndex((item) => {
+        return item.id == provinceId;
+      });
 
-      // 复盘地区
-      if (selected && selected[2] >= 0) {
-        groups[2] = {
-          items: groups[1].items[selected[1]].list.map((item) => {
-            return { id: item.id, label: item.name };
+      // 复盘城市
+      if (cityId) {
+        groups[1] = {
+          items: groups[0].items[selected[0]].list.map((item, index) => {
+            if (item.id == cityId) {
+              selected[1] = index;
+            }
+            return { id: item.id, label: item.name, disabled: item.disabled, list: item.districts };
           }),
         };
+
+        // 复盘地区
+        if (areaId) {
+          groups[2] = {
+            items: groups[1].items[selected[1]].list.map((item, index) => {
+              if (item.id == areaId) {
+                selected[2] = index;
+              }
+              return { id: item.id, label: item.name, disabled: item.disabled };
+            }),
+          };
+        }
       }
     }
-    return groups;
+
+    return {
+      selected: selected,
+      groups: groups,
+    };
   }
 
 

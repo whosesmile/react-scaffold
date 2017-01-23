@@ -136,31 +136,12 @@ export default class Address extends Component {
     let fn = () => {
       let list = this.state.list;
       let model = this.state.model;
-      let selected = [-1, -1, -1];
-      // 复盘省份
-      if (model.provinceId) {
-        selected[0] = list.findIndex((item) => {
-          return item.id == model.provinceId;
-        });
-
-        // 复盘城市
-        if (model.cityId) {
-          selected[1] = list[selected[0]].regions.findIndex((item) => {
-            return item.id == model.cityId;
-          });
-
-          // 复盘地区
-          if (model.areaId) {
-            selected[2] = list[selected[0]].regions[selected[1]].districts.findIndex((item) => {
-              return item.id == model.areaId;
-            });
-          }
-        }
-      }
 
       let props = {
         list: list,
-        selected: selected,
+        provinceId: model.provinceId,
+        cityId: model.cityId,
+        areaId: model.areaId,
         onCancel: this.clearWidget,
         onChoose: (data, selected) => {
           let [p, c, a] = data;

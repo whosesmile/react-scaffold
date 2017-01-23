@@ -38,6 +38,19 @@ export default class Picker extends Component {
     });
   }
 
+  inValid() {
+    let groups = this.props.groups;
+    let selected = this.props.selected;
+    let result = false;
+    groups.forEach((group, i) => {
+      let item = group.items[selected[i]];
+      if (item && item.disabled) {
+        result = true;
+      }
+    });
+    return result;
+  }
+
   // CORE METHOD
   handleChange = (item, i, groupIndex) => {
     let selected = this.state.selected;
@@ -70,7 +83,7 @@ export default class Picker extends Component {
           <div className="header">
             <a className="button literal inline text-nm text-gray" onClick={ onCancel || this.dismiss }>{ labels.cancel }</a>
             <h4 className="title">{ this.props.title }</h4>
-            <a className="button literal inline text-nm  text-driving" onClick={ this.handleChoose || this.dismiss }>{ labels.confirm }</a>
+            <a className="button literal inline text-nm  text-driving" disabled={ this.inValid() } onClick={ this.handleChoose || this.dismiss }>{ labels.confirm }</a>
           </div>
           <div className="content">
             {
@@ -250,7 +263,7 @@ class PickerGroup extends Component {
         <div className="roller" style={ styles }>
           {
             this.props.items.map((item, idx) => {
-              return <div key={ idx } className="item" dangerouslySetInnerHTML={{__html: item.label}}></div>;
+              return <div key={ idx } className={ classnames('item', {disabled: item.disabled}) } dangerouslySetInnerHTML={{__html: item.label}}></div>;
             })
           }
         </div>
