@@ -38,9 +38,6 @@ export default class Page extends Component {
   componentDidMount() {
     document.title = this.props.title;
 
-    // !!! 修正fixed, 原因参考 less/preset.less !!!
-    this.request = setTimeout(() => { $(this.refs.page).addClass('notrans'); }, 350);
-
     // APP内嵌或微信、服务窗，直接更改TITLE无效
     if (Env.nested) {
       var frame = document.createElement('iframe');
@@ -49,17 +46,25 @@ export default class Page extends Component {
       frame.onload = () => setTimeout(() => document.body.removeChild(frame), 10);
       document.body.appendChild(frame);
     }
+
+    // !!! 修正fixed, 原因参考 less/preset.less !!!
+    this.timer = setTimeout(this.handleFixed, 350);
   }
 
   componentWillUnmount() {
-    clearTimeout(this.request);
+    clearTimeout(this.timer);
+  }
+
+  // !!! 修正fixed, 原因参考 less/preset.less !!!
+  handleFixed = () => {
+    $(this.refs.page).addClass('notrans');
   }
 
   render() {
     let { title, menus, className, widget, ...others } = this.props;
     let clazz = classnames('ex-page', className);
     return (
-      <div ref="page" className={ clazz } { ...others }>
+      <div ref="page" className={ clazz } { ...others } onTransitionEnd={ this.handleFixed }>
         { !Env.nested &&
           <Bar component="header" menus={ menus } title={ title }></Bar>
         }

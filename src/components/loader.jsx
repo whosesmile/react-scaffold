@@ -42,7 +42,7 @@ export default class Loader extends Component {
       if (document.body.scrollHeight - document.body.scrollTop - document.documentElement.clientHeight < this.state.threshold) {
         this.loadMore((data) => {
           let callback = this.props.callback || $.noop;
-          callback(data);
+          callback(data, this.state.page);
         });
       }
     };
@@ -64,11 +64,11 @@ export default class Loader extends Component {
         loading: false,
       });
       if (res.code === 200) {
+        fn(res.data.list);
         this.setState({
           page: this.state.page + 1,
           count: this.state.count + res.data.list.length, // 备份
         });
-        fn(res.data.list);
         if (res.data.list.length < this.props.size) {
           this.release();
           this.setState({
@@ -100,7 +100,7 @@ export default class Loader extends Component {
     if (this.props.load) {
       this.loadMore((data) => {
         let callback = this.props.callback || $.noop;
-        callback(data);
+        callback(data, this.state.page);
       });
     }
     // 如果不需要自动加载并且当前页码是第一页 说明服务器端已经初始化好了 从page:2翻页

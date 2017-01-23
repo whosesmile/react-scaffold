@@ -6,143 +6,256 @@ import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 import MaskLayer from './masklayer';
 
-class PickerWidget extends Component {
+export default class Picker extends Component {
   static propTypes = {
     title: PropTypes.string,
     show: PropTypes.bool,
-    actions: PropTypes.array,
-    groups: PropTypes.array,
+    groups: PropTypes.array.isRequired,
+    labels: PropTypes.object,
     selected: PropTypes.array,
     onChange: PropTypes.func,
     onCancel: PropTypes.func,
-    onGroupChange: PropTypes.func,
+    onChoose: PropTypes.func,
   };
 
   static defaultProps = {
-    actions: [],
+    show: true,
     groups: [],
-    show: false,
-    onChange: () => {},
-    onCancel: () => {},
+    labels: { cancel: '取消', confirm: '确定' }
   }
 
   constructor(props) {
     super(props)
-
     this.state = {
+      show: this.props.show,
       selected: this.props.selected ? this.props.selected : Array(this.props.groups.length).fill(-1),
-      actions: this.props.actions.length > 0 ? this.props.actions : [{
-        text: '取消',
-        onClick: (e) => this.handleClose(() => { this.props.onCancel(e); }),
-      }, {
-        text: '确定',
-        onClick: (e) => this.handleChanges(),
-      }],
-      closing: false
+    };
+  }
+
+  dismiss = (e) => {
+    this.setState({
+      show: false,
+    });
+  }
+
+  // CORE METHOD
+  handleChange = (item, i, groupIndex) => {
+    let selected = this.state.selected;
+    selected[groupIndex] = i;
+    this.setState({
+      selected: selected,
+    }, () => {
+      if (this.props.onChange) {
+        this.props.onChange(item, i, groupIndex, this.state.selected, this);
+      }
+    });
+  }
+
+  handleChoose = () => {
+    if (this.props.onChoose) {
+      let data = this.props.groups.map((group, i) => {
+        return group.items[this.state.selected[i]];
+      });
+      this.props.onChoose(data, this.state.selected);
     }
   }
 
-  handleChanges = () => {
-    this.handleClose(() => {
-      this.props.onChange(this.state.selected, this);
-    });
-  }
+  render() {
 
-  handleChange = (item, i, groupIndex) => {
-    let selected = this.state.selected;
-
-    selected[groupIndex] = i;
-    this.setState({ selected }, () => {
-      if (this.props.onGroupChange) this.props.onGroupChange(item, i, groupIndex, this.state.selected, this)
-    });
-  }
-
-  handleClose = (callback) => {
-    this.setState({
-      closing: true
-    }, () => setTimeout(() => {
-      this.setState({ closing: false });
-      callback()
-    }, 300))
-  }
-
-  renderActions() {
-    let elActions = this.state.actions.map((action, i) => {
-      let { label, ...others } = action;
-      return <a {...others} key={i} className="weui-picker__action"> { label }</a>
-    })
+    let { title, show, groups, labels, selected, onChange, onCancel, onChoose, ...others } = this.props;
 
     return (
-      <div className="weui-picker__hd">
-        { elActions }
-      </div>
-    )
+      <MaskLayer show={ this.state.show } onClick={ onCancel || this.dismiss }>
+        <div className="picker">
+          <div className="header">
+            <a className="button literal inline text-nm text-gray" onClick={ onCancel || this.dismiss }>{ labels.cancel }</a>
+            <h4 className="title">{ this.props.title }</h4>
+            <a className="button literal inline text-nm  text-driving" onClick={ this.handleChoose || this.dismiss }>{ labels.confirm }</a>
+          </div>
+          <div className="content">
+            {
+              this.props.groups.map((group, idx) => {
+                return <PickerGroup  key={ idx } index={ idx } selected={ this.state.selected[idx] } onChange={ this.handleChange } { ...group } />;
+              })
+            }
+          </div>
+        </div>
+      </MaskLayer>
+    );
+  }
+};
+
+class PickerGroup extends Component {
+
+  static propTypes = {
+    height: PropTypes.number,
+    itemHeight: PropTypes.number,
+    aniamtion: PropTypes.bool,
+    items: PropTypes.array.isRequired,
+    index: PropTypes.number,
+    selected: PropTypes.number,
+    onChange: PropTypes.func,
+  };
+
+  static defaultProps = {
+    height: 238,
+    itemHeight: 34,
+    animation: true,
+    index: 0,
+    selected: -1,
+    onChange: () => {},
   }
 
-  renderGroups() {
-    return this.props.groups.map((group, i) => {
-      return <PickerGroup  key={i} {...group} onChange={this.handleChange} groupIndex={i} defaultIndex={this.state.selected[i]} />;
-    })
+  constructor(props) {
+    super(props);
+    this.state = {
+      touchId: null,
+      touching: false,
+      stpoint: 0,
+      sttrans: 0,
+      translate: 0,
+      selected: this.props.selected,
+      animating: this.props.animation,
+    };
+  }
+
+  handleChange(propagate = true) {
+    let { items, index } = this.props;
+    if (propagate) {
+      this.props.onChange(items[this.state.selected], this.state.selected, index);
+    }
+  }
+
+  componentDidMount() {
+    this.adjustOffset(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.adjustOffset(nextProps);
+  }
+
+  adjustOffset(props) {
+    let { selected, items, height, itemHeight } = props;
+    if (items.length === 0) {
+      return;
+    }
+    let propagate = selected < 0;
+
+    // 防止溢出
+    if (selected > items.length - 1) {
+      selected = items.length - 1;
+    }
+    // 找到最接近的值
+    if (selected < 0) {
+      selected = 0;
+    }
+
+    let volume = height / itemHeight;
+    let median = (volume - 1) / 2;
+
+    this.setState({
+      touching: false,
+      animating: true,
+      sttrans: 0,
+      stpoint: 0,
+      touchId: null,
+      selected: selected,
+      translate: (median - selected) * itemHeight,
+    }, () => {
+      this.handleChange(propagate);
+    });
+  }
+
+  handleTouchStart = (e) => {
+    if (this.state.touching || this.props.items.length <= 1) {
+      return;
+    }
+
+    this.setState({
+      touching: true,
+      animating: false,
+      sttrans: this.state.translate,
+      stpoint: e.targetTouches[0].pageY,
+      touchId: e.targetTouches[0].identifier,
+    });
+  }
+
+  handleTouchMove = (e) => {
+    if (!this.state.touching || this.props.items.length <= 1) {
+      return;
+    }
+    if (e.targetTouches[0].identifier !== this.state.touchId) {
+      return;
+    }
+
+    e.preventDefault();
+    this.setState({
+      translate: this.state.sttrans + (e.targetTouches[0].pageY - this.state.stpoint),
+    });
+  }
+
+  handleTouchEnd = (e) => {
+    if (!this.state.touching || this.props.items.length <= 1) {
+      return;
+    }
+
+    // 计算位置
+    const { height, itemHeight } = this.props;
+    let volume = height / itemHeight;
+    let median = (volume - 1) / 2;
+    let count = this.props.items.length;
+    let translate = this.state.translate;
+
+    // 超过上限
+    if (translate > median * itemHeight) {
+      translate = median * itemHeight;
+    }
+    // 超过下限
+    else if (translate < (-count + median + 1) * itemHeight) {
+      translate = (-count + median + 1) * itemHeight;
+    }
+    // 校准位置
+    else if (translate % itemHeight !== 0) {
+      let adjust = translate % itemHeight;
+      if (Math.abs(adjust) > itemHeight / 2) {
+        translate += adjust > 0 ? itemHeight - adjust : -itemHeight - adjust;
+      } else {
+        translate -= adjust;
+      }
+    }
+
+    let selected = this.state.selected;
+    this.setState({
+      touching: false,
+      animating: true,
+      sttrans: 0,
+      stpoint: 0,
+      touchId: null,
+      selected: median - translate / itemHeight,
+      translate: translate,
+    }, () => {
+      if (selected !== this.state.selected) {
+        this.handleChange();
+      }
+    });
   }
 
   render() {
-    // const { className, show, actions, groups, defaultSelect, onGroupChange, onChange, onCancel, ...others } = this.props;
-    // const cls = classNames('weui-picker', {
-    //   'weui-animate-slide-up': show && !this.state.closing,
-    //   'weui-animate-slide-down': this.state.closing
-    // }, className);
-
-    // const maskCls = classNames({
-    //   'weui-animate-fade-in': show && !this.state.closing,
-    //   'weui-animate-fade-out': this.state.closing
-    // })
-
+    let styles = {
+      'transform': `translateY(${ this.state.translate }px)`,
+      'transition': this.state.animating ? 'transform .3s' : 'none',
+    };
     return (
-      <div className="picker">
-        <div className="header">
-          <a className="menu text-gray">关闭</a>
-          <h4 className="title">{ this.props.title }</h4>
-          <a className="menu text-link">确定</a>
-        </div>
-        <div className="content">
-          <div className="group">
-            <div className="roller">
-              <div className="item">北京</div>
-              <div className="item">上海</div>
-              <div className="item">天津</div>
-              <div className="item">重庆</div>
-              <div className="item">广州</div>
-              <div className="item">深圳</div>
-              <div className="item">南京</div>
-              <div className="item">西安</div>
-              <div className="item">苏州</div>
-              <div className="item">武汉</div>
-            </div>
-          </div>
+      <div className="group" onTouchStart={ this.handleTouchStart } onTouchMove={ this.handleTouchMove } onTouchEnd={ this.handleTouchEnd }>
+        <div className="roller" style={ styles }>
+          {
+            this.props.items.map((item, idx) => {
+              return <div key={ idx } className="item" dangerouslySetInnerHTML={{__html: item.label}}></div>;
+            })
+          }
         </div>
       </div>
     );
-
-    // return this.props.show ? (
-    //   <div>
-    //       <Mask className={maskCls} onClick={e=>this.handleClose( ()=> {if(this.props.onCancel) this.props.onCancel(e)} )} />
-    //       <div className={cls} {...others}>
-    //           { this.renderActions() }
-    //           <div className="weui-picker__bd">
-    //               { this.renderGroups() }
-    //           </div>
-    //       </div>
-    //   </div>
-    // ) : false;
   }
-};
 
-// 选择器代理
-const Picker = {
-  render: (opts) => {
-    return React.createElement(PickerWidget, opts);
-  }
-};
-
-export default Picker;
-export { PickerWidget };
+}

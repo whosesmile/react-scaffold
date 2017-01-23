@@ -10,8 +10,7 @@ import Bar from '../../components/bar';
 import Input from '../../components/input';
 import Modal from '../../components/modal';
 import Toast from '../../components/toast';
-import Carousel from '../../components/carousel';
-import Filter from '../../support/filter';
+import CityPicker from '../../components/citypicker';
 
 export default class Address extends Component {
   static propTypes = {};
@@ -69,9 +68,9 @@ export default class Address extends Component {
   // 渲染省市区
   getLocation() {
     let model = this.state.model;
-    if (model.projectName) {
+    if (model.provinceName) {
       return (
-        <div className="text text-right">
+        <div className="text text-ellipsis text-right">
           { model.provinceName }-{ model.cityName }-{ model.areaName || '其他地区' }
         </div>
       );
@@ -114,7 +113,7 @@ export default class Address extends Component {
   }
 
   // 提交数据
-  submit = () => {
+  handleSubmit = () => {
     if (!this.state.model.name) {
       return this.setState({
         widget: <Toast icon="failure" message="请填写收货人" callback={ this.clearWidget } />
@@ -125,6 +124,76 @@ export default class Address extends Component {
         widget: <Toast icon="failure" message="手机号不正确" callback={ this.clearWidget } />
       });
     }
+  }
+
+  handleLocation = () => {
+
+    this.setState({
+      widget: <Toast icon="loading" message="请稍后" callback={ this.clearWidget } />
+    });
+
+    // 待优化
+    let fn = () => {
+      let list = this.state.list;
+      let model = this.state.model;
+      let selected = [-1, -1, -1];
+      // 复盘省份
+      if (model.provinceId) {
+        selected[0] = list.findIndex((item) => {
+          return item.id == model.provinceId;
+        });
+
+        // 复盘城市
+        if (model.cityId) {
+          selected[1] = list[selected[0]].regions.findIndex((item) => {
+            return item.id == model.cityId;
+          });
+
+          // 复盘地区
+          if (model.areaId) {
+            selected[2] = list[selected[0]].regions[selected[1]].districts.findIndex((item) => {
+              return item.id == model.areaId;
+            });
+          }
+        }
+      }
+
+      let props = {
+        list: list,
+        selected: selected,
+        onCancel: this.clearWidget,
+        onChoose: (data, selected) => {
+          let [p, c, a] = data;
+          model.provinceId = p.id;
+          model.provinceName = p.label;
+          model.cityId = c.id;
+          model.cityName = c.label;
+          model.areaId = a.id;
+          model.areaName = a.label;
+          this.setState({
+            model: model,
+          }, this.clearWidget);
+        },
+      };
+
+      this.setState({
+        widget: <CityPicker { ...props } />
+      });
+    };
+
+    // 加载数据
+    this.state.list ? fn() : $.get('/account/ajax/areadict', (res) => {
+      if (res.code === 200) {
+        let list = JSON.parse(res.data.areaJsonStr);
+        this.setState({
+          list: list,
+        }, fn);
+      } else {
+        this.setState({
+          widget: <Toast icon="failure" message="加载失败" callback={ this.clearWidget } />
+        });
+      }
+    });
   }
 
   render() {
@@ -152,7 +221,7 @@ export default class Address extends Component {
                 </label>
               </div>
               <div className="list">
-                <div className="item tapable">
+                <div className="item tapable" onClick={ this.handleLocation }>
                   <span className="label">所在地区</span>
                   { this.getLocation() }
                   <i className="icon text-gray">&#xe61a;</i>
@@ -180,7 +249,7 @@ export default class Address extends Component {
 
         <Bar component="footer" className="btm-fixed">
           <div className="button-group compact">
-            <button className="button driving square" onClick={ this.submit }>保存地址</button>
+            <button className="button driving square" onClick={ this.handleSubmit }>保存地址</button>
           </div>
         </Bar>
       </Page>

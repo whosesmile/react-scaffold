@@ -20,15 +20,23 @@ export default class MaskLayer extends Component {
     this.state = {};
   }
 
+  delegate(fn) {
+    return (e) => {
+      if (e.target === this.refs.mask) {
+        return fn && fn();
+      }
+    };
+  }
+
   render() {
-    let { show, transparent, className, ...others } = this.props;
+    let { show, transparent, onClick, className, ...others } = this.props;
     let clazz = classnames('ex-widget-layer', {
       'transparent': this.props.transparent,
     }, className);
 
     if (show) {
       return (
-        <div ref="mask" className={ clazz } {...others}>
+        <div ref="mask" className={ clazz } onClick={ this.delegate(onClick) } {...others}>
           { this.props.children }
         </div>
       );

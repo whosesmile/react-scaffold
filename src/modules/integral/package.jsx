@@ -172,11 +172,13 @@ export default class Package extends Component {
           </div>
         </section>
 
-        <Bar component="footer" className="btm-fixed">
-          <div className="button-group compact">
-            <a className="button default square" href="tel:4000818181">如有疑问，请致电: 4000818181</a>
-          </div>
-        </Bar>
+        {  !this.state.loading &&
+          <Bar component="footer" className="btm-fixed">
+            <div className="button-group compact">
+              <a className="button default square" href="tel:4000818181">如有疑问，请致电: 4000818181</a>
+            </div>
+          </Bar>
+        }
       </Page>
     );
   }

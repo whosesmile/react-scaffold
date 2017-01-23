@@ -67,6 +67,7 @@ export default class Toast extends Component {
   render() {
     let { icon, message, className, show, time, callback = this.dismiss, ...others } = this.props;
     let clazz = classnames('toast', className);
+    clearTimeout(this.timer);
     this.timer = setTimeout(callback, time);
     return (
       <MaskLayer transparent={ true } show={ this.state.show }>
