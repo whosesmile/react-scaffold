@@ -40,7 +40,7 @@ export default class Picker extends Component {
 
   inValid() {
     let groups = this.props.groups;
-    let selected = this.props.selected;
+    let selected = this.state.selected;
     let result = false;
     groups.forEach((group, i) => {
       let item = group.items[selected[i]];

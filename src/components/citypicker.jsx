@@ -20,7 +20,7 @@ export default class CityPicker extends React.Component {
     this.state = this.parseData(this.props.list);
   }
 
-  // 如果数据结构不满足情况 需要解析一次
+  // 数据结构不满足情况 需要重新解析一次
   parseData(list) {
     let groups = Array(3).fill({ items: [] });
     let selected = Array(3).fill(-1);
@@ -44,12 +44,12 @@ export default class CityPicker extends React.Component {
       if (cityId) {
         groups[1] = {
           items: groups[0].items[selected[0]].list.map((item, index) => {
-            if (item.id == cityId) {
-              selected[1] = index;
-            }
             return { id: item.id, label: item.name, disabled: item.disabled, list: item.districts };
           }),
         };
+        selected[1] = groups[1].items.findIndex((item) => {
+          return item.id == cityId;
+        });
 
         // 复盘地区
         if (areaId) {
@@ -61,13 +61,16 @@ export default class CityPicker extends React.Component {
               return { id: item.id, label: item.name, disabled: item.disabled };
             }),
           };
+          selected[2] = groups[2].items.findIndex((item) => {
+            return item.id == areaId;
+          });
         }
       }
     }
 
     return {
-      selected: selected,
       groups: groups,
+      selected: selected,
     };
   }
 
@@ -78,7 +81,7 @@ export default class CityPicker extends React.Component {
     if (groupIndex === 0) {
       groups[1] = {
         items: data.list.map((item) => {
-          return { id: item.id, label: item.name, list: item.districts };
+          return { id: item.id, label: item.name, disabled: item.disabled, list: item.districts };
         })
       };
 
@@ -89,7 +92,7 @@ export default class CityPicker extends React.Component {
     if (groupIndex === 1) {
       groups[2] = {
         items: data.list.map((item) => {
-          return { id: item.id, label: item.name };
+          return { id: item.id, label: item.name, disabled: item.disabled };
         })
       };
       // 重要：默认选择第一个，这里写成 0 是因为已经是最后一列，不会有连锁变动了，当然写成-1也无所谓，会多一次调用而已
@@ -98,7 +101,6 @@ export default class CityPicker extends React.Component {
     // 更改区县
     if (groupIndex === 2) {
       // NOTING
-      console.log('nothing...')
     }
 
     // 刷新数据
