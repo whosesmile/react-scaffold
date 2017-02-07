@@ -1,5 +1,5 @@
 /*!
- *地址列表
+ * 通用选择地址
  */
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
@@ -20,11 +20,28 @@ export default class Addresses extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '我的地址',
+      title: '选择地址',
       loading: true,
       list: [],
       prefix: location.pathname.split('/')[1],
+      next: this.props.location.query.next || '',
+      query: {},
     };
+
+    // 防止pathname带参
+    let index = this.state.next.indexOf('?');
+    if (index !== -1) {
+      let next = this.state.next;
+      this.state.next = next.substring(0, index);
+      let search = next.substring(index + 1);
+      let query = search.split('&').map((item) => {
+        let pairs = item.split('=');
+        return {
+          [pairs[0]]: decodeURIComponent(pairs[1]),
+        };
+      });
+      this.state.query = Object.assign(...query);
+    }
   }
 
   // 清空组件
@@ -125,7 +142,7 @@ export default class Addresses extends Component {
     return this.state.list.map((item, idx) => {
       return (
         <div key={ idx} className="list">
-          <Link is class="item" ui-mode="15px" to={ `/${ this.state.prefix }/address/${ item.id }` }>
+          <Link is class="item" ui-mode="15px" to={ {pathname: this.state.next || `/${ this.state.prefix }/address/${ item.id }`, query: {...this.state.query, addressId: item.id}} }>
             <i className="icon text-xl text-darkgray">&#xe60d;</i>
             <div className="text">
               <p className="text-justify text-md">

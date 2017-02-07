@@ -1,7 +1,6 @@
 /*!
  * 状态追踪
  */
-import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
 import Page from '../../components/page';
 

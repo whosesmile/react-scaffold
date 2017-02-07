@@ -1,7 +1,6 @@
 /*!
  * 选项卡 约定class(tabs,tabpane), 放弃使用Tab自定义标签,简化结构
  */
-import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 

@@ -1,7 +1,6 @@
 /*!
  * 新增地址 编辑地址
  */
-import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
 import { Link, browserHistory } from 'react-router';
 import classnames from 'classnames';
@@ -14,6 +13,7 @@ import Picker from '../../components/picker';
 import CityPicker from '../../components/citypicker';
 
 export default class Address extends Component {
+
   static propTypes = {};
 
   static defaultProps = {};
@@ -92,7 +92,7 @@ export default class Address extends Component {
     }
     // 如果有组团
     else if (this.state.hasGroup && !model.groupId) {
-      message = '请先选择组团';
+      message = '请选择组团';
     }
     // 如果不是其他社区，需要选择房屋
     // 因为可能是《其他房屋》,所以同时判定ID和NAME

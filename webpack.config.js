@@ -4,11 +4,11 @@ var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var OpenBrowserPlugin = require('open-browser-webpack-plugin');
-var uglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 var port = 3302;
 
 var plugins = [
   new HtmlWebpackPlugin({ title: '千丁前端', template: '../template.html', chunks: [] }),
+  new webpack.ProvidePlugin({ $: 'zepto-on-demand' }),
   new webpack.HotModuleReplacementPlugin(),
   new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
   new OpenBrowserPlugin({ url: 'http://localhost:' + port }),
@@ -16,13 +16,13 @@ var plugins = [
 
 if (process.argv.indexOf('--compress') > -1) {
   plugins.push(new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify("production") } }));
-  plugins.push(new uglifyJsPlugin({ compress: { warnings: false } }));
+  plugins.push(new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }));
 }
 
 module.exports = {
   context: path.join(__dirname, 'src'),
   entry: Object.assign(entries(), {
-    vendor: ['react', 'react-dom', 'react-router', 'react-addons-css-transition-group', 'classnames', 'webpack-zepto', 'fastclick'],
+    vendor: ['react', 'react-dom', 'react-router', 'react-addons-css-transition-group', 'classnames', 'zepto-on-demand', 'fastclick'],
   }),
   output: {
     path: path.join(__dirname, 'dist'),
@@ -31,6 +31,9 @@ module.exports = {
   plugins: plugins,
   module: {
     loaders: [{
+      test: require.resolve('zepto-on-demand'),
+      loader: 'exports-loader?window.Zepto!script-loader'
+    }, {
       test: /\.jsx?$/,
       exclude: /(node_modules|bower_components)/,
       loader: 'babel',

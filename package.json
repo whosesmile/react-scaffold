@@ -20,6 +20,7 @@
     "babel-preset-stage-2": "^6.18.0",
     "classnames": "^2.2.5",
     "css-loader": "^0.26.1",
+    "exports-loader": "^0.6.3",
     "faker": "^3.1.0",
     "fastclick": "^1.0.6",
     "file-loader": "^0.9.0",
@@ -35,9 +36,10 @@
     "react-addons-css-transition-group": "^15.4.2",
     "react-dom": "^15.4.1",
     "react-router": "^3.0.0",
+    "script-loader": "^0.7.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2",
-    "webpack-zepto": "0.0.1"
+    "zepto-on-demand": "https://github.com/whosesmile/zepto-on-demand.git"
   }
 }

@@ -1,7 +1,6 @@
 /*!
  * 旋转木马
  */
-import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import Slider from 'nuka-carousel';

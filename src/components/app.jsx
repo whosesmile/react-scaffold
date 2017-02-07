@@ -10,6 +10,7 @@ import { browserHistory } from 'react-router';
 window.addEventListener('load', () => FastClick.attach(document.body));
 
 export default class App extends Component {
+
   static propTypes = {};
 
   static defaultProps = {};

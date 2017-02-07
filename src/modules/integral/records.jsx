@@ -1,4 +1,3 @@
-import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
 import { Link, browserHistory } from 'react-router';
 import Page from '../../components/page';

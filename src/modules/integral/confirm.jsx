@@ -1,16 +1,14 @@
 /*!
  * 兑换成功
  */
-import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import Bar from '../../components/bar';
 import Page from '../../components/page';
+import TurnLink from '../../components/turnlink';
 
 export default class Confirm extends Component {
-  static propTypes = {
-    goods: PropTypes.object,
-  };
+  static propTypes = {};
 
   static defaultProps = {};
 
@@ -18,20 +16,28 @@ export default class Confirm extends Component {
     super(props);
     this.state = {
       title: '兑换确认',
-      goods: this.props.goods,
     };
   }
 
   componentDidMount() {
-    if (!this.state.goods) {
-      $.get('/integral/ajax/details', { id: this.props.params.id }, (res) => {
-        if (res.code === 200) {
-          this.setState({
-            goods: res.data.entity,
-          });
-        }
-      });
-    }
+    // 加载详情 & 加载地址
+    Promise.all([
+      $.get('/integral/ajax/details', { id: this.props.params.id }),
+      $.get('/account/ajax/address', { id: this.props.location.query.addressId }),
+    ]).then((list) => {
+      // 详情
+      if (list[0].code === 200) {
+        this.setState({
+          goods: list[0].data.entity,
+        });
+      }
+      // 地址
+      if (list[1].code === 200) {
+        this.setState({
+          address: list[1].data.entity,
+        });
+      }
+    })
   }
 
   render() {
@@ -63,23 +69,23 @@ export default class Confirm extends Component {
               { this.state.goods.goodsType == 'ENTITY' &&
                 <div className="list">
                   { this.state.address &&
-                    <a className="item" href="">
+                    <TurnLink className="item" to="/integral/addresses">
                       <i className="icon text-gray">&#xe60d;</i>
                       <span className="text">
                         { this.state.address.name }
                         <p className="brief text-wrap"><span>地址：{ this.state.address.addressStr }</span></p>
                       </span>
                       <i className="icon text-gray">&#xe61a;</i>
-                    </a>
+                    </TurnLink>
                   }
                   { !this.state.address &&
-                    <a className="item" href="">
+                    <TurnLink className="item" to="/integral/addresses">
                       <i className="icon text-gray">&#xe60d;</i>
                       <span className="text">
                         <span className="text-sm text-gray">请选择收货地址</span>
                       </span>
                       <i className="icon text-gray">&#xe61a;</i>
-                    </a>
+                    </TurnLink>
                   }
                 </div>
               }

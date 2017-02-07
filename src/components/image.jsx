@@ -1,7 +1,6 @@
 /*!
  * 延迟加载
  */
-import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 

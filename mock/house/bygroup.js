@@ -1,4 +1,5 @@
 // https://github.com/Marak/faker.js/wiki
+// 2.8新增 /api/json/brick/getRoomBygroupName
 var faker = require('faker')
 module.exports = function() {
   return {

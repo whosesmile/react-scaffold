@@ -1,7 +1,6 @@
 /*!
  * 页面模板
  */
-import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import Bar from './bar';

@@ -1,7 +1,6 @@
 /*!
  * 滚动加载
  */
-import $ from 'webpack-zepto';
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 
@@ -56,28 +55,33 @@ export default class Loader extends Component {
       loading: true,
     });
 
-    this.request = $.get(this.props.url, {
-      page: this.state.page,
-      size: this.props.size,
-    }, (res) => {
-      this.setState({
-        loading: false,
-      });
-      if (res.code === 200) {
-        fn(res.data.list);
+    this.request = $.ajax({
+      url: this.props.url,
+      data: {
+        page: this.state.page,
+        size: this.props.size,
+      },
+      cache: false,
+      success: (res) => {
         this.setState({
-          page: this.state.page + 1,
-          count: this.state.count + res.data.list.length, // 备份
+          loading: false,
         });
-        if (res.data.list.length < this.props.size) {
-          this.release();
+        if (res.code === 200) {
+          fn(res.data.list);
           this.setState({
-            hasmore: false,
+            page: this.state.page + 1,
+            count: this.state.count + res.data.list.length, // 备份
           });
+          if (res.data.list.length < this.props.size) {
+            this.release();
+            this.setState({
+              hasmore: false,
+            });
+          }
+        } else {
+          fn([]);
+          // TODO FAILURE
         }
-      } else {
-        fn([]);
-        // TODO FAILURE
       }
     });
   }
