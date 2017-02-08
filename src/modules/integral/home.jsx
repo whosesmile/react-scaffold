@@ -15,7 +15,18 @@ export default class Home extends Component {
     this.state = {
       title: '积分商城',
       list: [],
+      available: 0,
     };
+  }
+
+  componentDidMount() {
+    $.get('/integral/ajax/remain', (res) => {
+      if (res.code === 200) {
+        this.setState({
+          available: res.data.available,
+        });
+      }
+    });
   }
 
   appendList(list) {
@@ -56,7 +67,7 @@ export default class Home extends Component {
             <div className="flex menus text-center text-sm">
               <Link className="item text-dark" to="/integral/records">
                 <img src="//img1.qdingnet.com/image-9ebded27-50cb-4008-986d-995de3b162bc.png" />
-                <span>884积分</span>
+                <span>{ this.state.available }积分</span>
               </Link>
               <Link className="item text-dark" to="/integral/protocol">
                 <img src="//img1.qdingnet.com/image-33367e9b-664f-461e-a7f8-5282075c3cdd.png" />

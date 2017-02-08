@@ -19,7 +19,7 @@ export default class Logistics extends Component {
   }
 
   componentDidMount() {
-    this.request = $.get('/integral/ajax/logistics', {
+    this.request = $.get('/shopping/ajax/logistics', {
       id: this.props.params.id,
     }, (res) => {
       if (res.code === 200) {

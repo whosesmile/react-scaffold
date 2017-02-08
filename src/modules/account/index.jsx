@@ -15,8 +15,7 @@ ReactDOM.render(
     <Route path="/account" component={ App }>
       <IndexRoute component={ Home } />
       <Route path="/account/addresses" component={ Addresses } />
-      <Route path="/account/address" component={ Address } />
-      <Route path="/account/address/:id" component={ Address } />
+      <Route path="/account/address(/:id)" component={ Address } />
     </Route>
   </Router>,
   document.querySelector('#bootstrap')

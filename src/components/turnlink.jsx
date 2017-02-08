@@ -1,5 +1,5 @@
 /*!
- * TurnLink 将当前路径追加为参数: next
+ * TurnLink 将当前路径追加为参数: next, 一般用于从下个PAGE跳转回当前页面
  */
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';

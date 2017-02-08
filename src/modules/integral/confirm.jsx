@@ -2,9 +2,10 @@
  * 兑换成功
  */
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import Bar from '../../components/bar';
 import Page from '../../components/page';
+import Toast from '../../components/toast';
 import TurnLink from '../../components/turnlink';
 
 export default class Confirm extends Component {
@@ -19,8 +20,14 @@ export default class Confirm extends Component {
     };
   }
 
+  // 清空组件
+  clearWidget = () => {
+    this.setState({ widget: null });
+  }
+
   componentDidMount() {
     // 加载详情 & 加载地址
+    // PS: 虚拟物品不需要加载地址，鉴于虚拟物品较稀少，暂时不做优化
     Promise.all([
       $.get('/integral/ajax/details', { id: this.props.params.id }),
       $.get('/account/ajax/address', { id: this.props.location.query.addressId }),
@@ -40,9 +47,38 @@ export default class Confirm extends Component {
     })
   }
 
+  handleExchange = (e) => {
+    // 实物商品需要选择地址
+    if (this.state.goods.goodsType == 'ENTITY' && !this.state.address) {
+      this.setState({
+        widget: <Toast icon="failure" message="请选择地址" callback={ this.clearWidget } />
+      });
+    }
+    // 已选地址或不需要选择地址类型
+    else {
+      this.setState({
+        widget: <Toast icon="loading" message="请稍后" time={ 10000 } />
+      });
+
+      // 下单
+      $.post('/integral/ajax/placeorder', Object.assign(this.state.address || {}, {
+        goodsId: this.state.goods.id,
+        goodsType: this.state.goods.goodsType,
+      }), (res) => {
+        if (res.code === 200) {
+          browserHistory.push(`/integral/success/${ res.data.entity.orderCode }`);
+        } else {
+          this.setState({
+            widget: <Toast icon="failure" message={ res.data.message || '兑换失败' } callback={ this.clearWidget } />
+          });
+        }
+      });
+    }
+  }
+
   render() {
     return (
-      <Page className="confirm" title={ this.state.title }>
+      <Page className="confirm" title={ this.state.title } widget={ this.state.widget }>
         {/* main */}
         <section className="main">
           { !this.state.goods &&
@@ -97,7 +133,7 @@ export default class Confirm extends Component {
           <Bar component="footer" className="btm-fixed">
             <div className="button-group compact">
               <button className="button literal square text-left">应付：<span className="text-driving">{ this.state.goods.consumeIntegral }积分</span></button>
-              <button className="button driving square">立即兑换</button>
+              <button className="button driving square" onClick={ this.handleExchange }>立即兑换</button>
             </div>
           </Bar>
         }
