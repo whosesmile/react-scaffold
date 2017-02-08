@@ -23,22 +23,23 @@ import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 
 ReactDOM.render(
   <Router onUpdate={ () => window.scrollTo(0, 0) } history={ browserHistory }>
-    <Route path="/integral" component={ App }>
-      <IndexRoute component={ Home } />
-      <Route path="/integral/records" component={ Records } />
-      <Route path="/integral/packages" component={ Package } />
-      <Route path="/integral/protocol" component={ Protocol } />
-      <Route path="/integral/instruction" component={ Instruction } />
-      <Route path="/integral/orders" component={ Orders } />
-      <Route path="/integral/order/:id" component={ Order } />
-      <Route path="/integral/details/:id" component={ Details } />
-      <Route path="/integral/success/:id" component={ Success } />
-      <Route path="/integral/failure/:id" component={ Failure } />
-      <Route path="/integral/confirm/:id" component={ Confirm } />
-      <Route path="/integral/logistics/:id" component={ Logistics } />
-
-      <Route path="/integral/addresses" component={ Addresses } />
-      <Route path="/integral/address(/:id)" component={ Address } />
+    <Route path="/" component={ App }>
+      <Route path="integral">
+        <IndexRoute component={ Home } />
+        <Route path="records" component={ Records } />
+        <Route path="packages" component={ Package } />
+        <Route path="protocol" component={ Protocol } />
+        <Route path="instruction" component={ Instruction } />
+        <Route path="orders" component={ Orders } />
+        <Route path="order/:id" component={ Order } />
+        <Route path="details/:id" component={ Details } />
+        <Route path="success/:id" component={ Success } />
+        <Route path="failure/:id" component={ Failure } />
+        <Route path="confirm/:id" component={ Confirm } />
+        <Route path="logistics/:id" component={ Logistics } />
+        <Route path="addresses" component={ Addresses } />
+        <Route path="address(/:id)" component={ Address } />
+      </Route>
     </Route>
   </Router>,
   document.querySelector('#bootstrap')

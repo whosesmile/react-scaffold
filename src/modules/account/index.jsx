@@ -12,10 +12,12 @@ import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 
 ReactDOM.render(
   <Router onUpdate={ () => window.scrollTo(0, 0) } history={ browserHistory }>
-    <Route path="/account" component={ App }>
-      <IndexRoute component={ Home } />
-      <Route path="/account/addresses" component={ Addresses } />
-      <Route path="/account/address(/:id)" component={ Address } />
+    <Route path="/" component={ App }>
+      <Route path="account">
+        <IndexRoute component={ Home } />
+        <Route path="addresses" component={ Addresses } />
+        <Route path="address(/:id)" component={ Address } />
+      </Route>
     </Route>
   </Router>,
   document.querySelector('#bootstrap')
