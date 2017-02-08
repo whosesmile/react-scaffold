@@ -4,9 +4,9 @@
   "description": "Only for personal rapid developing",
   "main": "index.js",
   "scripts": {
-    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start": "if-env NODE_ENV=production && npm run start:pro || npm run start:dev",
     "start:dev": "webpack-dev-server",
-    "start:prod": "webpack --compress"
+    "start:pro": "webpack --compress"
   },
   "author": "whosesmile@gmail.com",
   "license": "MIT",

@@ -6,21 +6,26 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var OpenBrowserPlugin = require('open-browser-webpack-plugin');
 var port = 3302;
 
-var plugins = [
-  new webpack.ProvidePlugin({ $: 'zepto-on-demand' }),
-  new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
-];
+var plugins = [];
 
 // 生产模式
 if (process.argv.indexOf('--compress') > -1) {
-  plugins.push(new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify("production") } }));
-  plugins.push(new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }));
+  plugins = [
+    new webpack.ProvidePlugin({ $: 'zepto-on-demand' }),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
+    new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify("production") } }),
+    new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
+  ];
 }
 // 开发模式
 else {
-  plugins.push(new HtmlWebpackPlugin({ title: '千丁前端', template: '../template.html', chunks: [] }));
-  plugins.push(new webpack.HotModuleReplacementPlugin());
-  plugins.push(new OpenBrowserPlugin({ url: 'http://localhost:' + port }));
+  plugins = [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.ProvidePlugin({ $: 'zepto-on-demand' }),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
+    new HtmlWebpackPlugin({ title: '千丁前端', template: '../template.html', chunks: [] }),
+    new OpenBrowserPlugin({ url: 'http://localhost:' + port }),
+  ];
 }
 
 module.exports = {
@@ -30,7 +35,7 @@ module.exports = {
   }),
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: '[name].js'
+    filename: '[name].bundle.js'
   },
   plugins: plugins,
   module: {

@@ -6,14 +6,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from '../../components/app';
 import Home from './home';
-import { Router, Route, browserHistory, IndexRoute } from 'react-router';
+import { Router, Route, browserHistory, IndexRoute, Redirect } from 'react-router';
 
 ReactDOM.render(
   <Router onUpdate={ () => window.scrollTo(0, 0) } history={ browserHistory }>
     <Route path="/" component={ App }>
-      <Route path="home">
-        <IndexRoute component={ Home } />
-      </Route>
+      <IndexRoute component={ Home } />
+      <Redirect from="home" to="/" />
     </Route>
   </Router>,
   document.querySelector('#bootstrap')

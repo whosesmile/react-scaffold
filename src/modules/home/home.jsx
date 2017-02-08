@@ -18,7 +18,26 @@ export default class Home extends Component {
       <Page className="home" title={ this.state.title }>
         {/* main */}
         <section className="main">
-          TODO
+          <div className="list compact">
+            <a className="item" href="/account">
+              <div className="text">个人中心</div>
+              <i className="icon">&#xe61a;</i>
+            </a>
+            <a className="item" href="/integral">
+              <div className="text">积分商城</div>
+              <i className="icon">&#xe61a;</i>
+            </a>
+            <a className="item" href="/">
+              <div className="text">新版旅游</div>
+              <div className="extra">待实现</div>
+              <i className="icon">&#xe61a;</i>
+            </a>
+            <a className="item" href="/">
+              <div className="text">物业交费</div>
+              <div className="extra">待实现</div>
+              <i className="icon">&#xe61a;</i>
+            </a>
+          </div>
         </section>
       </Page>
     );

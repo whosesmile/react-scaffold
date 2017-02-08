@@ -19,20 +19,7 @@
     <!-- 以下脚本是调试使用，正式需要写明需要的脚本 -->
     <script>
       var bundle = location.pathname.split('/')[1];
-      if (bundle) {
-        document.write('<script src="/modules/' + bundle + '.js"><\/script>');
-      }
-      else {
-        document.querySelector('#bootstrap').innerHTML = (`
-          <div class="list compact">
-            <div class="item-divider text-center"><b>业态列表</b></div>
-            <a class="item" href="/integral">
-              <div class="text">积分商城</div>
-              <i class="icon">&#xe61a;</i>
-            </a>
-          </div>
-        `);
-      }
+      document.write('<script src="/modules/' + (bundle || 'home') + '.bundle.js"><\/script>');
     </script>
   </body>
 </html>
