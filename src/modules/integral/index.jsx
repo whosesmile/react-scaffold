@@ -19,6 +19,7 @@ import Failure from './failure';
 import Logistics from '../../support/view/logistics';
 import Addresses from '../../support/view/addresses';
 import Address from '../../support/view/address';
+import { Reload } from '../../support/util';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 
 ReactDOM.render(
@@ -40,6 +41,8 @@ ReactDOM.render(
         <Route path="addresses" component={ Addresses } />
         <Route path="address(/:id)" component={ Address } />
       </Route>
+
+      <Route path="*" onEnter={ Reload } />
     </Route>
   </Router>,
   document.querySelector('#bootstrap')

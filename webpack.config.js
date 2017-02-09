@@ -13,16 +13,16 @@ if (process.argv.indexOf('--compress') > -1) {
   plugins = [
     new webpack.ProvidePlugin({ $: 'zepto-on-demand' }),
     new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
-    new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify("production") } }),
+    new webpack.DefinePlugin({ 'process.env': { NODE_ENV: 'production' } }),
     new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
   ];
 }
 // 开发模式
 else {
   plugins = [
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.ProvidePlugin({ $: 'zepto-on-demand' }),
     new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
+    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({ title: '千丁前端', template: '../template.html', chunks: [] }),
     new OpenBrowserPlugin({ url: 'http://localhost:' + port }),
   ];
@@ -61,7 +61,7 @@ module.exports = {
     hot: true,
     inline: true,
     compress: true,
-    contentBase: ['./src'],
+    contentBase: ['./dist'],
     historyApiFallback: true,
     setup: function(app) {
       app.all('/*/ajax/**', function(req, res) {

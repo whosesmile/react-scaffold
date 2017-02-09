@@ -17,11 +17,13 @@ export default class Orders extends Component {
     this.state = {
       title: '兑换记录',
       list: [],
+      loading: true,
     };
   }
 
   appendList(list) {
     this.setState({
+      loading: false,
       list: this.state.list.concat(list),
     });
   }
@@ -30,9 +32,20 @@ export default class Orders extends Component {
     let prizeTypes = { 'TICKET': '优惠券', 'FLOW': '流量包', 'ENTITY': '实物商品' };
     let orderStatus = [, , '已兑换', '兑换失败', '已发货', '已签收', '未兑换'];
 
+    if (!this.state.loading && this.state.list.length === 0) {
+      return (
+        <div className="feedback">
+          <div className="mark">
+            <img width="220" height="220" src="//img1.qdingnet.com/b70973ae84276a865ae7ae673ea1e318.png" alt="空白" />
+          </div>
+          <div className="describe">还没有相关订单哦</div>
+        </div>
+      );
+    }
+
     return this.state.list.map((item, idx) => {
       return (
-        <div key={ idx } className="list">
+        <div is key={ idx } class="list">
           <div className="item">
             <div className="text text-sm">积分商城</div>
             <div className="extra text-sm">{ Filter.default(orderStatus[item.status], '其他') }</div>

@@ -40,6 +40,15 @@ const Filter = {
     }
     return fmt;
   },
+
+  // 截取字符串
+  truncate: function(input, size) {
+    input = String(input || '');
+    if (input.length <= size) {
+      return input;
+    }
+    return input.substring(0, size) + '...';
+  },
 };
 
 export default Filter;

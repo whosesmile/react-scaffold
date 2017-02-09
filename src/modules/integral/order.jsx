@@ -45,44 +45,44 @@ export default class Order extends Component {
 
   confrimReceive = () => {
 
-    // // Modal Demo
-    // const props = {
-    //   title: '温馨提示',
-    //   message: '您确认签收这件商品吗？',
-    //   buttons: [{
-    //     text: '取消',
-    //     onClick: this.clearWidget,
-    //   }, {
-    //     text: '确定',
-    //     onClick: this.handleReceive,
-    //   }]
-    // };
-
-    // this.setState({
-    //   widget: <Modal { ...props } />
-    // });
-
-    // ActionSheet Demo
+    // Modal Demo
     const props = {
       title: '温馨提示',
       message: '您确认签收这件商品吗？',
-      buttons: [
-        [{
-          text: '签收',
-          className: 'text-primary',
-          onClick: this.handleReceive,
-        }],
-        [{
-          text: '取消',
-          className: 'text-gray',
-          onClick: this.clearWidget,
-        }]
-      ]
+      buttons: [{
+        text: '取消',
+        onClick: this.clearWidget,
+      }, {
+        text: '确定',
+        onClick: this.handleReceive,
+      }]
     };
 
     this.setState({
-      widget: <ActionSheet { ...props } />
+      widget: <Modal { ...props } />
     });
+
+    // ActionSheet Demo
+    // const props = {
+    //   title: '温馨提示',
+    //   message: '您确认签收这件商品吗？',
+    //   buttons: [
+    //     [{
+    //       text: '签收',
+    //       className: 'text-primary',
+    //       onClick: this.handleReceive,
+    //     }],
+    //     [{
+    //       text: '取消',
+    //       className: 'text-gray',
+    //       onClick: this.clearWidget,
+    //     }]
+    //   ]
+    // };
+
+    // this.setState({
+    //   widget: <ActionSheet { ...props } />
+    // });
   }
 
   handleReceive = () => {

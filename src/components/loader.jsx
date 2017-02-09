@@ -7,6 +7,7 @@ import classnames from 'classnames';
 export default class Loader extends Component {
   static propTypes = {
     url: PropTypes.string.isRequired,
+    query: PropTypes.object,
     page: PropTypes.number,
     size: PropTypes.number,
     load: PropTypes.bool,
@@ -32,19 +33,19 @@ export default class Loader extends Component {
       page: this.props.page,
     };
     this.events = ['scroll', 'resize', 'lookup'];
+  }
 
-    this.handler = (e) => {
-      // CHECK IS HIDDEN
-      if (!this.refs.panel.offsetParent) {
-        return;
-      }
-      if (document.body.scrollHeight - document.body.scrollTop - document.documentElement.clientHeight < this.state.threshold) {
-        this.loadMore((data) => {
-          let callback = this.props.callback || $.noop;
-          callback(data, this.state.page);
-        });
-      }
-    };
+  handler = () => {
+    // CHECK IS HIDDEN
+    if (!this.refs.panel.offsetParent) {
+      return;
+    }
+    if (document.body.scrollHeight - document.body.scrollTop - document.documentElement.clientHeight < this.state.threshold) {
+      this.loadMore((data) => {
+        let callback = this.props.callback || $.noop;
+        callback(data, this.state.page);
+      });
+    }
   }
 
   loadMore(fn) {
@@ -57,10 +58,10 @@ export default class Loader extends Component {
 
     this.request = $.ajax({
       url: this.props.url,
-      data: {
+      data: Object.assign({
         page: this.state.page,
         size: this.props.size,
-      },
+      }, this.props.query),
       cache: false,
       success: (res) => {
         this.setState({
@@ -117,6 +118,31 @@ export default class Loader extends Component {
 
   componentWillUnmount() {
     this.release();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (JSON.stringify(nextProps.query) !== JSON.stringify(this.props.query)) {
+      this.setState({
+        hasmore: true,
+        loading: false,
+        count: 0,
+        page: nextProps.page,
+      }, () => {
+        // 自动加载首页
+        if (nextProps.load) {
+          this.loadMore((data) => {
+            let callback = nextProps.callback || $.noop;
+            callback(data, this.state.page);
+          });
+        }
+        // 如果不需要自动加载并且当前页码是第一页 说明服务器端已经初始化好了 从page:2翻页
+        else if (this.state.page === 1) {
+          this.setState({
+            page: 2,
+          });
+        }
+      });
+    }
   }
 
   renderLoading() {

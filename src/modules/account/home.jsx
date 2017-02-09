@@ -93,13 +93,13 @@ export default class Home extends Component {
           </div>
 
           <div className="list">
-            <a className="item" href="/account/orders">
+            <Link className="item" to="/account/orders">
               <div className="avatar">
                 <img width="16" src="//img1.qdingnet.com/899826a5bde2edb56611b67b0ba7c7ae.png" />
               </div>
               <span className="text">我的订单</span>
               <i className="icon text-gray">&#xe61a;</i>
-            </a>
+            </Link>
             <Link className="item" to="/account/addresses">
               <div className="avatar">
                 <img width="16" src="//img1.qdingnet.com/41a2bbb947f173727de845f70f7c36ab.png" />
