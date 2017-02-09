@@ -37,7 +37,7 @@ export default class Page extends Component {
   componentDidMount() {
     document.title = this.props.title;
 
-    // APP内嵌或微信、服务窗，直接更改TITLE无效
+    // !!! 内嵌窗口如APP、微信、服务窗等,直接更改TITLE无效
     if (Env.nested) {
       var frame = document.createElement('iframe');
       frame.src = '//m.baidu.com/favicon.ico';
@@ -48,6 +48,9 @@ export default class Page extends Component {
 
     // !!! 修正fixed, 原因参考 less/preset.less !!!
     this.timer = setTimeout(this.handleFixed, 350);
+
+    // !!! 修正偏移,防止前一个页面滚动
+    window.scrollTo(0, 0);
   }
 
   componentWillUnmount() {
@@ -71,11 +74,9 @@ export default class Page extends Component {
         { this.props.children }
 
         {
-        /*
-          * 全局组件插槽
-          * 注意：由于页面过度有动画，同时网络AJAX有延迟，因此有时会在错误的页面弹出组件
-          * 如果不能接受这种情况，可以在当前PAGE手动加入slot元素，调用组件时将slot作为最后一个参数传递即可。
-        */
+          /*
+          * 页面组件插槽
+          */
         }
 
         <Slot>{ widget }</Slot>

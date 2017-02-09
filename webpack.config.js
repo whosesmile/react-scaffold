@@ -61,7 +61,7 @@ module.exports = {
     hot: true,
     inline: true,
     compress: true,
-    contentBase: ['./dist'],
+    contentBase: ['./src'],
     historyApiFallback: true,
     setup: function(app) {
       app.all('/*/ajax/**', function(req, res) {

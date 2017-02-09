@@ -11,7 +11,7 @@ import Address from '../../support/view/address';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 
 ReactDOM.render(
-  <Router onUpdate={ () => window.scrollTo(0, 0) } history={ browserHistory }>
+  <Router history={ browserHistory }>
     <Route path="/" component={ App }>
       <Route path="account">
         <IndexRoute component={ Home } />
