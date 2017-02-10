@@ -14,9 +14,6 @@ import MaskLayer from '../../components/masklayer';
 import Filter from '../../support/filter';
 
 export default class Orders extends Component {
-  static propTypes = {};
-
-  static defaultProps = {};
 
   constructor(props) {
     super(props);
@@ -154,7 +151,7 @@ export default class Orders extends Component {
         {/* main */}
         <section className="main">
           <Swing>
-            <div className="flex compact">
+            <div className={ classnames('flex','compact', {active: this.state.filter}) }>
               <div className={ classnames('item', {active: this.state.filter === 'business'}) } onClick={ this.handleFilter.bind(this, 'business') }>
                 <span>{ (this.state.botypes.find((item) => item.type == this.state.business) || this.state.botypes[0]).name }</span>
                 <img width="24" src="//img1.qdingnet.com/d3f9a9b6304a8ccccbb2a1457fe5b5e6.png" />
@@ -188,7 +185,7 @@ export default class Orders extends Component {
           </Loader>
           <Slot>
             { this.state.filter &&
-              <MaskLayer show={ true } onClick={ this.handleFilter.bind(this, null) } />
+              <MaskLayer show={ true } className="reduce" onClick={ this.handleFilter.bind(this, null) } />
             }
           </Slot>
         </section>

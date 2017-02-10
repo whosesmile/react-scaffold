@@ -6,9 +6,6 @@ import { Link } from 'react-router';
 import Page from '../../components/page';
 
 export default class Failure extends Component {
-  static propTypes = {};
-
-  static defaultProps = {};
 
   constructor(props) {
     super(props);

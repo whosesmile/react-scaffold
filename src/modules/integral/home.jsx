@@ -6,10 +6,6 @@ import Loader from '../../components/loader';
 
 export default class Home extends Component {
 
-  static propTypes = {};
-
-  static defaultProps = {};
-
   constructor(props) {
     super(props);
     this.state = {

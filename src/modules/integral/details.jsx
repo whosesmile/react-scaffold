@@ -9,9 +9,6 @@ import Carousel from '../../components/carousel';
 import Filter from '../../support/filter';
 
 export default class Details extends Component {
-  static propTypes = {};
-
-  static defaultProps = {};
 
   constructor(props) {
     super(props);

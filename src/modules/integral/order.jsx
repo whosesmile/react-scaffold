@@ -12,17 +12,10 @@ import Filter from '../../support/filter';
 
 export default class Order extends Component {
 
-  static propTypes = {
-    order: PropTypes.object,
-  };
-
-  static defaultProps = {};
-
   constructor(props) {
     super(props);
     this.state = {
       title: '兑换详情',
-      order: this.props.order,
     };
   }
 

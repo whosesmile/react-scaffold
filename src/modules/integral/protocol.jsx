@@ -5,9 +5,6 @@ import React, { Component, PropTypes } from 'react';
 import Page from '../../components/page';
 
 export default class Protocol extends Component {
-  static propTypes = {};
-
-  static defaultProps = {};
 
   constructor(props) {
     super(props);

@@ -8,9 +8,6 @@ import Loader from '../../components/loader';
 import Filter from '../../support/filter';
 
 export default class Orders extends Component {
-  static propTypes = {};
-
-  static defaultProps = {};
 
   constructor(props) {
     super(props);

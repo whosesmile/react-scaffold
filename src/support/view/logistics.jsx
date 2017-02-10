@@ -6,9 +6,6 @@ import Page from '../../components/page';
 import Filter from '../../support/filter';
 
 export default class Logistics extends Component {
-  static propTypes = {};
-
-  static defaultProps = {};
 
   constructor(props) {
     super(props);

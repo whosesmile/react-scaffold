@@ -14,10 +14,6 @@ import CityPicker from '../../components/citypicker';
 
 export default class Address extends Component {
 
-  static propTypes = {};
-
-  static defaultProps = {};
-
   constructor(props) {
     super(props);
     if (this.props.params.id) {

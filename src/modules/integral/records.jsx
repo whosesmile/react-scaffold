@@ -7,9 +7,6 @@ import TabView from '../../components/tabview';
 import Filter from '../../support/filter';
 
 export default class Records extends Component {
-  static propTypes = {};
-
-  static defaultProps = {};
 
   constructor(props) {
     super(props);

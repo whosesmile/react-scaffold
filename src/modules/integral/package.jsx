@@ -11,9 +11,6 @@ import Toast from '../../components/toast';
 import Filter from '../../support/filter';
 
 export default class Package extends Component {
-  static propTypes = {};
-
-  static defaultProps = {};
 
   constructor(props) {
     super(props);

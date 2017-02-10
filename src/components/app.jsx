@@ -5,6 +5,9 @@ import FastClick from 'fastclick';
 import React, { Component, PropTypes } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { browserHistory } from 'react-router';
+import Slot from './slot';
+import Modal from './modal';
+import Env from '../support/env';
 
 // FASTCLICK: PROXY CLICK
 window.addEventListener('load', () => FastClick.attach(document.body));
@@ -41,7 +44,14 @@ export default class App extends Component {
     return rrkeys;
   }
 
+  clearWidget = () => {
+    this.setState({
+      widget: null
+    });
+  }
+
   componentDidMount() {
+    // 切换动画
     browserHistory.listen((data) => {
       let key = data.key;
       // 新增 PUSH
@@ -81,12 +91,60 @@ export default class App extends Component {
         }
       }
     });
+
+    // 异常拦截
+    $(document).on('ajaxSuccess', (e, xhr, data, res) => {
+      // 社区拦截
+      if (res.code === 402) {
+        const props = {
+          title: '温馨提示',
+          message: '您需要选择社区后才能继续操作',
+          buttons: [{
+            text: '取消',
+            onClick: this.clearWidget,
+          }, {
+            text: '确定',
+            onClick: () => {
+              location.href = '/location?next=' + encodeURIComponent(location.href);
+            },
+          }],
+        };
+        this.setState({
+          widget: <Modal { ...props }/>
+        });
+      }
+
+      // 登录拦截
+      if (res.code === 403) {
+        const props = {
+          title: '温馨提示',
+          message: '您需要登录之后才能继续操作',
+          buttons: [{
+            text: '取消',
+            onClick: this.clearWidget,
+          }, {
+            text: '确定',
+            onClick: () => {
+              if (Env.is('wx') || Env.is('ali')) {
+                location.href = '/account/improve?next=' + encodeURIComponent(location.href);
+              } else {
+                location.href = '/account/login?next=' + encodeURIComponent(location.href);
+              }
+            },
+          }],
+        };
+        this.setState({
+          widget: <Modal { ...props }/>
+        });
+      }
+    });
   }
 
   render() {
     return (
       <ReactCSSTransitionGroup component="div" className={ this.state.action } transitionName="view"  transitionEnterTimeout={ 300 } transitionLeaveTimeout={ 300 }>
         { React.cloneElement(this.props.children, {key: location.pathname}) }
+        <Slot>{ this.state.widget }</Slot>
       </ReactCSSTransitionGroup>
     );
   }

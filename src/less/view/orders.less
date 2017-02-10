@@ -5,15 +5,19 @@
 
 // 订单列表
 .orders {
+  // 降低遮罩层级 以便显出过滤菜单
+  .ex-widget-layer.reduce {
+    z-index: 99;
+  }
+  // 美观
   .button-group > .button.sm {
     min-width: 76px;
   }
-  .swing .tablet {
-    z-index: 1001;
-  }
+  // 悬挂
   .swing .flex {
     position: relative;
     margin-top: -1px;
+    z-index: 100;
 
     &:before {
       .borderTop();

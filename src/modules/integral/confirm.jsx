@@ -9,9 +9,6 @@ import Toast from '../../components/toast';
 import TurnLink from '../../components/turnlink';
 
 export default class Confirm extends Component {
-  static propTypes = {};
-
-  static defaultProps = {};
 
   constructor(props) {
     super(props);
