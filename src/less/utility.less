@@ -1,3 +1,17 @@
+.list.compact {
+  margin-top: -1px
+}
+.list.hspace {
+  position: relative;
+
+  &:before {
+    .borderLeft();
+  }
+  &:after {
+    .borderRight();
+  }
+}
+
 .main.has-footer {
   margin-bottom: 58px;
 }

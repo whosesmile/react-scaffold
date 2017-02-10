@@ -1,0 +1,100 @@
+// For Orders Page
+@import '../const.less';
+@import '../color.less';
+@import '../mixin.less';
+
+// 订单列表
+.orders {
+  .button-group > .button.sm {
+    min-width: 76px;
+  }
+  .swing .tablet {
+    z-index: 1001;
+  }
+  .swing .flex {
+    position: relative;
+    margin-top: -1px;
+
+    &:before {
+      .borderTop();
+    }
+    &:after {
+      .borderBottom();
+    }
+    .item {
+      font-size: 15px;
+      text-align: center;
+      line-height: 44px;
+      background-color: #fff;
+
+      &:not(:last-child) {
+        border-right: 1px solid #eee;
+      }
+      img {
+        vertical-align: middle;
+        margin-top: -4px;
+        transition-property: transform;
+        transition-duration: .3s;
+      }
+      &.active img {
+        transform: rotate(180deg);
+      }
+      .menus {
+        max-height: 0;
+        transition-property: max-height;
+        transition-duration: .15s;
+        transition-timing-function: ease-out;
+        overflow: hidden;
+        background-color: #fff;
+        position: absolute;
+        top: 44px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        z-index: 100;
+      }
+      &.active .menus {
+        max-height: 325px;
+        max-height: 50vh;
+        transition-duration: .3s;
+        transition-timing-function: ease-in;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+      }
+      nav {
+        text-align: center;
+        padding: 5px;
+        border-bottom: 1px solid #e5e5e5;
+        .clearfix();
+
+        a {
+          position: relative;
+          float: left;
+          width: 33.3333%;
+          padding: 5px;
+          line-height: 42px;
+
+          span {
+            position: relative;
+            display: block;
+
+            &:active {
+              background-color: #f8f8f8;
+            }
+            &:after {
+              .border();
+              border-radius: 10px;
+            }
+          }
+          &.selected span {
+            color: @textColorOrange;
+
+            &:after {
+              border-color: @textColorOrange;
+            }
+          }
+        }
+      }
+    }
+  }
+}

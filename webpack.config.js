@@ -23,13 +23,12 @@ else {
     new webpack.ProvidePlugin({ $: 'zepto-on-demand' }),
     new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
     new webpack.HotModuleReplacementPlugin(),
-    new HtmlWebpackPlugin({ title: '千丁前端', template: '../template.html', chunks: [] }),
+    new HtmlWebpackPlugin({ title: '千丁前端', template: './template.html', chunks: [] }),
     new OpenBrowserPlugin({ url: 'http://localhost:' + port }),
   ];
 }
 
 module.exports = {
-  context: path.join(__dirname, 'src'),
   entry: Object.assign(entries(), {
     vendor: ['react', 'react-dom', 'react-router', 'react-addons-css-transition-group', 'classnames', 'zepto-on-demand', 'fastclick'],
   }),
@@ -61,7 +60,7 @@ module.exports = {
     hot: true,
     inline: true,
     compress: true,
-    contentBase: ['./dist'],
+    contentBase: 'dist',
     historyApiFallback: true,
     setup: function(app) {
       app.all('/*/ajax/**', function(req, res) {
@@ -88,7 +87,7 @@ function entries() {
     var stat = fs.statSync(file);
     if (stat && stat.isDirectory() && fs.existsSync(path.join(file, 'index.jsx'))) {
       var name = path.join('modules', path.basename(file));
-      result[name] = ['.', name, 'index.jsx'].join(path.sep);
+      result[name] = ['./src', name, 'index.jsx'].join(path.sep);
     }
   });
   return result;

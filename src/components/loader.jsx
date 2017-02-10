@@ -48,6 +48,28 @@ export default class Loader extends Component {
     }
   }
 
+  // 判断是否自动加载
+  autoLoad(props) {
+    // 自动加载首页
+    if (props.load) {
+      this.loadMore((data) => {
+        let callback = props.callback || $.noop;
+        callback(data, {
+          page: this.state.page,
+          size: this.props.size,
+          count: this.state.count,
+          hasmore: this.state.hasmore,
+        });
+      });
+    }
+    // 如果不需要自动加载并且当前页码是第一页 说明服务器端已经初始化好了 从page:2翻页
+    else if (this.state.page === 1) {
+      this.setState({
+        page: 2,
+      });
+    }
+  }
+
   loadMore(fn) {
     if (!this.state.hasmore || this.state.loading) {
       return;
@@ -101,25 +123,14 @@ export default class Loader extends Component {
       $(window).on(ename, this.handler);
     });
 
-    // 自动加载首页
-    if (this.props.load) {
-      this.loadMore((data) => {
-        let callback = this.props.callback || $.noop;
-        callback(data, this.state.page);
-      });
-    }
-    // 如果不需要自动加载并且当前页码是第一页 说明服务器端已经初始化好了 从page:2翻页
-    else if (this.state.page === 1) {
-      this.setState({
-        page: 2,
-      });
-    }
+    this.autoLoad(this.props);
   }
 
   componentWillUnmount() {
     this.release();
   }
 
+  // 更新参数 需要重置必要的状态
   componentWillReceiveProps(nextProps) {
     if (JSON.stringify(nextProps.query) !== JSON.stringify(this.props.query)) {
       this.setState({
@@ -128,19 +139,7 @@ export default class Loader extends Component {
         count: 0,
         page: nextProps.page,
       }, () => {
-        // 自动加载首页
-        if (nextProps.load) {
-          this.loadMore((data) => {
-            let callback = nextProps.callback || $.noop;
-            callback(data, this.state.page);
-          });
-        }
-        // 如果不需要自动加载并且当前页码是第一页 说明服务器端已经初始化好了 从page:2翻页
-        else if (this.state.page === 1) {
-          this.setState({
-            page: 2,
-          });
-        }
+        this.autoLoad(nextProps);
       });
     }
   }

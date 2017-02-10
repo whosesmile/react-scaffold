@@ -6,9 +6,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from '../../components/app';
 import Home from './home';
-import Orders from './orders';
 import Addresses from './addresses';
 import Address from '../../support/view/address';
+import Orders from '../../support/view/orders';
 import { Reload } from '../../support/util';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 

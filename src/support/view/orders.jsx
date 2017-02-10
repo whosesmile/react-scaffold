@@ -1,6 +1,7 @@
 /*!
  * 我的订单记录
  */
+import '../../less/view/orders.less';
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import Page from '../../components/page';
@@ -23,9 +24,24 @@ export default class Orders extends Component {
       title: '我的订单',
       list: [],
       loading: true,
-      status: this.props.location.query.status || 0,
+      type: this.props.location.query.type || 0,
       business: this.props.location.query.business || null,
+      botypes: [{ name: '全部服务', type: null }],
+      odtypes: [{ name: '全部订单', type: 0 }, { name: '代付款', type: 1 }, { name: '待评价', type: 2 }],
     };
+  }
+
+  componentDidMount() {
+    // 列举订单业态(每个用户不一样)
+    $.get('/account/ajax/botypes', (res) => {
+      if (res.code === 200) {
+        this.setState({
+          botypes: this.state.botypes.concat(res.data.list.map((item) => {
+            return { name: item.businessName, type: item.businessType };
+          })),
+        });
+      }
+    });
   }
 
   appendList(list) {
@@ -52,11 +68,11 @@ export default class Orders extends Component {
     }
   }
 
-  handleStatus(status) {
+  handleType(type) {
     // 更改订单分类，需要重新查询，因此重置数据
-    if (this.state.status !== status) {
+    if (this.state.type !== type) {
       this.setState({
-        status: status,
+        type: type,
         loading: true,
         list: [],
       });
@@ -132,7 +148,7 @@ export default class Orders extends Component {
   }
 
   render() {
-    const status = ['全部订单', '待付款', '待评价'];
+    const types = ['全部订单', '待付款', '待评价'];
     return (
       <Page className="orders" title={ this.state.title }>
         {/* main */}
@@ -140,29 +156,36 @@ export default class Orders extends Component {
           <Swing>
             <div className="flex compact">
               <div className={ classnames('item', {active: this.state.filter === 'business'}) } onClick={ this.handleFilter.bind(this, 'business') }>
-                <span>全部服务</span>
+                <span>{ (this.state.botypes.find((item) => item.type == this.state.business) || this.state.botypes[0]).name }</span>
                 <img width="24" src="//img1.qdingnet.com/d3f9a9b6304a8ccccbb2a1457fe5b5e6.png" />
-                <nav>
-                  <a className={ classnames({selected: this.state.business == null}) } onClick={ this.handleBusiness.bind(this, null) }><span>全部服务</span></a>
-                  <a className={ classnames({selected: this.state.business == 'JT'}) } onClick={ this.handleBusiness.bind(this, 'JT') }><span>阶梯团购</span></a>
-                  <a className={ classnames({selected: this.state.business == 'LZ'}) } onClick={ this.handleBusiness.bind(this, 'LZ') }><span>鲜花绿植</span></a>
-                </nav>
+                <div className="menus">
+                  <nav>
+                    {
+                      this.state.botypes.map((item, idx) => {
+                        return <a key={ idx } className={ classnames({selected: this.state.business == item.type}) } onClick={ this.handleBusiness.bind(this, item.type) }><span>{ item.name }</span></a>
+                      })
+                    }
+                  </nav>
+                </div>
               </div>
-              <div className={ classnames('item', {active: this.state.filter === 'status'}) } onClick={ this.handleFilter.bind(this, 'status') }>
-                <span>{ status[this.state.status] || '全部订单' }</span>
+              <div className={ classnames('item', {active: this.state.filter === 'type'}) } onClick={ this.handleFilter.bind(this, 'type') }>
+                <span>{  (this.state.odtypes.find((item) => item.type == this.state.type) || this.state.odtypes[0]).name }</span>
                 <img width="24" src="//img1.qdingnet.com/d3f9a9b6304a8ccccbb2a1457fe5b5e6.png" />
-                <nav>
-                  <a className={ classnames({selected: this.state.status == 0}) } onClick={ this.handleStatus.bind(this, 0) }><span>全部订单</span></a>
-                  <a className={ classnames({selected: this.state.status == 1}) } onClick={ this.handleStatus.bind(this, 1) }><span>待付款</span></a>
-                  <a className={ classnames({selected: this.state.status == 2}) } onClick={ this.handleStatus.bind(this, 2) }><span>待评价</span></a>
-                </nav>
+                <div className="menus">
+                  <nav>
+                    {
+                      this.state.odtypes.map((item, idx) => {
+                        return <a key={ idx } className={ classnames({selected: this.state.type == item.type}) } onClick={ this.handleType.bind(this, item.type) }><span>{ item.name }</span></a>
+                      })
+                    }
+                  </nav>
+                </div>
               </div>
             </div>
           </Swing>
-          <Loader url="/account/ajax/orders" query={ {business: this.state.business, status: this.state.status} }callback={ this.appendList.bind(this) }>
+          <Loader url="/account/ajax/orders" query={ {business: this.state.business, type: this.state.type} }callback={ this.appendList.bind(this) }>
             { this.renderList() }
           </Loader>
-
           <Slot>
             { this.state.filter &&
               <MaskLayer show={ true } onClick={ this.handleFilter.bind(this, null) } />
