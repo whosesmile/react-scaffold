@@ -140,6 +140,11 @@ export default class App extends Component {
     });
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    // 防止死循环刷新 参见:support/util {Reload}
+    sessionStorage.removeItem(this.props.location.pathname);
+  }
+
   render() {
     return (
       <ReactCSSTransitionGroup component="div" className={ this.state.action } transitionName="view"  transitionEnterTimeout={ 300 } transitionLeaveTimeout={ 300 }>
