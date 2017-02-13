@@ -2,7 +2,7 @@
  * 流量兑换
  */
 import React, { Component, PropTypes } from 'react';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import Bar from '../../components/bar';
 import Page from '../../components/page';
 import Input from '../../components/input';
@@ -50,7 +50,7 @@ export default class Package extends Component {
   handleConfirm(packet) {
     const props = {
       title: '温馨提示',
-      message: `确认花费<span class="text-driving">${ packet.consumeIntegral }积分</span>兑换<span class="text-driving">${ packet.goodsName }</span>吗？`,
+      message: <section>确认花费<span className="text-driving">{ packet.consumeIntegral }积分</span>兑换<span className="text-driving">{ packet.goodsName }</span>吗？</section>,
       buttons: [{
         text: '取消',
         onClick: this.clearWidget,
@@ -75,7 +75,7 @@ export default class Package extends Component {
       consigneeMobile: this.state.mobile,
     }, (res) => {
       if (res.code === 200) {
-        browserHistory.push(`/integral/success/${ res.data.entity.orderCode }`);
+        this.props.router.push(`/integral/success/${ res.data.entity.orderCode }`);
       } else {
         this.setState({
           widget: <Toast icon="failure" message="兑换失败" callback={ this.clearWidget } />

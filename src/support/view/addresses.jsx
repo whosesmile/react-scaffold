@@ -52,7 +52,7 @@ export default class Addresses extends Component {
     });
   }
 
-  handleDefault = (item, idx) => {
+  handleDefault = (item) => {
     if (!item.defaultFlag) {
       this.setState({
         widget: <Toast icon="loading" message="请稍后" time={ 10000 } callback={ this.clearWidget } />
@@ -61,13 +61,12 @@ export default class Addresses extends Component {
         id: item.id,
       }, (res) => {
         if (res.code === 200) {
-          this.state.list.map((item, index) => {
-            item.defaultFlag = index === idx ? 1 : 0;
-            return item;
-          });
           this.setState({
-            list: this.state.list,
-            widget: <Toast icon="success" message="设置成功" callback={ this.clearWidget } />
+            widget: <Toast icon="success" message="设置成功" callback={ this.clearWidget } />,
+            list: this.state.list.map((x) => {
+              x.defaultFlag = x === item ? 1 : 0;
+              return x;
+            }),
           });
         } else {
           this.setState({
@@ -151,7 +150,7 @@ export default class Addresses extends Component {
           </Link>
           <div className="item">
             <label className="text text-sm text-darkgray">
-              <input className="checkbox" type="radio" name="defaultFlag" checked={ item.defaultFlag } onChange={ this.handleDefault.bind(this, item, idx) } />设为默认
+              <input className="checkbox" type="radio" name="defaultFlag" checked={ item.defaultFlag } onChange={ this.handleDefault.bind(this, item) } />设为默认
             </label>
             <div className="extra">
               <div className="button-group">

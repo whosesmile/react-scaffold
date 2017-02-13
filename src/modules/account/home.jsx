@@ -33,7 +33,7 @@ export default class Home extends Component {
   render() {
     let wallet = this.state.wallet;
     return (
-      <Page className="home" title={ this.state.title }>
+      <Page className="home" title={ this.state.title } widget={ this.state.widget }>
         {/* main */}
         <section className="main">
           {/*

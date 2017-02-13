@@ -37,7 +37,7 @@ export default class Details extends Component {
   render() {
 
     return (
-      <Page className="details bgwhite" title={ this.state.title }>
+      <Page className="details bgwhite" title={ this.state.title } widget={ this.state.widget }>
         <section className="main has-footer">
           { !this.state.goods &&
             <div className="loadmore">

@@ -53,7 +53,7 @@ export default class Home extends Component {
 
   render() {
     return (
-      <Page className="home" title={ this.state.title }>
+      <Page className="home" title={ this.state.title } widget={ this.state.widget }>
         {/* main */}
         <section className="main">
           <div is class="hspace vspace" ui-mode="10px">

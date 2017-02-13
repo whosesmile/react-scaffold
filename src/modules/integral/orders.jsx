@@ -71,7 +71,7 @@ export default class Orders extends Component {
 
   render() {
     return (
-      <Page className="orders" title={ this.state.title }>
+      <Page className="orders" title={ this.state.title } widget={ this.state.widget }>
         {/* main */}
         <section className="main">
           <Loader url="/integral/ajax/orders" callback={ this.appendList.bind(this) }>

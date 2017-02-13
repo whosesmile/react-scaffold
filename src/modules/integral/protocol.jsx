@@ -15,7 +15,7 @@ export default class Protocol extends Component {
 
   render() {
     return (
-      <Page className="protocol bgwhite" title={ this.state.title }>
+      <Page className="protocol bgwhite" title={ this.state.title } widget={ this.state.widget }>
         {/* main */}
         <section className="main">
           <div className="article">

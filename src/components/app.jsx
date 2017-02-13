@@ -144,7 +144,13 @@ export default class App extends Component {
     return (
       <ReactCSSTransitionGroup component="div" className={ this.state.action } transitionName="view"  transitionEnterTimeout={ 300 } transitionLeaveTimeout={ 300 }>
         { React.cloneElement(this.props.children, {key: location.pathname}) }
-        <Slot>{ this.state.widget }</Slot>
+        <Slot>
+          {
+            [].concat(this.state.widget || []).map((item, idx) => {
+              return React.cloneElement(item, {key: idx});
+            })
+          }
+        </Slot>
       </ReactCSSTransitionGroup>
     );
   }

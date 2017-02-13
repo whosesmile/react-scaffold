@@ -15,7 +15,7 @@ export default class Instruction extends Component {
 
   render() {
     return (
-      <Page className="instruction" title={ this.state.title }>
+      <Page className="instruction" title={ this.state.title } widget={ this.state.widget }>
         {/* main */}
         <section className="main">
           <div className="article">

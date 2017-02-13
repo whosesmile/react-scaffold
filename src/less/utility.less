@@ -1,17 +1,10 @@
 .list.compact {
   margin-top: -1px
 }
-.list.hspace {
-  position: relative;
-
-  &:before {
-    .borderLeft();
-  }
-  &:after {
-    .borderRight();
-  }
+// 由于fastclick的原因, 防止无法触发radio || checkbox 的点击事件
+.list > label.item > * {
+  pointer-events: none;
 }
-
 .main.has-footer {
   margin-bottom: 58px;
 }

@@ -22,7 +22,7 @@ export default class Cashier extends Component {
     }
     // html5
     else {
-      return (<Link { ...others } to={ {pathname:'/cashier/payment', query: { code: code, business: business }} }>{ this.props.children }</Link>);
+      return (<Link { ...others } to={ {pathname:'/cashier/payment', query: { code: code, price: price, business: business }} }>{ this.props.children }</Link>);
     }
   }
 }

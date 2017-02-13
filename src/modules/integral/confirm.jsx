@@ -129,7 +129,7 @@ export default class Confirm extends Component {
         { this.state.goods &&
           <Bar component="footer" className="btm-fixed">
             <div className="button-group compact">
-              <button className="button literal square text-left">应付：<span className="text-driving">{ this.state.goods.consumeIntegral }积分</span></button>
+              <button className="button literal square text-left">应付: <span className="text-driving">{ this.state.goods.consumeIntegral }积分</span></button>
               <button className="button driving square" onClick={ this.handleExchange }>立即兑换</button>
             </div>
           </Bar>

@@ -79,7 +79,13 @@ export default class Page extends Component {
           */
         }
 
-        <Slot>{ widget }</Slot>
+        <Slot>
+          {
+            [].concat(widget || []).map((item, idx) => {
+              return React.cloneElement(item, {key: idx});
+            })
+          }
+        </Slot>
 
       </div>
     );

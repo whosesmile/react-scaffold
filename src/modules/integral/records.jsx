@@ -67,7 +67,7 @@ export default class Records extends Component {
 
   render() {
     return (
-      <Page className="records" title={ this.state.title }>
+      <Page className="records" title={ this.state.title } widget={ this.state.widget }>
         {/* main */}
         <section className="main">
           <TabView>

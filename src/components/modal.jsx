@@ -10,7 +10,7 @@ export default class Modal extends Component {
 
   static propTypes = {
     title: PropTypes.string,
-    message: PropTypes.string.isRequired,
+    message: PropTypes.any.isRequired,
     show: PropTypes.bool,
   };
 
@@ -38,7 +38,7 @@ export default class Modal extends Component {
           { this.props.title &&
             <h3 className="title">{ this.props.title }</h3>
           }
-          <div className="content" dangerouslySetInnerHTML={{__html: this.props.message}}></div>
+          <div className="content">{ this.props.message }</div>
 
           <footer className="footer">
             <div className="button-group compact nesting">
