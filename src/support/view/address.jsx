@@ -60,7 +60,9 @@ export default class Address extends Component {
 
   // 清空组件
   clearWidget = () => {
-    this.setState({ widget: null });
+    let widget = [].concat(this.state.widget || []);
+    widget.pop();
+    this.setState({ widget });
   }
 
   // 检查错误

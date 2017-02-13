@@ -28,7 +28,9 @@ export default class Package extends Component {
   }
 
   clearWidget = () => {
-    this.setState({ widget: null });
+    let widget = [].concat(this.state.widget || []);
+    widget.pop();
+    this.setState({ widget });
   }
 
   // 更改手机

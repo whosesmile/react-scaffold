@@ -45,9 +45,9 @@ export default class App extends Component {
   }
 
   clearWidget = () => {
-    this.setState({
-      widget: null
-    });
+    let widget = [].concat(this.state.widget || []);
+    widget.pop();
+    this.setState({ widget });
   }
 
   componentDidMount() {

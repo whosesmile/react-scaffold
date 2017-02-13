@@ -20,30 +20,9 @@ export default class Home extends Component {
 
   // 清空组件
   clearWidget = () => {
-    if (Array.isArray(this.state.widget)) {
-      this.state.widget.pop();
-      this.setState({
-        widget: this.state.widget
-      });
-    } else {
-      this.setState({ widget: null });
-    }
-  }
-
-  // 统一的错误处理
-  showError(message) {
-    const props = {
-      title: '抱歉',
-      message: message,
-      buttons: [{
-        text: '确定',
-        onClick: this.clearWidget,
-      }]
-    };
-
-    this.setState({
-      widget: <Modal { ...props } />
-    });
+    let widget = [].concat(this.state.widget || []);
+    widget.pop();
+    this.setState({ widget });
   }
 
   // 更改支付方式
@@ -137,7 +116,18 @@ export default class Home extends Component {
           }
         });
       } else {
-        this.showError(res.data.message || '微信支付暂时不可用');
+        const props = {
+          title: '抱歉',
+          message: res.data.message || '微信支付暂时不可用',
+          buttons: [{
+            text: '确定',
+            onClick: this.clearWidget,
+          }]
+        };
+
+        this.setState({
+          widget: <Modal { ...props } />
+        });
       }
     });
   }
@@ -283,6 +273,21 @@ export default class Home extends Component {
 
   componentDidMount() {
     const query = this.props.location.query;
+
+    if (!query.code || !query.price || !query.business) {
+      const props = {
+        title: '数据异常',
+        message: '缺少必要的支付参数，无法支付',
+        buttons: [{
+          text: '关闭',
+          onClick: this.clearWidget,
+        }]
+      };
+
+      return this.setState({
+        widget: <Modal { ...props } />
+      });
+    }
     // 记载支付方式
     $.get('/cashier/ajax/method', {
       code: query.code,
