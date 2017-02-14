@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import Page from '../../components/page';
 import Swing from '../../components/swing';
 import Loader from '../../components/loader';

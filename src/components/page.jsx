@@ -3,6 +3,7 @@
  */
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
+import { browserHistory } from 'react-router';
 import Bar from './bar';
 import Slot from './slot';
 import Env from '../support/env';
@@ -18,7 +19,7 @@ export default class Page extends Component {
     // 此处是示意 上线前会改动
     // 二维数组 第一个前置菜单，第二个后置菜单
     menus: [
-      [{ icon: '&#xe60e;', label: '返回', className: 'text-gray', href: 'javascript:history.back()' }],
+      [{ icon: '&#xe60e;', label: '返回', className: 'text-gray', onClick: () => browserHistory.goBack() }],
       [{ icon: '&#xe618;', className: 'text-gray', onClick: () => location.reload() }],
     ],
   };

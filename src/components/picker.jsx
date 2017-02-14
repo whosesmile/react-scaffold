@@ -83,7 +83,7 @@ export default class Picker extends Component {
           <div className="header">
             <a className="button literal inline text-nm text-gray" onClick={ onCancel || this.dismiss }>{ labels.cancel }</a>
             <h4 className="title">{ this.props.title }</h4>
-            <a className="button literal inline text-nm  text-driving" disabled={ this.inValid() } onClick={ this.handleChoose || this.dismiss }>{ labels.confirm }</a>
+            <a className="button literal inline text-nm text-driving" disabled={ this.inValid() } onClick={ this.handleChoose || this.dismiss }>{ labels.confirm }</a>
           </div>
           <div className="content">
             {

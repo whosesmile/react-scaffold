@@ -2,7 +2,7 @@
  * 兑换成功
  */
 import React, { Component, PropTypes } from 'react';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import Bar from '../../components/bar';
 import Page from '../../components/page';
 import Toast from '../../components/toast';
@@ -65,7 +65,7 @@ export default class Confirm extends Component {
         goodsType: this.state.goods.goodsType,
       }), (res) => {
         if (res.code === 200) {
-          browserHistory.push(`/integral/success/${ res.data.entity.orderCode }`);
+          this.props.router.push({ pathname: '/integral/success', query: { code: res.data.entity.orderCode } });
         } else {
           this.setState({
             widget: <Toast icon="failure" message={ res.data.message || '兑换失败' } callback={ this.clearWidget } />

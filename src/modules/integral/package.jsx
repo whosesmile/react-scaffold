@@ -77,7 +77,7 @@ export default class Package extends Component {
       consigneeMobile: this.state.mobile,
     }, (res) => {
       if (res.code === 200) {
-        this.props.router.push(`/integral/success/${ res.data.entity.orderCode }`);
+        this.props.router.push({ pathname: '/integral/success', query: { code: res.data.entity.orderCode } });
       } else {
         this.setState({
           widget: <Toast icon="failure" message="兑换失败" callback={ this.clearWidget } />

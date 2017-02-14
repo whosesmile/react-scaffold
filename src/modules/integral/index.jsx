@@ -20,6 +20,7 @@ import Logistics from '../../support/view/logistics';
 import Addresses from '../../support/view/addresses';
 import Address from '../../support/view/address';
 import { Reload } from '../../support/util';
+import { loginRequired } from '../../support/interceptor';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 
 ReactDOM.render(
@@ -27,16 +28,16 @@ ReactDOM.render(
     <Route path="/" component={ App }>
       <Route path="integral">
         <IndexRoute component={ Home } />
-        <Route path="records" component={ Records } />
+        <Route path="records" component={ Records } onEnter={ loginRequired } />
         <Route path="packages" component={ Package } />
         <Route path="protocol" component={ Protocol } />
         <Route path="instruction" component={ Instruction } />
         <Route path="orders" component={ Orders } />
         <Route path="order/:id" component={ Order } />
         <Route path="details/:id" component={ Details } />
-        <Route path="success/:id" component={ Success } />
-        <Route path="failure/:id" component={ Failure } />
         <Route path="confirm/:id" component={ Confirm } />
+        <Route path="success" component={ Success } />
+        <Route path="failure" component={ Failure } />
         <Route path="logistics/:id" component={ Logistics } />
         <Route path="addresses" component={ Addresses } />
         <Route path="address(/:id)" component={ Address } />

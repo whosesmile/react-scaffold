@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Page from '../../components/page';
+import Toast from '../../components/toast';
+import Popup, { PopupHeader } from '../../components/popup';
 
 export default class Home extends Component {
 
@@ -8,6 +10,90 @@ export default class Home extends Component {
     this.state = {
       title: '千丁小区',
     };
+  }
+
+  // 清空组件
+  clearWidget = () => {
+    let widget = [].concat(this.state.widget || []);
+    widget.pop();
+    this.setState({ widget });
+  }
+
+  callback(item) {
+    this.setState({
+      widget: <Toast icon="warning" message={ '你选择了' + item } />
+    });
+  }
+
+  handlePopup1 = () => {
+    this.setState({
+      widget: (
+        <Popup className="test" onClick={ this.clearWidget }>
+          <div className="content">
+            <div className="list compact">
+              {
+                Array(5).fill(1).map((item, idx)=> {
+                  return (
+                    <div key={ idx } className="item" onClick={ this.callback.bind(this,idx) }>
+                      <div className="text">我是项目：{ idx }</div>
+                      <i className="icon">&#xe61a;</i>
+                    </div>
+                  );
+                })
+              }
+            </div>
+          </div>
+        </Popup>
+      ),
+    });
+  }
+
+  handlePopup2 = () => {
+    this.setState({
+      widget: (
+        <Popup className="test" onClick={ this.clearWidget }>
+          <PopupHeader title="请选择" />
+          <div className="content">
+            <div className="list compact">
+              {
+                Array(5).fill(1).map((item, idx)=> {
+                  return (
+                    <div key={ idx } className="item" onClick={ this.callback.bind(this,idx) }>
+                      <div className="text">我是项目：{ idx }</div>
+                      <i className="icon">&#xe61a;</i>
+                    </div>
+                  );
+                })
+              }
+            </div>
+          </div>
+        </Popup>
+      ),
+    });
+  }
+
+  handlePopup3 = () => {
+    this.setState({
+      widget: (
+        <Popup className="test" onClick={ this.clearWidget }>
+          <PopupHeader title="请选择" onCancel={ this.clearWidget } onConfirm={ this.clearWidget } />
+          <div className="content">
+            <div className="list compact">
+              {
+                Array(5).fill(1).map((item, idx)=> {
+                  return (
+                    <div key={ idx } className="item" onClick={ this.callback.bind(this,idx) }>
+                      <div className="text">我是项目：{ idx }</div>
+                      <i className="icon">&#xe61a;</i>
+                    </div>
+                  );
+                })
+              }
+            </div>
+          </div>
+        </Popup>
+      ),
+    });
   }
 
   render() {
@@ -34,6 +120,24 @@ export default class Home extends Component {
               <div className="extra">待实现</div>
               <i className="icon">&#xe61a;</i>
             </a>
+          </div>
+
+          <div className="list">
+            <div className="item tapable" onClick={ this.handlePopup1 }>
+              <div className="text">POPUP示例</div>
+              <div className="extra">无标题</div>
+              <i className="icon">&#xe61a;</i>
+            </div>
+            <div className="item tapable" onClick={ this.handlePopup2 }>
+              <div className="text">POPUP示例</div>
+              <div className="extra">带标题</div>
+              <i className="icon">&#xe61a;</i>
+            </div>
+            <div className="item tapable" onClick={ this.handlePopup3 }>
+              <div className="text">POPUP示例</div>
+              <div className="extra">带按钮</div>
+              <i className="icon">&#xe61a;</i>
+            </div>
           </div>
         </section>
       </Page>

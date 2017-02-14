@@ -23,7 +23,11 @@ export default class SkipLink extends Component {
     if (/^(https?:)?\/\//.test(result)) {
       return (<a { ...others } href={ result }>{ this.props.children }</a>);
     }
-
+    // 不同同模块
+    if (result.indexOf(location.pathname) === -1) {
+      return (<a { ...others } href={ result }>{ this.props.children }</a>);
+    }
+    // 相同模块
     return (<Link { ...others } to={ result }>{ this.props.children }</Link>);
   }
 }
