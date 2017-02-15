@@ -404,7 +404,7 @@ export default class Home extends Component {
                     <div key={ idx } className="list">
                       {/* 钱包支付:特殊处理 */}
                       { item.type === 61 &&
-                        <label is class="item tapable" ui-mode="15px">
+                        <label is class="item tapable forlab" ui-mode="15px">
                           <div className="avatar">
                             <img width="45" height="45" src={ item.icon } />
                           </div>
@@ -424,7 +424,7 @@ export default class Home extends Component {
                       }
                       {/* 其他支付 */}
                       { item.type !== 61 &&
-                        <label is class="item tapable" ui-mode="15px">
+                        <label is class="item tapable forlab" ui-mode="15px">
                           <div className="avatar">
                             <img width="45" height="45" src={ item.icon } />
                           </div>
