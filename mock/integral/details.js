@@ -7,7 +7,7 @@ module.exports = function() {
       entity: {
         id: faker.random.number(),
         goodsName: faker.name.jobArea(),
-        goodsType: faker.random.arrayElement(['ENTITY', 'TICKET']),
+        goodsType: faker.random.arrayElement(['ENTITY' /*, 'TICKET'*/ ]),
         goodsDesc: faker.lorem.words().split(' ').join('\n'),
         consumeIntegral: faker.random.number(),
         marketPrice: faker.random.number(),

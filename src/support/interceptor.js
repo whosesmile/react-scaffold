@@ -1,16 +1,20 @@
+import Env from './env';
+
 // 社区拦截
 function projectRequired(nextState, replace) {
-  // TODO
+  if (!window.CF || !CF.project || !CF.member.id) {
+    location.href = '/location?next=' + encodeURIComponent(location.href);
+  }
 }
 
 // 登录拦截
 function loginRequired(nextState, replace) {
-  // TODO
-  if (false) {
-    replace({
-      pathname: '/account',
-      state: { nextPathname: nextState.location.pathname }
-    });
+  if (!window.CF || !CF.member || !CF.member.memberId) {
+    if (Env.is('wx') || Env.is('ali')) {
+      location.href = '/account/improve?next=' + encodeURIComponent(location.href);
+    } else {
+      location.href = '/account/login?next=' + encodeURIComponent(location.href);
+    }
   }
 }
 

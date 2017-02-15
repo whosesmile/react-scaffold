@@ -19,7 +19,7 @@ module.exports = function() {
       id: faker.random.number(),
       isSetting: 1,
       memberId: faker.random.number(),
-      mobile: 18610535297,
+      mobile: faker.phone.phoneNumberFormat(),
       name: "杜拉拉",
       phone: 18610535297,
       postCode: faker.random.number(),

@@ -14,9 +14,13 @@ window.addEventListener('load', () => FastClick.attach(document.body));
 
 export default class App extends Component {
 
-  static propTypes = {};
+  static childContextTypes = {
+    dump: PropTypes.object,
+  };
 
-  static defaultProps = {};
+  getChildContext() {
+    return { dump: this.dump || {} };
+  }
 
   constructor(props) {
     super(props);
@@ -53,6 +57,8 @@ export default class App extends Component {
   componentDidMount() {
     // 切换动画
     browserHistory.listen((data) => {
+      // 转存数据
+      this.dump = data.state || null;
       let key = data.key;
       // 新增 PUSH
       if (data.action === 'PUSH') {

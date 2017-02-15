@@ -10,6 +10,10 @@ import TurnLink from '../../components/turnlink';
 
 export default class Confirm extends Component {
 
+  static contextTypes = {
+    dump: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -27,23 +31,36 @@ export default class Confirm extends Component {
   componentDidMount() {
     // 加载详情 & 加载地址
     // PS: 虚拟物品不需要加载地址，鉴于虚拟物品较稀少，暂时不做优化
-    Promise.all([
-      $.get('/integral/ajax/details', { id: this.props.params.id }),
-      $.get('/account/ajax/address', { id: this.props.location.query.addressId }),
-    ]).then((list) => {
-      // 详情
-      if (list[0].code === 200) {
-        this.setState({
-          goods: list[0].data.entity,
-        });
-      }
-      // 地址
-      if (list[1].code === 200) {
-        this.setState({
-          address: list[1].data.entity,
-        });
-      }
-    })
+    if (this.context.dump.address) {
+      $.get('/integral/ajax/details', { id: this.props.params.id }, (res) => {
+        if (res.code === 200) {
+          this.setState({
+            goods: res.data.entity,
+            address: this.context.dump.address,
+          });
+        }
+      });
+    }
+    // 同时请求
+    else {
+      Promise.all([
+        $.get('/integral/ajax/details', { id: this.props.params.id }),
+        $.get('/account/ajax/address', { id: this.props.location.query.addressId }),
+      ]).then((list) => {
+        // 详情
+        if (list[0].code === 200) {
+          this.setState({
+            goods: list[0].data.entity,
+          });
+        }
+        // 地址
+        if (list[1].code === 200) {
+          this.setState({
+            address: list[1].data.entity,
+          });
+        }
+      });
+    }
   }
 
   handleExchange = (e) => {
@@ -104,10 +121,13 @@ export default class Confirm extends Component {
               { this.state.goods.goodsType == 'ENTITY' &&
                 <div className="list">
                   { this.state.address &&
-                    <TurnLink className="item" to="/integral/addresses">
+                    <TurnLink is class="item" to="/integral/addresses" ui-mode="15px">
                       <i className="icon text-gray">&#xe60d;</i>
                       <span className="text">
-                        { this.state.address.name }
+                        <p className="text-justify text-md">
+                          <span>{ this.state.address.name }</span>
+                          <span className="value text-right">{ this.state.address.mobile }</span>
+                        </p>
                         <p className="brief text-wrap"><span>地址：{ this.state.address.addressStr }</span></p>
                       </span>
                       <i className="icon text-gray">&#xe61a;</i>

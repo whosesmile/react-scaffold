@@ -139,7 +139,7 @@ export default class Addresses extends Component {
     return this.state.list.map((item, idx) => {
       return (
         <div key={ idx} className="list">
-          <Link is class="item" ui-mode="15px" to={ {pathname: this.state.next || `/${ this.state.prefix }/address/${ item.id }`, query: {...this.state.query, addressId: item.id}} }>
+          <Link is class="item" ui-mode="15px" to={ {pathname: this.state.next || `/${ this.state.prefix }/address/${ item.id }`, query: {...this.state.query, addressId: item.id}, state: {address: item}} }>
             <i className="icon text-xl text-darkgray">&#xe60d;</i>
             <div className="text">
               <p className="text-justify text-md">

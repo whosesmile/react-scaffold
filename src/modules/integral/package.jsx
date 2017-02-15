@@ -155,19 +155,19 @@ export default class Package extends Component {
                 );
               })
             }
-
-            { this.state.list.length > 0 &&
-              <div className="article text-sm text-gray">
-                <h3>充值说明</h3>
-                <section>
-                  <p>1. 流量为全国流量，立即生效，月底失效，每个手机号码每月限充5次。</p>
-                  <p>2. 每月最后两天，中国移动手机号进入清算期，暂不支持兑换。</p>
-                  <p>3. 积分换取的流量，以实际运营商套餐为准，移动、联通、电信略有不同。</p>
-                  <p>4. 超过运营商冲抵限额、号码欠费、套餐互斥、非实名认证、运营商黑名单等充值失败，则积分会自动返还。</p>
-                </section>
-              </div>
-            }
           </div>
+
+          { !this.state.loading && this.state.list.length > 0 &&
+            <div className="article text-sm text-gray">
+              <h3>充值说明</h3>
+              <section>
+                <p>1. 流量为全国流量，立即生效，月底失效，每个手机号码每月限充5次。</p>
+                <p>2. 每月最后两天，中国移动手机号进入清算期，暂不支持兑换。</p>
+                <p>3. 积分换取的流量，以实际运营商套餐为准，移动、联通、电信略有不同。</p>
+                <p>4. 超过运营商冲抵限额、号码欠费、套餐互斥、非实名认证、运营商黑名单等充值失败，则积分会自动返还。</p>
+              </section>
+            </div>
+          }
         </section>
 
         {  !this.state.loading &&
