@@ -23,7 +23,7 @@ module.exports = function() {
       name: "杜拉拉",
       phone: 18610535297,
       postCode: faker.random.number(),
-      projectId: faker.random.number(),
+      projectId: Math.random() > 0.5 ? '1751' : faker.random.number(),
       projectName: "北城星座",
       provinceId: faker.random.number(),
       provinceName: "四川省",

@@ -1,4 +1,4 @@
-/*!
+/**
  * 兑换记录
  */
 import React, { Component, PropTypes } from 'react';
@@ -47,7 +47,7 @@ export default class Orders extends Component {
             <div className="text text-sm">积分商城</div>
             <div className="extra text-sm">{ Filter.default(orderStatus[item.status], '其他') }</div>
           </div>
-          <Link is class="item" ui-mode="15px" to={ '/integral/order/' + item.id }>
+          <Link is class="item" ui-mode="15px" to={ '/integral/order/' + item.orderCode }>
             <div className="avatar">
               <img width="60" height="60px" src={ item.coverImg } />
             </div>
@@ -60,7 +60,7 @@ export default class Orders extends Component {
             <div className="text text-sm">消耗: <span className="text-driving">{ item.consumeIntegral }积分</span></div>
             <div className="extra">
               <div className="button-group">
-                <Link className="button default sm" to={ '/integral/order/' + item.id }>查看详情</Link>
+                <Link className="button default sm" to={ '/integral/order/' + item.orderCode }>查看详情</Link>
               </div>
             </div>
           </div>
@@ -71,7 +71,7 @@ export default class Orders extends Component {
 
   render() {
     return (
-      <Page className="orders" title={ this.state.title } widget={ this.state.widget }>
+      <Page className="orders" title={ this.state.title } widget={ this.state.widget } menus={ this.state.menus }>
         {/* main */}
         <section className="main">
           <Loader url="/integral/ajax/orders" callback={ this.appendList.bind(this) }>

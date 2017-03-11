@@ -12,16 +12,23 @@ var plugins = [];
 if (process.argv.indexOf('--compress') > -1) {
   plugins = [
     new webpack.ProvidePlugin({ $: 'zepto-on-demand' }),
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
-    new webpack.DefinePlugin({ 'process.env': { NODE_ENV: 'production' } }),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', minChunks: Infinity }),
+    new webpack.DefinePlugin({ 'process.env': { NODE_ENV: JSON.stringify('production') } }),
     new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
+  ];
+}
+// 联调模式
+else if (process.argv.indexOf('--watch') > -1) {
+  plugins = [
+    new webpack.ProvidePlugin({ $: 'zepto-on-demand' }),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', minChunks: Infinity }),
   ];
 }
 // 开发模式
 else {
   plugins = [
     new webpack.ProvidePlugin({ $: 'zepto-on-demand' }),
-    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', minChunks: Infinity }),
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({ title: '千丁前端', template: './template.html', chunks: [] }),
     new OpenBrowserPlugin({ url: 'http://localhost:' + port }),
@@ -76,7 +83,6 @@ module.exports = {
     extensions: ['', '.js', 'json', '.jsx'],
   },
 };
-
 
 // 递归目录查找模块
 function entries() {

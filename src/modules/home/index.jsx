@@ -1,4 +1,4 @@
-/*!
+/**
  * by 李双宝
  */
 import './style.less';

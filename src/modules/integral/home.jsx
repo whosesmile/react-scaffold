@@ -1,3 +1,6 @@
+/**
+ * 首页
+ */
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import Page from '../../components/page';
@@ -36,10 +39,13 @@ export default class Home extends Component {
       return (
         <Link key={ idx } to={ '/integral/details/' + item.id } className="item" >
           <div className="panel">
-          <div is class="vspace hspace" ui-mode="10px">
-            <div className="figure">
-              <LazyImage src={ item.coverImg } />
-            </div>
+            <div is class="vspace hspace" ui-mode="10px">
+              <div className="figure">
+                <LazyImage src={ item.coverImg } />
+              </div>
+              { false && item.isFinished &&
+                <img class="sellout" src="//img1.qdingnet.com/image-e23b028d-83f4-42d2-867b-f7a1a1f7fe8f.png" />
+              }
             </div>
             <div className="text">
               <h4 className="name">{ item.goodsName }</h4>
@@ -53,7 +59,7 @@ export default class Home extends Component {
 
   render() {
     return (
-      <Page className="home" title={ this.state.title } widget={ this.state.widget }>
+      <Page className="home" title={ this.state.title } widget={ this.state.widget } menus={ this.state.menus }>
         {/* main */}
         <section className="main">
           <div is class="hspace vspace" ui-mode="10px">

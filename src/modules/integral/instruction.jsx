@@ -1,4 +1,4 @@
-/*!
+/**
  * 兑换说明
  */
 import React, { Component, PropTypes } from 'react';
@@ -15,7 +15,7 @@ export default class Instruction extends Component {
 
   render() {
     return (
-      <Page className="instruction" title={ this.state.title } widget={ this.state.widget }>
+      <Page className="instruction bg-white" title={ this.state.title } widget={ this.state.widget } menus={ this.state.menus }>
         {/* main */}
         <section className="main">
           <div className="article">

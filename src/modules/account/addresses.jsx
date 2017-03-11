@@ -1,4 +1,4 @@
-/*!
+/**
  *地址列表
  */
 import React, { Component, PropTypes } from 'react';
@@ -166,7 +166,7 @@ export default class Addresses extends Component {
         { this.state.list.length > 0 &&
           <Bar component="footer" className="btm-fixed">
             <div className="button-group compact">
-              <Link className="button driving square" to={ `/${ this.state.prefix }/address` }>新增地址</Link>
+              <Link className="button driving square" to={ `/${ this.state.prefix }/address` }><i className="icon">&#xe62c;</i>新增地址</Link>
             </div>
           </Bar>
         }

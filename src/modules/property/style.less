@@ -1,0 +1,116 @@
+@import '../../less/base.less';
+
+.home {
+  .list.banner {
+    height: 90px;
+    background: linear-gradient(to bottom right, #ff9350, #ff4d47);
+
+    .item {
+      height: 100%;
+      background: transparent;
+    }
+    .text-opacity {
+      opacity: 0.6;
+    }
+  }
+  .menus {
+    background-color: #fff;
+    height: 75px;
+    border-radius: 0 0 6px 6px;
+
+    .active {
+      color: #ff5a32;
+      border-bottom: 4px solid #ff5a32
+    }
+    .item {
+      position: relative;
+      line-height: 75px;
+      margin-right: 0 !important;
+
+      &:not(:last-child):after {
+        .borderRight()
+      }
+      img {
+        width: 29px;
+        height: 29px
+      }
+      span {
+        display: block;
+        margin: 0 auto
+      }
+    }
+  }
+  .message {
+    width: 100%;
+    text-align: center;
+    line-height: 38px;
+    font-size: 13px;
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    position: fixed;
+    bottom: 44px
+  }
+  .popup .rooms {
+    height: 180px;
+    height: 30vh;
+    overflow: scroll;
+  }
+}
+// // // // // // // // // //
+
+.pleft {
+  width: 50%;
+  border-right: 1px solid #eee;
+  padding: 10px 0
+}
+.pleft h4 {
+  font-size: 22px
+}
+.pleft img {
+  margin-top: 10px
+}
+.pright {
+  width: 50%;
+  padding: 10px 0
+}
+.pright h4 {
+  font-size: 22px
+}
+.pright img {
+  margin-top: 10px
+}
+.cancelbtn {
+  margin-top: 10px !important
+}
+.order {
+  .tlist {
+    margin-top: 0 !important
+  }
+  .status {
+    background: #ff4817 !important;
+    padding: 10px 15px
+  }
+  .status .head {
+    margin-left: 5% !important
+  }
+  .status .sright {
+    float: right;
+    width: 75%;
+    margin-top: 4px
+  }
+  .time {
+    background: #eb3c0d !important;
+    padding: 10px 15px
+  }
+  .list.tlist>.status.item:before {
+    border-top: none !important
+  }
+  .tlist .item-divider.gray {
+    background: #eee !important
+  }
+}
+.details {
+  .swing .navbar {
+    margin-top: -1px;
+  }
+}

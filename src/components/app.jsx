@@ -1,13 +1,13 @@
-/*!
+/**
  * 应用模板
  */
 import FastClick from 'fastclick';
 import React, { Component, PropTypes } from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { browserHistory } from 'react-router';
 import Slot from './slot';
 import Modal from './modal';
 import Env from '../support/env';
+import JSBridge from '../support/bridge';
 
 // FASTCLICK: PROXY CLICK
 window.addEventListener('load', () => FastClick.attach(document.body));
@@ -16,10 +16,11 @@ export default class App extends Component {
 
   static childContextTypes = {
     dump: PropTypes.object,
+    store: PropTypes.object,
   };
 
   getChildContext() {
-    return { dump: this.dump || {} };
+    return { dump: this.dump || {}, store: this.store, };
   }
 
   constructor(props) {
@@ -27,6 +28,17 @@ export default class App extends Component {
     this.state = {
       index: 0,
       action: 'ahead',
+    };
+
+    this.dump = null;
+    this.store = {
+      get current() {
+        return this[location.pathname];
+      },
+
+      get: function(pathname) {
+        return this[pathname];
+      }
     };
 
     if (!history.state || !history.state.key || this.getRrkeys().indexOf(history.state.key) === -1) {
@@ -144,17 +156,44 @@ export default class App extends Component {
         });
       }
     });
+
+    // 微信分享
+    if (Env.is('wx') && 'wx' in window) {
+      wx.ready(function() {
+        // 默认分享
+        ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone'].forEach(function(name) {
+          wx[name]({
+            title: '关注千丁',
+            desc: '精致服务 乐享生活',
+            imgUrl: 'http://img1.qdingnet.com/318163c64963fdfc477d740be3426b77.jpg',
+            link: 'https://m2.iqdnet.com/home',
+            success: function() {
+              $(document).triggerHandler('event:share:success');
+            },
+            cancel: function() {
+              $(document).triggerHandler('event:share:cancel');
+            },
+          });
+        });
+
+        // 隐藏部分渠道
+        wx.hideMenuItems({
+          menuList: ['menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:facebook', 'menuItem:share:QZone'],
+        });
+      });
+    }
   }
 
   componentWillUpdate(nextProps, nextState) {
     // 防止死循环刷新 参见:support/util {Reload}
     sessionStorage.removeItem(this.props.location.pathname);
+    this.store[this.props.location.pathname] = this.refs.page.state;
   }
 
   render() {
     return (
-      <ReactCSSTransitionGroup component="div" className={ this.state.action } transitionName="view"  transitionEnterTimeout={ 300 } transitionLeaveTimeout={ 300 }>
-        { React.cloneElement(this.props.children, {key: location.pathname}) }
+      <Slot className={ this.state.action } transitionName="view" >
+        { React.cloneElement(this.props.children, {ref: 'page', key: location.pathname}) }
         <Slot>
           {
             [].concat(this.state.widget || []).map((item, idx) => {
@@ -162,7 +201,7 @@ export default class App extends Component {
             })
           }
         </Slot>
-      </ReactCSSTransitionGroup>
+      </Slot>
     );
   }
 };

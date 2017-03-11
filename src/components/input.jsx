@@ -1,4 +1,4 @@
-/*!
+/**
  * Input 带关闭
  */
 import React, { Component, PropTypes } from 'react';

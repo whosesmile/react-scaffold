@@ -1,15 +1,16 @@
-/*!
+/**
  * Cashier 收银台
  */
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import Env from '../support/env';
+import JSBridge from '../support/bridge';
 
 export default class Cashier extends Component {
 
-  payment() {
-    // TODO
-    console.warn('待实现');
+  payment = () => {
+    let { code, price, business } = this.props;
+    JSBridge.payment(code, price, business);
   }
 
   render() {
@@ -22,7 +23,7 @@ export default class Cashier extends Component {
     }
     // html5
     else {
-      return (<Link { ...others } to={ {pathname:'/cashier/payment', query: { code: code, price: price, business: business }} }>{ this.props.children }</Link>);
+      return (<a { ...others } href={ `http://${ location.host }/cashier/payment?code=${ code }&price=${ price }&business=${ business }` }>{ this.props.children }</a>);
     }
   }
 }

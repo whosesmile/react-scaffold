@@ -1,13 +1,13 @@
-/*!
+/**
  * by 李双宝
  */
 import './style.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from '../../components/app';
-import Home from '../../support/view/cashier/home';
-import Success from '../../support/view/cashier/success';
-import Failure from '../../support/view/cashier/failure';
+import Home from './home';
+import Success from './success';
+import Failure from './failure';
 import { Reload } from '../../support/util';
 import { Router, Route, browserHistory, IndexRoute, IndexRedirect } from 'react-router';
 

@@ -1,4 +1,4 @@
-/*!
+/**
  * 兑换成功
  */
 import React, { Component, PropTypes } from 'react';
@@ -56,7 +56,7 @@ export default class Confirm extends Component {
         // 地址
         if (list[1].code === 200) {
           this.setState({
-            address: list[1].data.entity,
+            address: list[1].data,
           });
         }
       });
@@ -77,7 +77,13 @@ export default class Confirm extends Component {
       });
 
       // 下单
-      $.post('/integral/ajax/placeorder', Object.assign(this.state.address || {}, {
+      let address = this.state.address;
+      $.post('/integral/ajax/placeorder', Object.assign(this.state.address ? {
+        consignee: address.consignee,
+        consigneeMobile: address.mobile,
+        consigneeAddress: address.addressStr,
+        consigneeAddressId: address.id,
+      } : {}, {
         goodsId: this.state.goods.id,
         goodsType: this.state.goods.goodsType,
       }), (res) => {
@@ -94,7 +100,7 @@ export default class Confirm extends Component {
 
   render() {
     return (
-      <Page className="confirm" title={ this.state.title } widget={ this.state.widget }>
+      <Page className="confirm" title={ this.state.title } widget={ this.state.widget } menus={ this.state.menus }>
         {/* main */}
         <section className="main">
           { !this.state.goods &&

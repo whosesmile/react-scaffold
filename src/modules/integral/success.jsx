@@ -1,4 +1,4 @@
-/*!
+/**
  * 兑换成功
  */
 import React, { Component, PropTypes } from 'react';
@@ -11,12 +11,13 @@ export default class Success extends Component {
     super(props);
     this.state = {
       title: '积分兑换',
+
     };
   }
 
   render() {
     return (
-      <Page className="success bgwhite" title={ this.state.title } widget={ this.state.widget }>
+      <Page className="success bgwhite" title={ this.state.title } widget={ this.state.widget } menus={ this.state.menus }>
         {/* main */}
         <section className="main">
           <div className="feedback">

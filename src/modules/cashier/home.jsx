@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
-import Bar from '../../../components/bar';
-import Page from '../../../components/page';
-import Toast from '../../../components/toast';
-import Modal from '../../../components/modal';
-import Env from '../../../support/env';
-import Filter from '../../../support/filter';
+import Bar from '../../components/bar';
+import Page from '../../components/page';
+import Toast from '../../components/toast';
+import Modal from '../../components/modal';
+import Env from '../../support/env';
+import Filter from '../../support/filter';
 import { getFeedback } from './config';
 
 export default class Home extends Component {

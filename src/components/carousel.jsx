@@ -1,4 +1,4 @@
-/*!
+/**
  * 旋转木马
  */
 import React, { Component, PropTypes } from 'react';
@@ -28,6 +28,9 @@ export default class Carousel extends Component {
     return [{
       component: React.createClass({
         render() {
+          if (this.props.slideCount === 1) {
+            return null;
+          }
           return (
             <nav>
               {
@@ -44,7 +47,8 @@ export default class Carousel extends Component {
   }
 
   render() {
-    let { list, className, paddingTop, ...others } = this.props;
+    let { list, className, paddingTop, wrapAround, ...others } = this.props;
+    wrapAround = list.length > 1 ? wrapAround : false;
     return (
       <div className="carousel" style={ {paddingTop: paddingTop} }>
         <Slider refs="panel" decorators={ this.decorators(list.length) } { ...others }>

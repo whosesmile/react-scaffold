@@ -1,4 +1,4 @@
-/*!
+/**
  * 选项卡 约定class(tabs,tabpane), 放弃使用Tab自定义标签,简化结构
  */
 import React, { Component, PropTypes } from 'react';

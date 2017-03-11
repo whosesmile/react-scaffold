@@ -1,4 +1,4 @@
-/*!
+/**
  * 流量兑换
  */
 import React, { Component, PropTypes } from 'react';
@@ -19,7 +19,10 @@ export default class Package extends Component {
       invalid: false,
       loading: false,
       list: [],
-      message: '',
+      menus: [
+        [{ icon: '&#xe60e;', label: '返回', className: 'text-gray', onClick: () => history.back() }],
+        [{ label: '兑换说明', className: 'text-gray', onClick: () => { this.props.router.push('/integral/instruction') } }],
+      ]
     };
 
     if (typeof CF !== 'undefined') {
@@ -80,7 +83,7 @@ export default class Package extends Component {
         this.props.router.push({ pathname: '/integral/success', query: { code: res.data.entity.orderCode } });
       } else {
         this.setState({
-          widget: <Toast icon="failure" message="兑换失败" callback={ this.clearWidget } />
+          widget: <Toast icon="failure" message={ res.data.message } callback={ this.clearWidget } />
         });
       }
     });
@@ -125,7 +128,7 @@ export default class Package extends Component {
 
   render() {
     return (
-      <Page className="package" title={ this.state.title } widget={ this.state.widget }>
+      <Page className="package" title={ this.state.title } widget={ this.state.widget } menus={ this.state.menus }>
         {/* main */}
         <section className="main has-footer">
           <div className="list compact">
@@ -156,6 +159,15 @@ export default class Package extends Component {
               })
             }
           </div>
+
+          { !this.state.loading && this.state.list.length == 0 &&
+            <div className="feedback">
+              <div className="mark">
+                <img width="220" height="220" src="//img1.qdingnet.com/b70973ae84276a865ae7ae673ea1e318.png" alt="空白" />
+              </div>
+              <div className="describe">暂时还没有相关流量包哦</div>
+            </div>
+          }
 
           { !this.state.loading && this.state.list.length > 0 &&
             <div className="article text-sm text-gray">

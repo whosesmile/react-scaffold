@@ -1,3 +1,6 @@
+/**
+ * 积分明细
+ */
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import Page from '../../components/page';
@@ -67,7 +70,7 @@ export default class Records extends Component {
 
   render() {
     return (
-      <Page className="records" title={ this.state.title } widget={ this.state.widget }>
+      <Page className="records" title={ this.state.title } widget={ this.state.widget } menus={ this.state.menus }>
         {/* main */}
         <section className="main">
           <TabView>

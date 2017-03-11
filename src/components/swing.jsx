@@ -1,4 +1,4 @@
-/*!
+/**
  * 悬挂功能
  */
 import React, { Component, PropTypes } from 'react';

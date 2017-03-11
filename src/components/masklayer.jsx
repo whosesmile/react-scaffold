@@ -1,4 +1,4 @@
-/*!
+/**
  * 遮罩容器
  */
 import React, { Component, PropTypes } from 'react';

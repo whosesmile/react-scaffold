@@ -1,4 +1,4 @@
-/*!
+/**
  * 新增地址 编辑地址
  */
 import React, { Component, PropTypes } from 'react';
@@ -40,8 +40,12 @@ export default class Address extends Component {
         id: this.props.params.id,
       }, (res) => {
         if (res.code === 200) {
+          let model = res.data;
+          // 后台接口不规范: 省市区字典是数字, 地址返回却变成字符串, 为了方便判断进行强转
+          model.provinceId = Number(model.provinceId || 0);
+          model.cityId = Number(model.cityId || 0);
+          model.areaId = Number(model.areaId || 0);
           // 特殊数据处理下 保存时要反过来处理
-          let model = res.data.entity;
           model.projectName = model.projectName || '其他社区';
           model.roomName = model.roomName || '其他房屋';
           this.setState({
@@ -285,10 +289,8 @@ export default class Address extends Component {
       areaId: model.areaId,
     }, (res) => {
       if (res.code === 200) {
-        projects[key] = res.data.list.map((item) => {
-          item.label = item.name;
-          return item;
-        });
+        // 缓存数据
+        projects[key] = res.data.list;
         // 追加其他
         projects[key].push({ id: null, label: '其他社区' });
 
@@ -323,6 +325,7 @@ export default class Address extends Component {
         title: '所属社区',
         groups: [{
           items: list,
+          label: 'name',
         }],
         selected: [model.projectId ? list.findIndex((item) => item.id == model.projectId) : (model.projectName ? list.length - 1 : 0)],
         onCancel: this.clearWidget,
@@ -331,7 +334,7 @@ export default class Address extends Component {
           let signing = JSON.stringify(model);
           let project = data[0];
           model.projectId = project.id;
-          model.projectName = project.label;
+          model.projectName = project.name;
           model.street = project.street;
 
           // 对比签名，是否需要重置组团和房间
@@ -499,7 +502,7 @@ export default class Address extends Component {
 
     // 如果包含组团 查询社区当前组团名下房屋
     if (model.groupName) {
-      $.get('/house/ajax/bygroup', {
+      $.get('/account/ajax/grooms', {
         groupName: model.groupName,
         projectId: model.projectId,
       }, (res) => {

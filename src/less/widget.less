@@ -89,10 +89,7 @@
     }
   }
 }
-
-
-
-
+// 上推浮层
 .popup {
   position: absolute;
   bottom: 0;
@@ -137,4 +134,40 @@
       transform: translate3d(0, 100%, 0);
     }
   }
+}
+// 下拉浮层
+.popdown {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background-color: #fff;
+  transition-property: transform;
+  transition-duration: .3s;
+}
+// ActionSheet
+.ex-widget-enter {
+  .popdown {
+    transform: translate3d(0, -100%, 0);
+  }
+  &.ex-widget-enter-active {
+    .popdown {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+}
+.ex-widget-leave {
+  .popdown {
+    transform: translate3d(0, 0, 0);
+  }
+  &.ex-widget-leave-active {
+    .popdown {
+      transform: translate3d(0, -100%, 0);
+    }
+  }
+}
+.bar.bulge {
+  z-index: 900;
+}
+.ex-widget-layer.slight {
+  z-index: 800;
 }

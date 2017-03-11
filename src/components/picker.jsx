@@ -1,4 +1,4 @@
-/*!
+/**
  * 选择器
  */
 import React, { Component, PropTypes } from 'react';
@@ -105,6 +105,7 @@ class PickerGroup extends Component {
     itemHeight: PropTypes.number,
     aniamtion: PropTypes.bool,
     items: PropTypes.array.isRequired,
+    label: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
     index: PropTypes.number,
     selected: PropTypes.number,
     onChange: PropTypes.func,
@@ -116,6 +117,7 @@ class PickerGroup extends Component {
     animation: true,
     index: 0,
     selected: -1,
+    label: 'label',
     onChange: () => {},
   }
 
@@ -253,17 +255,29 @@ class PickerGroup extends Component {
     });
   }
 
+  renderLabel(item, index) {
+    let label = null;
+    if (typeof this.props.label === 'function') {
+      label = this.props.label(item, index);
+    } else {
+      label = item[this.props.label];
+    }
+    return label;
+  }
+
   render() {
     let styles = {
-      'transform': `translateY(${ this.state.translate }px)`,
-      'transition': this.state.animating ? 'transform .3s' : 'none',
+      WebkitTransform: `translateY(${ this.state.translate }px)`,
+      WebkitTransition: this.state.animating ? 'transform .3s, -webkit-transform .3s' : 'none',
+      transform: `translateY(${ this.state.translate }px)`,
+      transition: this.state.animating ? 'transform .3s, -webkit-transform .3s' : 'none',
     };
     return (
       <div className="group" onTouchStart={ this.handleTouchStart } onTouchMove={ this.handleTouchMove } onTouchEnd={ this.handleTouchEnd }>
         <div className="roller" style={ styles }>
           {
             this.props.items.map((item, idx) => {
-              return <div key={ idx } className={ classnames('item', {disabled: item.disabled}) } dangerouslySetInnerHTML={{__html: item.label}}></div>;
+              return <div key={ idx } className={ classnames('item', {disabled: item.disabled}) }>{ this.renderLabel(item, idx) }</div>;
             })
           }
         </div>

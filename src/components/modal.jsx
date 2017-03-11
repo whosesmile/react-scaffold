@@ -1,4 +1,4 @@
-/*!
+/**
  * 弹窗
  */
 import React, { Component, PropTypes } from 'react';

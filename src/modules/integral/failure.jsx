@@ -1,4 +1,4 @@
-/*!
+/**
  * 兑换失败
  */
 import React, { Component, PropTypes } from 'react';
@@ -16,7 +16,7 @@ export default class Failure extends Component {
 
   render() {
     return (
-      <Page className="failure bgwhite" title={ this.state.title } widget={ this.state.widget }>
+      <Page className="failure bgwhite" title={ this.state.title } widget={ this.state.widget } menus={ this.state.menus }>
         {/* main */}
         <section className="main">
           <div className="feedback">

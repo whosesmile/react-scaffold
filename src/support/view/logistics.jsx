@@ -1,4 +1,4 @@
-/*!
+/**
  * 状态追踪
  */
 import React, { Component, PropTypes } from 'react';

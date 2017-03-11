@@ -1,4 +1,4 @@
-/*!
+/**
  * 滚动加载
  */
 import React, { Component, PropTypes } from 'react';
@@ -41,9 +41,9 @@ export default class Loader extends Component {
       return;
     }
     if (document.body.scrollHeight - document.body.scrollTop - document.documentElement.clientHeight < this.state.threshold) {
-      this.loadMore((data) => {
+      this.loadMore((list, data) => {
         let callback = this.props.callback || $.noop;
-        callback(data, this.state.page);
+        callback(list, data);
       });
     }
   }
@@ -52,14 +52,9 @@ export default class Loader extends Component {
   autoLoad(props) {
     // 自动加载首页
     if (props.load) {
-      this.loadMore((data) => {
+      this.loadMore((list, data) => {
         let callback = props.callback || $.noop;
-        callback(data, {
-          page: this.state.page,
-          size: this.props.size,
-          count: this.state.count,
-          hasmore: this.state.hasmore,
-        });
+        callback(list, data);
       });
     }
     // 如果不需要自动加载并且当前页码是第一页 说明服务器端已经初始化好了 从page:2翻页
@@ -90,7 +85,7 @@ export default class Loader extends Component {
           loading: false,
         });
         if (res.code === 200) {
-          fn(res.data.list);
+          fn(res.data.list, res.data);
           this.setState({
             page: this.state.page + 1,
             count: this.state.count + res.data.list.length, // 备份
@@ -152,7 +147,7 @@ export default class Loader extends Component {
           <span className="tips text-gray">{ this.props.tips }</span>
         </div>
       );
-    } else if (!this.state.hasmore && this.state.count && this.props.ends) {
+    } else if (!this.state.hasmore && this.state.count > this.state.size && this.props.ends) {
       return (
         <div is class="divider" ui-mode="30%">{ this.props.ends }</div>
       );

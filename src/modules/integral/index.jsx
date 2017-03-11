@@ -1,4 +1,4 @@
-/*!
+/**
  * By 李双宝 其他业务也请声明负责人
  */
 import './style.less';
@@ -33,7 +33,7 @@ ReactDOM.render(
         <Route path="protocol" component={ Protocol } />
         <Route path="instruction" component={ Instruction } />
         <Route path="orders" component={ Orders } />
-        <Route path="order/:id" component={ Order } />
+        <Route path="order/:code" component={ Order } />
         <Route path="details/:id" component={ Details } />
         <Route path="confirm/:id" component={ Confirm } />
         <Route path="success" component={ Success } />

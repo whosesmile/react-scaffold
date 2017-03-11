@@ -1,4 +1,4 @@
-/*!
+/**
  * 积分协议
  */
 import React, { Component, PropTypes } from 'react';
@@ -15,7 +15,7 @@ export default class Protocol extends Component {
 
   render() {
     return (
-      <Page className="protocol bgwhite" title={ this.state.title } widget={ this.state.widget }>
+      <Page className="protocol bgwhite" title={ this.state.title } widget={ this.state.widget } menus={ this.state.menus }>
         {/* main */}
         <section className="main">
           <div className="article">

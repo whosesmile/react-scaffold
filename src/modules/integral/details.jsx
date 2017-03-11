@@ -1,4 +1,4 @@
-/*!
+/**
  * 商品详情
  */
 import React, { Component, PropTypes } from 'react';
@@ -37,7 +37,7 @@ export default class Details extends Component {
   render() {
 
     return (
-      <Page className="details bgwhite" title={ this.state.title } widget={ this.state.widget }>
+      <Page className="details bgwhite" title={ this.state.title } widget={ this.state.widget } menus={ this.state.menus }>
         <section className="main has-footer">
           { !this.state.goods &&
             <div className="loadmore">

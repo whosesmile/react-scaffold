@@ -1,4 +1,4 @@
-/*!
+/**
  * 订单详情
  */
 import React, { Component, PropTypes } from 'react';
@@ -21,7 +21,7 @@ export default class Order extends Component {
 
   componentDidMount() {
     if (!this.state.order) {
-      $.get('/integral/ajax/order', { id: this.props.params.id }, (res) => {
+      $.get('/integral/ajax/order', { code: this.props.params.code }, (res) => {
         if (res.code === 200) {
           this.setState({
             order: res.data.entity,
@@ -105,7 +105,7 @@ export default class Order extends Component {
     let order = this.state.order;
     let orderStatus = [, , '已兑换', '兑换失败', '已发货', '已签收', '未兑换'];
     return (
-      <Page className="order" title={ this.state.title } widget={ this.state.widget }>
+      <Page className="order" title={ this.state.title } widget={ this.state.widget } menus={ this.state.menus }>
         {/* main */}
         <section className="main has-footer">
           { !order &&
@@ -246,7 +246,7 @@ export default class Order extends Component {
                 <button className="button warning square" onClick={ this.confrimReceive }>确认签收</button>
               </div>
             }
-            { order.source != 2 || order.status != 4 &&
+            { (order.source != 2 || order.status != 4) &&
               <div className="button-group compact">
                 <a className="button default square" href="tel:4000818181">如有疑问，请致电: 4000818181</a>
               </div>

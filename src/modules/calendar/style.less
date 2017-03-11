@@ -1,0 +1,134 @@
+@import '../../less/base.less';
+
+.home {
+  .switcher {
+    margin-top: -1px;
+
+    .menu {
+      height: 100%;
+
+      img {
+        opacity: 0.6;
+      }
+      &:active {
+        background-color: #eee;
+
+        img {
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+  .calendar {
+    background-color: #fff;
+    padding: 0 10px;
+
+    .item {
+      float: left;
+      width: 14.285714vw;
+      width: 14.285714%;
+    }
+    .weeks .item {
+      height: 30px;
+      line-height: 30px;
+    }
+    .dates .item {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      font-size: 17px;
+      border-radius: 50%;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      height: 44px;
+      height: 13.8vw;
+
+      .text {
+        display: block;
+        flex: 1;
+        margin: auto;
+        line-height: 1;
+
+        p {
+          margin-top: 3px;
+        }
+      }
+      &:active {
+        background-color: #eee;
+      }
+      &.today {
+        background-color: #3d3d3d;
+        color: #fff;
+      }
+    }
+  }
+  .spotlight {
+    margin: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    overflow: hidden;
+
+    .banner {
+      padding-top: 43.66%;
+
+      .information {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: flex;
+        color: #fff;
+        line-height: 1;
+
+        .figure {
+          width: 40%;
+          text-align: center;
+          margin: auto 0;
+
+          h3 {
+            font-size: 96px;
+            font-weight: normal;
+          }
+        }
+        .text {
+          display: block;
+          flex: 1;
+          margin: auto 0;
+          padding-right: 10px;
+          overflow: hidden;
+
+          h3 {
+            font-weight: normal;
+            width: 85px;
+            height: 28px;
+            line-height: 28px;
+            background-color: #fc9932;
+            text-align: center;
+            font-size: 17px;
+            margin-bottom: 5%;
+          }
+          p {
+            margin: 6% 0 0;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+
+            a {
+              color: #fff;
+              display: block;
+              flex: 1;
+              .ellipsis();
+            }
+          }
+        }
+      }
+    }
+    .describe {
+      padding: 15px;
+      line-height: 2;
+    }
+  }
+}

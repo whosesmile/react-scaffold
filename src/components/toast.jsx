@@ -1,4 +1,4 @@
-/*!
+/**
  * 吐司
  */
 import React, { Component, PropTypes } from 'react';
@@ -45,7 +45,7 @@ export default class Toast extends Component {
   renderIcon() {
     let icon = this.props.icon;
     // PRESET ICON
-    if (Object.keys(this.state.presets).includes(icon)) {
+    if (Object.keys(this.state.presets).indexOf(icon) !== -1) {
       return <i className="icon" dangerouslySetInnerHTML={{__html: this.state.presets[icon]}}></i>;
     }
     // LOADING

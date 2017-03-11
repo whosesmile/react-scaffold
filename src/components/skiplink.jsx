@@ -1,4 +1,4 @@
-/*!
+/**
  * SkipLink 翻译skipModel
  */
 import React, { Component, PropTypes } from 'react';

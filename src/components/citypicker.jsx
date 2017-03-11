@@ -1,4 +1,4 @@
-/*!
+/**
  * 城市选择器
  */
 import React, { PropTypes } from 'react';
@@ -8,9 +8,9 @@ export default class CityPicker extends React.Component {
 
   static propTypes = {
     list: PropTypes.array.isRequired,
-    provinceId: PropTypes.number,
-    cityId: PropTypes.number,
-    areaId: PropTypes.number,
+    provinceId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    cityId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    areaId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }
 
   static defaultProps = {}
@@ -73,7 +73,6 @@ export default class CityPicker extends React.Component {
       selected: selected,
     };
   }
-
 
   updateGroup = (data, i, groupIndex, selected) => {
     let groups = this.state.groups;

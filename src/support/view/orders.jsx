@@ -1,4 +1,4 @@
-/*!
+/**
  * 我的订单记录
  */
 import '../../less/view/orders.less';
@@ -180,7 +180,7 @@ export default class Orders extends Component {
               </div>
             </div>
           </Swing>
-          <Loader url="/account/ajax/orders" query={ {business: this.state.business, type: this.state.type} }callback={ this.appendList.bind(this) }>
+          <Loader url="/account/ajax/orders" query={ {business: this.state.business, type: this.state.type} } callback={ this.appendList.bind(this) }>
             { this.renderList() }
           </Loader>
           <Slot>

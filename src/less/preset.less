@@ -1,7 +1,21 @@
+html, body {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
 body {
   user-select: none;
+  background-color: #eee;
+}
+#bootstrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   overflow-x: hidden;
-  background-color: #f8f8f8;
+  overflow-y: scroll;
 }
 // 白色背景
 .bg-white, .bgwhite {
@@ -11,77 +25,75 @@ body {
 .ex-page {
   min-height: 100vh;
   overflow: hidden;
-  background-color: #f8f8f8;
-  // 添加这个是为了防止切换PAGE动画抖动 但是会导致fixed定位失效
-  // http: //stackoverflow.com/questions/15194313/transform3d-not-working-with-position-fixed-children
-  transform: translate3d(0, 0, 0);
-  transition-property: transform;
-  transition-duration: .3s;
-
-  // 解决margin折叠问题
-  &:before {
-    clear: both;
-    content: "";
-    display: table;
-  }
-  &.view-enter, &.view-leave {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-  }
-
-  & > header.bar:first-child {
-    background-color: #f9f9f9;
-  }
+  background-color: #eee;
 }
+// 动画效果设定
+.ex-slot {
+  .ex-page {
+    // 添加这个是为了防止切换PAGE动画抖动 但是会导致fixed定位失效
+    // http: //stackoverflow.com/questions/15194313/transform3d-not-working-with-position-fixed-children
+    transform:translate3d(0, 0, 0);
+    transition-property: transform;
+    transition-duration: .3s;
 
-// transform导致fixed定位失败的问题，见上面解释
-.notrans {
-  transform: none;
-}
-
-
-// 前进效果
-.ahead {
-  // 页入
-  .view-enter {
-    z-index: 2;
-    transform: translate3d(100%, 0, 0);
-
-    &.view-enter-active {
-      transform: translate3d(0, 0, 0);
+    // 解决margin折叠问题
+    &:before {
+      clear: both;
+      content: "";
+      display: table;
+    }
+    &.view-enter, &.view-leave {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+    }
+    // transform导致fixed定位失败的问题，见上面解释
+    &.notrans {
+      transform: none;
     }
   }
-  // 页出
-  .view-leave {
-    z-index: 1;
-    transform: translate3d(0, 0, 0);
-
-    &.view-leave-active {
-      transform: translate3d(-30%, 0, 0);
-    }
-  }
-}
-// 后退效果
-.backoff {
-  // 页入
-  .view-enter {
-    z-index: 1;
-    transform: translate3d(-30%, 0, 0);
-
-    &.view-enter-active {
-      transform: translate3d(0, 0, 0);
-    }
-  }
-  // 页出
-  .view-leave {
-    z-index: 2;
-    transform: translate3d(0, 0, 0);
-
-    &.view-leave-active {
+  // 前进效果
+  &.ahead {
+    // 页入
+    .view-enter {
+      z-index: 2;
       transform: translate3d(100%, 0, 0);
+
+      &.view-enter-active {
+        transform: translate3d(0, 0, 0);
+      }
+    }
+    // 页出
+    .view-leave {
+      z-index: 1;
+      transform: translate3d(0, 0, 0);
+
+      &.view-leave-active {
+        transform: translate3d(-30%, 0, 0);
+      }
+    }
+  }
+  // 后退效果
+  &.backoff {
+    // 页入
+    .view-enter {
+      z-index: 1;
+      transform: translate3d(-30%, 0, 0);
+
+      &.view-enter-active {
+        transform: translate3d(0, 0, 0);
+      }
+    }
+    // 页出
+    .view-leave {
+      z-index: 2;
+      transform: translate3d(0, 0, 0);
+
+      &.view-leave-active {
+        transform: translate3d(100%, 0, 0);
+      }
     }
   }
 }
@@ -98,6 +110,10 @@ body {
 
     .slider-frame {
       height: 100% !important;
+
+      img {
+        width: 100%;
+      }
     }
     [class^="slider-decorator"] {
       width: 100%;

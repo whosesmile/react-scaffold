@@ -1,4 +1,4 @@
-/*!
+/**
  * 延迟加载
  */
 import React, { Component, PropTypes } from 'react';
